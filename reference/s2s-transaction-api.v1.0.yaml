@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: S2S TRANSACTION API
-  version: 1.0.0
+  version: 0.9.2
   description: Szrek2Solutions Trusted Transactions API
   contact:
     url: 'http://www.szrek.com'
