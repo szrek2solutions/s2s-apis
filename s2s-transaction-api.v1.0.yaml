@@ -1,0 +1,425 @@
+openapi: 3.0.0
+info:
+  title: S2S TRANSACTION API
+  version: 1.0.0
+  description: Szrek2Solutions Trusted Transactions API
+  contact:
+    url: 'http://www.szrek.com'
+servers:
+  - url: 'http://localhost:55002/s2s-transaction-api/v1.0'
+components:
+  schemas:
+    ClientData:
+      title: ClientData
+      type: array
+      description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
+      items:
+        type: string
+      x-examples:
+        example-1:
+          - myfieldvalue1
+          - myfieldvalue2
+          - '123456'
+    Status:
+      title: Status
+      type: object
+      description: Status code and description
+      properties:
+        code:
+          type: integer
+          description: Numeric error or status code
+          example: 0
+        description:
+          type: string
+          description: Short description of the error or status code
+          example: Success
+    FieldError:
+      title: FieldError
+      type: object
+      description: Details about a specific field error
+      properties:
+        code:
+          type: string
+          description: Error code name
+        message:
+          type: string
+          description: Additional detail about the error code
+        fieldName:
+          type: string
+          description: 'Name of the field that caused the error, if applicable'
+        path:
+          type: string
+          description: 'Path to the field that caused the error, if applicable'
+    ErrorResponse:
+      description: Describes the error and any specific problems with fields in the request.
+      allOf:
+        - $ref: '#/components/schemas/Status'
+        - type: object
+          properties:
+            fieldErrors:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+      x-examples:
+        example-1:
+          code: 999
+          description: Input validation failed
+          fieldErrors:
+            - code: INVALID_VALUE
+              message: not found
+    ClientInfo:
+      title: ClientInfo
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: Name or identifier of the client system.
+          example: GAMESERVER-1
+        clientTime:
+          type: string
+          format: date-time
+          description: Time on the client system.
+          example: '2020-09-30T18:30:23Z'
+        clientBusinessDay:
+          type: integer
+          description: Client's current business day. Format is YYMMDD.
+          example: 200930
+    BatchRequest:
+      title: BatchRequest
+      allOf:
+        - $ref: '#/components/schemas/ClientInfo'
+        - type: object
+          properties:
+            clientTransactionId:
+              $ref: '#/components/schemas/ClientTransactionId'
+    SignRequest:
+      title: SignRequest
+      type: object
+      properties:
+        clientRecordId:
+          type: string
+          description: Client's unique identifier for this record
+          example: RQID-31234545-32
+        clientData:
+          $ref: '#/components/schemas/ClientData'
+    BatchResponse:
+      title: BatchResponse
+      allOf:
+        - $ref: '#/components/schemas/ServerInfo'
+        - type: object
+          properties:
+            clientTransactionId:
+              $ref: '#/components/schemas/ClientTransactionId'
+            status:
+              $ref: '#/components/schemas/Status'
+          required:
+            - status
+        - $ref: '#/components/schemas/TransactionTime'
+    SignResult:
+      title: SignResult
+      type: object
+      properties:
+        signStatus:
+          $ref: '#/components/schemas/Status'
+        recordId:
+          type: string
+          description: Unique record identifier for the stored record
+          example: EX191109870000000125
+        recordHandle:
+          type: integer
+          description: Handle that can optionally be used for faster retrieval
+          format: int64
+      required:
+        - status
+    SecurityModule:
+      title: SecurityModule
+      type: object
+      description: Details about the cryptographic Hardware Security Module (HSM).
+      properties:
+        serial:
+          type: string
+          description: Serial number of the HSM.
+          example: 01000000F00019C8
+        sequencer:
+          type: integer
+          description: Sequence number of the HSM.
+          example: 734595
+        time:
+          type: string
+          description: Real-time clock value of the HSM.
+          example: '2020-09-30T18:30:23Z'
+        keyId:
+          type: string
+          description: Identifier of the RSA key pair on the HSM.
+          example: 308C-1328-3940-DC32
+    ServerInfo:
+      title: ServerInfo
+      type: object
+      properties:
+        serverId:
+          type: string
+          example: RNG-TEST-87
+          description: Transaction server identifier.
+        serverVersion:
+          type: string
+          example: '9.3'
+          description: Transaction server version number.
+      required:
+        - serverId
+        - serverVersion
+    ClientTransactionId:
+      title: ClientTransactionId
+      type: integer
+      description: Client's unique identifier for this transaction.
+      format: int64
+      example: 102030450
+    TransactionTime:
+      title: TransactionTime
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Date and time the request was processed.
+          example: '2020-09-30T18:30:23Z'
+        businessDay:
+          type: integer
+          description: Business day under which the transaction was recorded. Format is YYMMDD.
+          example: 200930
+    ExtractFields:
+      type: array
+      description: Name/value pairs as would be generated in a CSV extract file.
+      items:
+        type: object
+        description: ''
+        properties:
+          name:
+            type: string
+            description: Column name for the CSV extract field.
+          value:
+            type: string
+            description: 'Value of the extract field, formatted for CSV.'
+        required:
+          - name
+          - value
+  responses:
+    BadRequestResponse:
+      description: Bad Request
+      headers: {}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            Example:
+              value:
+                code: 999
+                description: Input validation failed
+                fieldErrors:
+                  - code: INVALID_VALUE
+                    message: Product not found
+                    fieldName: productId
+                    path: 'drawRequests[1].productId'
+paths:
+  /transactions:
+    post:
+      summary: Sign a Transaction
+      operationId: post-transactions
+      description: Sign and store a transaction in the block chain file.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BatchResponse'
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        description: 'Array of results records, corresponding to the array of requests'
+                        items:
+                          allOf:
+                            - type: object
+                              properties:
+                                clientRecordId:
+                                  type: string
+                                  description: Client's unique identifier for this record
+                                  example: RQID-31234545-32
+                            - $ref: '#/components/schemas/SignResult'
+              examples: {}
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/BatchRequest'
+                - type: object
+                  properties:
+                    signRequests:
+                      description: One or more record sign requests to be processed
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/SignRequest'
+                  required:
+                    - signRequests
+            examples: {}
+      parameters: []
+      tags:
+        - Transactions
+    parameters: []
+  /transactions/status:
+    get:
+      summary: Server Status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      serverTime:
+                        type: string
+                        format: date-time
+                        example: '2020-09-30T18:30:23Z'
+                        description: Current system time of the RNG server.
+                      businessDay:
+                        type: integer
+                        description: Current business day for this RNG server. Format is YYMMDD.
+                        example: 200930
+                      hsms:
+                        type: array
+                        description: Status of the configured hardware security modules.
+                        items:
+                          allOf:
+                            - type: object
+                              properties:
+                                slot:
+                                  type: integer
+                                  description: Slot number of the HSM.
+                                active:
+                                  type: boolean
+                                  description: Indicates the currently active HSM.
+                                status:
+                                  type: string
+                                  description: Current status description for this HSM.
+                              required:
+                                - slot
+                                - active
+                                - status
+                            - $ref: '#/components/schemas/SecurityModule'
+                            - type: object
+                              properties:
+                                lastErrorCode:
+                                  description: 'The error code of the most recent HSM error, if any.'
+                                  type: integer
+                                lastErrorTime:
+                                  type: string
+                                  description: 'The time of the last error code, if any.'
+                                  format: date-time
+              examples:
+                Example 1:
+                  value:
+                    serverId: RNG-TEST-87
+                    serverVersion: '9.3'
+                    serverTime: '2020-09-30T18:30:23Z'
+                    businessDay: 200930
+                    products:
+                      - id: 1001
+                        name: Cool3
+                        type: INTEGER
+                        requestCount: 1
+                        lastRequestTime: '2019-08-24T14:15:22Z'
+                      - id: 1002
+                        name: Lotto6
+                        type: INTEGER
+                        requestCount: 1
+                        lastRequestTime: '2019-08-24T14:15:22Z'
+                    cards:
+                      - slot: 0
+                        active: true
+                        status: OK
+                        serial: 01000000F00019C8
+                        sequencer: 18394549
+                        lastError: 5
+                        lastErrorTime: '2019-08-24T14:15:22Z'
+                        keyId: 308C-1328-3940-DC32
+                      - slot: 1
+                        active: false
+                        status: OK
+                        serial: 01000000F00019C5
+                        sequencer: 39459
+                        keyId: 308C-1328-3940-DC32
+      operationId: get-transactions-status
+      description: Get current status of the transaction server.
+      tags:
+        - Status
+    parameters: []
+  /transactions/verification:
+    get:
+      summary: Verify Signed Transaction
+      tags:
+        - Transactions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      verificationStatus:
+                        $ref: '#/components/schemas/Status'
+                      signRequest:
+                        allOf:
+                          - $ref: '#/components/schemas/ClientInfo'
+                          - type: object
+                            properties:
+                              clientTransactionId:
+                                $ref: '#/components/schemas/ClientTransactionId'
+                          - $ref: '#/components/schemas/SignRequest'
+                        description: The original signing request.
+                      signResult:
+                        allOf:
+                          - $ref: '#/components/schemas/TransactionTime'
+                          - $ref: '#/components/schemas/SignResult'
+                        description: The original signing result.
+                      hsm:
+                        $ref: '#/components/schemas/SecurityModule'
+                      extractFields:
+                        $ref: '#/components/schemas/ExtractFields'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Not Found
+      operationId: get-transactions-verification
+      description: Retrieves and verifies a previously stored record. Parameter MUST include one of either unique-record-id or client-record-id.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: unique-record-id
+          description: Search using the Unique Record Identifier (URI) returned in the store response
+        - schema:
+            type: string
+          in: query
+          name: client-record-id
+          description: Search using the clientRecordId sent in the store request
+security: []
+tags:
+  - name: Status
+  - name: Transactions
