@@ -1,0 +1,793 @@
+openapi: 3.0.0
+info:
+  title: S2S RNG API
+  version: 1.0.0
+  description: Szrek2Solutions Random Number Generator API
+  contact:
+    url: 'http://www.szrek.com'
+    email: info@szrek.com
+servers:
+  - url: 'http://server:55002/api/v1'
+    description: API server example
+components:
+  schemas:
+    DrawUser:
+      title: DrawUser
+      type: object
+      description: 'Draw participant''s name and login time, to be included in the draw reports.'
+      properties:
+        name:
+          type: string
+          description: Full name of the user as it should appear in the draw reports.
+          example: John Smith
+        loginTime:
+          type: string
+          format: date-time
+          description: 'If included, the login time for the user will appear in the draw reports.'
+          example: '2020-03-15T15:47:44Z'
+    RngMatrix:
+      title: RngMatrix
+      type: object
+      description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values
+      properties:
+        numberOfSets:
+          type: integer
+          description: How many sets of numbers to generate.
+          minimum: 1
+        setSize:
+          type: integer
+          description: How many numbers in each set.
+          example: 6
+          minimum: 1
+        minValue:
+          type: integer
+          description: Lowest number that can be generated.
+          example: 1
+          minimum: 0
+        maxValue:
+          type: integer
+          description: Highest number that can be generated.
+          example: 49
+          minimum: 0
+        withReplacement:
+          type: boolean
+          description: True if generated numbers can be repeated within a set.
+        sortOrder:
+          type: string
+          description: Sort order for the generated numbers within a set.
+          enum:
+            - UNSORTED
+            - ASCENDING
+          example: UNSORTED
+        exclusions:
+          type: array
+          description: Values to be excluded from the generation.
+          uniqueItems: true
+          maxItems: 65535
+          items:
+            type: integer
+            example: 0
+        distribution:
+          $ref: '#/components/schemas/Distribution'
+      required:
+        - numberOfSets
+    Distribution:
+      title: Distribution
+      type: object
+      description: Initial distribution values and depletion type. Used for TABLE products only.
+      x-examples: {}
+      properties:
+        values:
+          type: array
+          description: Initial distribution values.
+          maxItems: 64
+          items:
+            type: integer
+        depletionType:
+          type: string
+          enum:
+            - NO_DEPLETION
+            - DECREASE_ENTRY
+            - REMOVE_ENTRY
+          description: Specifies method of depletion for the distribution values.
+          example: NO_DEPLETION
+    ClientData:
+      title: ClientData
+      type: array
+      description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
+      items:
+        type: string
+    Status:
+      title: Status
+      type: object
+      description: Status code and description
+      properties:
+        code:
+          type: integer
+          description: Numeric error or status code.
+          example: 0
+        description:
+          type: string
+          description: Short description of the error or status code.
+          example: Success
+      required:
+        - code
+    FieldError:
+      title: FieldError
+      type: object
+      description: Details about a specific field error.
+      properties:
+        code:
+          type: string
+          description: Error code name.
+        message:
+          type: string
+          description: Additional detail about the error code.
+        fieldName:
+          type: string
+          description: 'Name of the field that caused the error, if applicable.'
+        path:
+          type: string
+          description: 'Path to the field that caused the error, if applicable.'
+    ErrorResponse:
+      description: Describes the error and any specific problems with fields in the request.
+      allOf:
+        - $ref: '#/components/schemas/Status'
+        - type: object
+          properties:
+            fieldErrors:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+      x-examples:
+        example-1:
+          code: 999
+          description: Input validation failed.
+          fieldErrors:
+            - code: INVALID_VALUE
+              message: Product not found
+              fieldName: productId
+              path: 'rngRequests[1].productId'
+    SecurityRequest:
+      title: SecurityRequest
+      type: object
+      description: Optional requests for security blocks to be included in the response.
+      properties:
+        blockType:
+          type: string
+          description: Security block type identifier.
+          example: S2S
+        version:
+          type: string
+          description: Format version of the security block.
+          example: '1.0'
+      required:
+        - blockType
+    SecurityModule:
+      title: SecurityModule
+      type: object
+      description: Details about the cryptographic Hardware Security Module (HSM).
+      properties:
+        serial:
+          type: string
+          description: Serial number of the HSM.
+          example: 01000000F00019C8
+        sequencer:
+          type: integer
+          description: Sequence number on the HSM.
+          example: 734595
+        time:
+          type: string
+          description: Real-time clock value on the HSM.
+          example: '2020-09-30T18:30:23Z'
+        keyId:
+          type: string
+          description: Identifier of the RSA key pair on the HSM.
+          example: 308C-1328-3940-DC32
+    SecurityBlock:
+      allOf:
+        - $ref: '#/components/schemas/SecurityRequest'
+        - type: object
+          description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+          properties:
+            blockType:
+              type: string
+              description: Security block type identifier.
+              example: S2S
+            version:
+              type: string
+              description: Format version of the security block.
+              example: '1.0'
+            keyId:
+              type: string
+              description: 'Identifier of the public key needed to verify the security block, if applicable.'
+              example: 308C-1328-3940-DC32
+            data:
+              type: string
+              description: Base 64 encoded content of the security block.
+              example: VGhpcyBpcyBhbiBleGFtcGxl
+          required:
+            - blockType
+    SecurityRequests:
+      type: array
+      description: Requested transaction security blocks.
+      items:
+        $ref: '#/components/schemas/SecurityRequest'
+    SecurityBlocks:
+      type: array
+      items:
+        $ref: '#/components/schemas/SecurityBlock'
+    ClientInfo:
+      title: ClientInfo
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: Name or identifier of the client system.
+          example: GAMESERVER-1
+        clientTime:
+          type: string
+          format: date-time
+          description: Time on the client system.
+          example: '2020-09-30T18:30:23Z'
+        clientBusinessDay:
+          type: integer
+          description: Client's current business day. Format is YYMMDD.
+          example: 200930
+    BatchRequest:
+      title: BatchRequest
+      allOf:
+        - $ref: '#/components/schemas/ClientInfo'
+        - type: object
+          properties:
+            clientTransactionId:
+              $ref: '#/components/schemas/ClientTransactionId'
+    RngRequest:
+      title: RngRequest
+      type: object
+      properties:
+        clientRecordId:
+          type: string
+          description: Client's unique identifier for this RNG request.
+          example: RQID-31234545-32
+        productId:
+          type: integer
+          description: 'Identifier of the product to be generated. The product defines all RNG parameters, and MAY allow them to be overridden in the RNG matrix structure.'
+        rngMatrix:
+          $ref: '#/components/schemas/RngMatrix'
+        clientData:
+          $ref: '#/components/schemas/ClientData'
+      required:
+        - productId
+    BatchResponse:
+      title: BatchResponse
+      allOf:
+        - $ref: '#/components/schemas/ServerInfo'
+        - type: object
+          properties:
+            transactionStatus:
+              $ref: '#/components/schemas/Status'
+            clientTransactionId:
+              $ref: '#/components/schemas/ClientTransactionId'
+          required:
+            - transactionStatus
+        - $ref: '#/components/schemas/TransactionTime'
+    RngResult:
+      title: RngResult
+      type: object
+      properties:
+        rngStatus:
+          $ref: '#/components/schemas/Status'
+        clientRecordId:
+          type: string
+          description: Client's unique identifier for this RNG request.
+          example: RQID-31234545-32
+        recordId:
+          type: string
+          description: Unique record identifier.
+          example: EX191109870000000125
+        recordHandle:
+          type: integer
+          description: Handle that can optionally be used for faster verification processing.
+          format: int64
+        productId:
+          type: integer
+          description: Identifier of the product definition used for the random generation.
+        productChecksum:
+          type: number
+          description: CRC32 checksum of the product definition used for the random generation.
+        sets:
+          type: array
+          description: Numbers generated
+          items:
+            type: array
+            items:
+              type: integer
+      required:
+        - rngStatus
+    TestMode:
+      type: boolean
+      description: Marks the draw as "test mode" and not valid for use.
+      x-userDataIndex: 1
+    DrawUsers:
+      description: 'Draw participants to be included in the draw reports. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
+      type: array
+      items:
+        $ref: '#/components/schemas/DrawUser'
+    ReturnRngMatrix:
+      description: Include RNG parameter matrix in RNG results.
+      type: boolean
+    FileDrawUserData:
+      title: FileDrawUserData
+      type: object
+      properties:
+        fileName:
+          type: string
+          description: Name of the file used for the draw.
+          example: PROMO-1.csv
+        fileHash:
+          type: string
+          description: SHA-1 hash of the file used for the draw.
+          format: binary
+          example: A54D88E06612D820BC3BE72877C74F257B561B19
+    RegularDrawUserData:
+      title: RegularDrawUserData
+      type: object
+      properties:
+        drawHash:
+          type: string
+          description: 'A hash string that will be included in the signed data, such as the SHA-1 hash of the bets.'
+          format: binary
+          example: B63C77E06612D820BC3BE72877C74F257B562A20
+        drawText:
+          type: string
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names.
+          example: PROMO-1
+    ServerInfo:
+      title: ServerInfo
+      type: object
+      properties:
+        serverId:
+          type: string
+          example: RNG-TEST-87
+          description: Transaction server identifier.
+        serverVersion:
+          type: string
+          example: '9.3'
+          description: Transaction server version number.
+      required:
+        - serverId
+        - serverVersion
+    ClientTransactionId:
+      title: ClientTransactionId
+      type: integer
+      description: Client's unique identifier for this transaction.
+      format: int64
+      example: 102030450
+    TransactionTime:
+      title: TransactionTime
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Date and time the request was processed.
+          example: '2020-09-30T18:30:23Z'
+        businessDay:
+          type: integer
+          description: Business day under which the transaction was recorded. Format is YYMMDD.
+          example: 200930
+    ExtractFields:
+      type: array
+      description: Name/value pairs as would be generated in a CSV extract file.
+      items:
+        type: object
+        description: ''
+        properties:
+          name:
+            type: string
+            description: Column name for the CSV extract field.
+          value:
+            type: string
+            description: 'Value of the extract field, formatted for CSV.'
+        required:
+          - name
+          - value
+  responses:
+    BadRequestResponse:
+      description: Bad Request
+      headers: {}
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            Example:
+              value:
+                code: 999
+                description: Input validation failed.
+                fieldErrors:
+                  - code: INVALID_VALUE
+                    message: Product not found
+                    fieldName: productId
+                    path: 'rngRequests[1].productId'
+  securitySchemes: {}
+paths:
+  /rng/quick-picks:
+    post:
+      summary: Quick Pick
+      operationId: post-rng-quick-picks
+      description: Conduct RNG for quick pick products. Returns reduced-size results for performance.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BatchResponse'
+                  - type: object
+                    properties:
+                      results:
+                        type: array
+                        description: 'Array of results objects, corresponding to the array of requests'
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/RngResult'
+              examples: {}
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/BatchRequest'
+                - type: object
+                  properties:
+                    rngRequests:
+                      description: One or more RNG requests to be processed.
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/RngRequest'
+                  required:
+                    - rngRequests
+            examples: {}
+      parameters: []
+      tags:
+        - RNG
+    parameters: []
+  /rng/file-draws:
+    post:
+      summary: File Draw
+      operationId: post-rng-file-draws
+      description: Conduct draws for file-based draw products.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BatchResponse'
+                  - type: object
+                    properties:
+                      testMode:
+                        $ref: '#/components/schemas/TestMode'
+                      results:
+                        type: array
+                        description: 'Array of results objects, corresponding to the array of requests.'
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/RngResult'
+                            - type: object
+                              properties:
+                                drawNumber:
+                                  type: integer
+                                rngMatrix:
+                                  $ref: '#/components/schemas/RngMatrix'
+                      securityBlocks:
+                        $ref: '#/components/schemas/SecurityBlocks'
+              examples: {}
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/BatchRequest'
+                - type: object
+                  properties:
+                    testMode:
+                      $ref: '#/components/schemas/TestMode'
+                    drawUsers:
+                      $ref: '#/components/schemas/DrawUsers'
+                    returnRngMatrix:
+                      $ref: '#/components/schemas/ReturnRngMatrix'
+                    rngRequests:
+                      description: One or more RNG requests to be processed.
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/RngRequest'
+                          - $ref: '#/components/schemas/FileDrawUserData'
+                    securityRequests:
+                      $ref: '#/components/schemas/SecurityRequests'
+                  required:
+                    - rngRequests
+            examples: {}
+      parameters: []
+      tags:
+        - RNG
+    parameters: []
+  /rng/regular-draws:
+    post:
+      summary: Regular Draw
+      operationId: post-rng-regular-draws
+      description: Conduct draws for regular draw products.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/BatchResponse'
+                  - type: object
+                    properties:
+                      testMode:
+                        $ref: '#/components/schemas/TestMode'
+                      results:
+                        type: array
+                        description: 'Array of results records, corresponding to the array of requests.'
+                        items:
+                          allOf:
+                            - $ref: '#/components/schemas/RngResult'
+                            - type: object
+                              properties:
+                                drawNumber:
+                                  type: integer
+                                rngMatrix:
+                                  $ref: '#/components/schemas/RngMatrix'
+                                securityBlocks:
+                                  $ref: '#/components/schemas/SecurityBlocks'
+              examples: {}
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/BatchRequest'
+                - type: object
+                  properties:
+                    testMode:
+                      $ref: '#/components/schemas/TestMode'
+                    drawUsers:
+                      $ref: '#/components/schemas/DrawUsers'
+                    returnRngMatrix:
+                      $ref: '#/components/schemas/ReturnRngMatrix'
+                    rngRequests:
+                      description: One or more RNG requests to be processed.
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: '#/components/schemas/RngRequest'
+                          - $ref: '#/components/schemas/RegularDrawUserData'
+                    securityRequests:
+                      $ref: '#/components/schemas/SecurityRequests'
+                  required:
+                    - rngRequests
+            examples: {}
+        description: ''
+      parameters: []
+      tags:
+        - RNG
+    parameters: []
+  /rng/status:
+    get:
+      summary: RNG Status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      serverTime:
+                        type: string
+                        format: date-time
+                        example: '2020-09-30T18:30:23Z'
+                        description: Current system time of the RNG server.
+                      businessDay:
+                        type: integer
+                        description: Current business day for this RNG server. Format is YYMMDD.
+                        example: 200930
+                      products:
+                        type: array
+                        description: Configured products and status.
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              description: Product identifier.
+                            name:
+                              type: string
+                              description: Product name.
+                            type:
+                              type: string
+                              enum:
+                                - INTEGER
+                                - TABLE
+                                - LOTTO
+                              example: INTEGER
+                              description: The configured RNG algorithm type for the product.
+                            requestCount:
+                              type: integer
+                              description: Current total number of RNG requests for this product.
+                            lastRequestTime:
+                              type: string
+                              description: The time of the last RNG request for this product.
+                              format: date-time
+                            distribution:
+                              type: array
+                              description: Current distribution values. Applies to TABLE type products only
+                              items:
+                                type: integer
+                                maximum: 64
+                            distributionOverride:
+                              type: array
+                              items:
+                                type: integer
+                                maximum: 64
+                          required:
+                            - id
+                            - name
+                            - type
+                            - requestCount
+                      hsms:
+                        type: array
+                        description: Status of the configured hardware security modules.
+                        items:
+                          allOf:
+                            - type: object
+                              properties:
+                                slot:
+                                  type: integer
+                                  description: Slot number of the HSM.
+                                active:
+                                  type: boolean
+                                  description: Indicates the currently active HSM.
+                                status:
+                                  type: string
+                                  description: Current status description for this HSM.
+                              required:
+                                - slot
+                                - active
+                                - status
+                            - $ref: '#/components/schemas/SecurityModule'
+                            - type: object
+                              properties:
+                                lastErrorCode:
+                                  description: 'The error code of the most recent HSM error, if any.'
+                                  type: integer
+                                lastErrorTime:
+                                  type: string
+                                  description: 'The time of the last error code, if any.'
+                                  format: date-time
+                    required:
+                      - serverTime
+                      - businessDay
+              examples:
+                Example 1:
+                  value:
+                    serverId: RNG-TEST-87
+                    serverVersion: '9.3'
+                    serverTime: '2020-09-30T18:30:23Z'
+                    businessDay: 200930
+                    products:
+                      - id: 1001
+                        name: Cool3
+                        type: INTEGER
+                        requestCount: 1
+                        lastRequestTime: '2019-08-24T14:15:22Z'
+                      - id: 1002
+                        name: Lotto6
+                        type: INTEGER
+                        requestCount: 1
+                        lastRequestTime: '2019-08-24T14:15:22Z'
+                    hsms:
+                      - slot: 0
+                        active: true
+                        status: OK
+                        serial: 01000000F00019C8
+                        sequencer: 18394549
+                        lastError: 5
+                        lastErrorTime: '2019-08-24T14:15:22Z'
+                        keyId: 308C-1328-3940-DC32
+                      - slot: 1
+                        active: false
+                        status: OK
+                        serial: 01000000F00019C5
+                        sequencer: 39459
+                        keyId: 308C-1328-3940-DC32
+      operationId: get-server-status
+      description: Get current status of the RNG server and the configured products.
+      tags:
+        - Status
+    parameters: []
+  /rng/verification:
+    get:
+      summary: Verify an RNG record
+      tags:
+        - RNG
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      verificationStatus:
+                        $ref: '#/components/schemas/Status'
+                      rngRequest:
+                        allOf:
+                          - $ref: '#/components/schemas/BatchRequest'
+                          - type: object
+                            properties:
+                              testMode:
+                                $ref: '#/components/schemas/TestMode'
+                              drawUsers:
+                                $ref: '#/components/schemas/DrawUsers'
+                          - $ref: '#/components/schemas/RngRequest'
+                          - $ref: '#/components/schemas/RegularDrawUserData'
+                          - $ref: '#/components/schemas/FileDrawUserData'
+                        description: The original RNG request.
+                      rngResult:
+                        allOf:
+                          - type: object
+                          - $ref: '#/components/schemas/TransactionTime'
+                          - $ref: '#/components/schemas/RngResult'
+                          - type: object
+                            properties:
+                              rngMatrix:
+                                $ref: '#/components/schemas/RngMatrix'
+                        description: The regenerated RNG results.
+                      hsm:
+                        $ref: '#/components/schemas/SecurityModule'
+                      extractFields:
+                        $ref: '#/components/schemas/ExtractFields'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+      operationId: get-rng-verification
+      description: Retrieves and verifies a previously generated RNG record.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: record-id
+          description: Search using the Unique Record Identifier (URI) returned in the RNG response.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: record-handle
+          description: The recordHandle returned in RNG response. May improve response time.
+    parameters: []
+security: []
+tags:
+  - name: RNG
+  - name: Status
