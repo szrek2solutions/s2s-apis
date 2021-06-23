@@ -118,7 +118,7 @@ components:
       description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
       items:
         type: string
-        example: 'some data field, some other data'
+        example: some data field some other data
     Status:
       title: Status
       type: object
@@ -497,7 +497,48 @@ paths:
                                   $ref: '#/components/schemas/RngMatrix'
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
-              examples: {}
+              examples:
+                example-1:
+                  value:
+                    serverId: RNG-TEST-87
+                    serverVersion: '9.3'
+                    transactionStatus:
+                      code: 0
+                      description: Success
+                    clientTransactionId: 102030450
+                    timestamp: '2020-09-30T18:30:23Z'
+                    businessDay: 200930
+                    testMode: true
+                    results:
+                      - rngStatus:
+                          code: 0
+                          description: Success
+                        clientRecordId: RQID-31234545-32
+                        recordId: EX191109870000000125
+                        recordHandle: 0
+                        productId: 0
+                        productChecksum: 0
+                        sets:
+                          - - 0
+                        drawNumber: 0
+                        drawMatrix:
+                          numberOfSets: 1
+                          setSize: 6
+                          minValue: 1
+                          maxValue: 49
+                          withReplacement: true
+                          sortOrder: UNSORTED
+                          exclusions:
+                            - '10,12,15'
+                          distribution:
+                            values:
+                              - '8,8,8,8,8'
+                            depletionType: NO_DEPLETION
+                        securityBlocks:
+                          - blockType: S2S
+                            version: '1.0'
+                            keyId: 308C-1328-3940-DC32
+                            data: VGhpcyBpcyBhbiBleGFtcGxl
         '400':
           $ref: '#/components/responses/BadRequestResponse'
       requestBody:
