@@ -277,7 +277,7 @@ components:
         productId:
           type: integer
           description: 'Identifier of the product to be generated. The product defines all RNG parameters, and MAY allow them to be overridden in the RNG matrix structure.'
-        rngMatrix:
+        drawMatrix:
           $ref: '#/components/schemas/RngMatrix'
         clientData:
           $ref: '#/components/schemas/ClientData'
@@ -340,9 +340,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/DrawUser'
-    ReturnRngMatrix:
-      description: Include RNG parameter matrix in RNG response.
-      type: boolean
     FileDrawUserData:
       title: FileDrawUserData
       type: object
@@ -428,6 +425,10 @@ components:
         required:
           - name
           - value
+    DrawData:
+      oneOf:
+        - $ref: '#/components/schemas/RegularDrawUserData'
+        - $ref: '#/components/schemas/FileDrawUserData'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -481,14 +482,14 @@ paths:
                 - $ref: '#/components/schemas/BatchRequest'
                 - type: object
                   properties:
-                    rngRequests:
+                    drawRequests:
                       description: One or more RNG requests to be processed.
                       type: array
                       items:
                         allOf:
                           - $ref: '#/components/schemas/RngRequest'
                   required:
-                    - rngRequests
+                    - drawRequests
             examples: {}
       parameters: []
       tags:
@@ -521,7 +522,7 @@ paths:
                               properties:
                                 drawNumber:
                                   type: integer
-                                rngMatrix:
+                                drawMatrix:
                                   $ref: '#/components/schemas/RngMatrix'
                       securityBlocks:
                         $ref: '#/components/schemas/SecurityBlocks'
@@ -540,9 +541,7 @@ paths:
                       $ref: '#/components/schemas/TestMode'
                     drawUsers:
                       $ref: '#/components/schemas/DrawUsers'
-                    returnRngMatrix:
-                      $ref: '#/components/schemas/ReturnRngMatrix'
-                    rngRequests:
+                    drawRequests:
                       description: One or more RNG requests to be processed.
                       type: array
                       items:
@@ -552,7 +551,7 @@ paths:
                     securityRequests:
                       $ref: '#/components/schemas/SecurityRequests'
                   required:
-                    - rngRequests
+                    - drawRequests
             examples: {}
       parameters: []
       tags:
@@ -585,7 +584,7 @@ paths:
                               properties:
                                 drawNumber:
                                   type: integer
-                                rngMatrix:
+                                drawMatrix:
                                   $ref: '#/components/schemas/RngMatrix'
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
@@ -604,19 +603,17 @@ paths:
                       $ref: '#/components/schemas/TestMode'
                     drawUsers:
                       $ref: '#/components/schemas/DrawUsers'
-                    returnRngMatrix:
-                      $ref: '#/components/schemas/ReturnRngMatrix'
-                    rngRequests:
+                    drawRequests:
                       description: One or more RNG requests to be processed.
                       type: array
                       items:
                         allOf:
                           - $ref: '#/components/schemas/RngRequest'
-                          - $ref: '#/components/schemas/RegularDrawUserData'
+                          - $ref: '#/components/schemas/DrawData'
                     securityRequests:
                       $ref: '#/components/schemas/SecurityRequests'
                   required:
-                    - rngRequests
+                    - drawRequests
             examples: {}
         description: ''
       parameters: []
