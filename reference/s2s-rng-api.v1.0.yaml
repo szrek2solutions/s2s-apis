@@ -312,12 +312,12 @@ components:
             - RQID-31234545-32
         recordId:
           type: string
-          description: Unique record identifier.
+          description: Unique record identifier (URI).
           examples:
             - EX191109870000000125
         recordHandle:
           type: integer
-          description: Handle that can optionally be used for faster verification processing.
+          description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
         productId:
           type: integer
@@ -657,9 +657,27 @@ paths:
       tags:
         - Status
     parameters: []
-  /rng/verification:
+  /rng/verifications:
     get:
       summary: Verify an RNG draw record
+      operationId: get-rng-verification
+      description: Retrieves and verifies a previously generated RNG draw record.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: record-id
+          description: Search using the Unique Record Identifier (URI) returned in the RNG response.
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: record-handle
+          description: The recordHandle returned in RNG response. May improve response time.
+    parameters: []
+    post:
+      summary: Verify an RNG draw record
+      operationId: post-rng-verifications
       tags:
         - RNG
       responses:
@@ -705,21 +723,22 @@ paths:
           description: Bad Request
         '404':
           description: Not Found
-      operationId: get-rng-verification
-      description: Retrieves and verifies a previously generated RNG draw record.
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: record-id
-          description: Search using the Unique Record Identifier (URI) returned in the RNG response.
-          required: true
-        - schema:
-            type: integer
-          in: query
-          name: record-handle
-          description: The recordHandle returned in RNG response. May improve response time.
-    parameters: []
+      description: Verifies a previously generated RNG draw record and returns the record detail.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recordId:
+                  type: string
+                  description: The Unique Record Identifier (URI) of the record to be verified.
+                recordHandle:
+                  type: string
+                  description: The recordHandle returned in RNG response. May improve response time.
+              required:
+                - recordId
+        description: ''
 security: []
 tags:
   - name: RNG
