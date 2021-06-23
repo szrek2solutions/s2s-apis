@@ -21,12 +21,14 @@ components:
           description: Full name of the user as it should appear in the draw reports.
           examples:
             - John Smith
+          example: Joe Smith
         loginTime:
           type: string
           format: date-time
           description: 'If included, the login time for the user will appear in the draw reports.'
           examples:
             - '2020-03-15T15:47:44Z'
+          example: '2021-06-22T18:44:34-04:00'
     RngMatrix:
       title: RngMatrix
       type: object
@@ -36,24 +38,28 @@ components:
           type: integer
           description: How many sets of numbers to generate.
           minimum: 1
+          example: 1
         setSize:
           type: integer
           description: How many numbers in each set.
           examples:
             - 6
           minimum: 1
+          example: 6
         minValue:
           type: integer
           description: Lowest number that can be generated.
           examples:
             - 1
           minimum: 0
+          example: 1
         maxValue:
           type: integer
           description: Highest number that can be generated.
           examples:
             - 49
           minimum: 0
+          example: 49
         withReplacement:
           type: boolean
           description: True if generated numbers can be repeated within a set.
@@ -66,6 +72,7 @@ components:
             - ASCENDING
           examples:
             - UNSORTED
+          example: UNSORTED
           readOnly: true
         exclusions:
           type: array
@@ -76,6 +83,7 @@ components:
             type: integer
             examples:
               - 0
+            example: '10,12,15'
         distribution:
           $ref: '#/components/schemas/Distribution'
       required:
@@ -92,6 +100,7 @@ components:
           maxItems: 64
           items:
             type: integer
+            example: '8,8,8,8,8'
         depletionType:
           type: string
           enum:
@@ -101,6 +110,7 @@ components:
           description: Specifies method of depletion for the distribution values.
           examples:
             - NO_DEPLETION
+          example: NO_DEPLETION
           readOnly: true
     ClientData:
       title: ClientData
@@ -108,6 +118,7 @@ components:
       description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
       items:
         type: string
+        example: 'some data field, some other data'
     Status:
       title: Status
       type: object
@@ -717,9 +728,11 @@ paths:
                 recordId:
                   type: string
                   description: The Unique Record Identifier (URI) of the record to be verified.
+                  example: EX210622870000000335
                 recordHandle:
                   type: string
                   description: The recordHandle that was returned in RNG response. Including this parameter may improve response time.
+                  example: '184638'
               required:
                 - recordId
         description: ''
