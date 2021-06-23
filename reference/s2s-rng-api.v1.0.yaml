@@ -573,7 +573,7 @@ paths:
                   - $ref: '#/components/schemas/BatchResponse'
                   - type: object
                     properties:
-                      testMode1:
+                      testMode:
                         $ref: '#/components/schemas/TestMode'
                       results:
                         type: array
