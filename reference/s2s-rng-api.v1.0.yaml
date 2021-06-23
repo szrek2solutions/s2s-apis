@@ -658,22 +658,6 @@ paths:
         - Status
     parameters: []
   /rng/verifications:
-    get:
-      summary: Verify an RNG draw record
-      operationId: get-rng-verification
-      description: Retrieves and verifies a previously generated RNG draw record.
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: record-id
-          description: Search using the Unique Record Identifier (URI) returned in the RNG response.
-          required: true
-        - schema:
-            type: integer
-          in: query
-          name: record-handle
-          description: The recordHandle returned in RNG response. May improve response time.
     parameters: []
     post:
       summary: Verify an RNG draw record
@@ -723,7 +707,7 @@ paths:
           description: Bad Request
         '404':
           description: Not Found
-      description: Verifies a previously generated RNG draw record and returns the record detail.
+      description: Verifies a previously generated RNG draw record and returns the draw detail.
       requestBody:
         content:
           application/json:
@@ -735,7 +719,7 @@ paths:
                   description: The Unique Record Identifier (URI) of the record to be verified.
                 recordHandle:
                   type: string
-                  description: The recordHandle returned in RNG response. May improve response time.
+                  description: The recordHandle that was returned in RNG response. Including this parameter may improve response time.
               required:
                 - recordId
         description: ''
