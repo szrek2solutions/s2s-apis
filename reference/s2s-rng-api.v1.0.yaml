@@ -57,6 +57,7 @@ components:
         withReplacement:
           type: boolean
           description: True if generated numbers can be repeated within a set.
+          readOnly: true
         sortOrder:
           type: string
           description: Sort order for the generated numbers within a set.
@@ -65,6 +66,7 @@ components:
             - ASCENDING
           examples:
             - UNSORTED
+          readOnly: true
         exclusions:
           type: array
           description: Values to be excluded from the generation.
@@ -99,6 +101,7 @@ components:
           description: Specifies method of depletion for the distribution values.
           examples:
             - NO_DEPLETION
+          readOnly: true
     ClientData:
       title: ClientData
       type: array
@@ -361,13 +364,16 @@ components:
       properties:
         drawHash:
           type: string
-          description: 'A hash string that will be included in the signed data, such as the SHA-1 hash of the bets.'
+          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
           format: binary
           examples:
             - B63C77E06612D820BC3BE72877C74F257B562A20
+        drawFile:
+          type: string
+          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
         drawText:
           type: string
-          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names.
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
           examples:
             - PROMO-1
     ServerInfo:
@@ -609,7 +615,7 @@ paths:
                       items:
                         allOf:
                           - $ref: '#/components/schemas/RngRequest'
-                          - $ref: '#/components/schemas/DrawData'
+                          - $ref: '#/components/schemas/RegularDrawUserData'
                     securityRequests:
                       $ref: '#/components/schemas/SecurityRequests'
                   required:
