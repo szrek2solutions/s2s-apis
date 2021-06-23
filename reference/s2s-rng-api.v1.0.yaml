@@ -455,57 +455,11 @@ components:
                     path: 'rngRequests[1].productId'
   securitySchemes: {}
 paths:
-  /rng/quick-picks:
+  /rng/draws:
     post:
-      summary: Quick Pick
-      operationId: post-rng-quick-picks
-      description: Conduct RNG for quick pick products. Returns reduced-size results for performance.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/BatchResponse'
-                  - type: object
-                    properties:
-                      results:
-                        type: array
-                        description: 'Array of results objects, corresponding to the array of requests'
-                        items:
-                          allOf:
-                            - $ref: '#/components/schemas/RngResult'
-              examples: {}
-        '400':
-          $ref: '#/components/responses/BadRequestResponse'
-      requestBody:
-        description: ''
-        content:
-          application/json:
-            schema:
-              allOf:
-                - $ref: '#/components/schemas/BatchRequest'
-                - type: object
-                  properties:
-                    drawRequests:
-                      description: One or more RNG requests to be processed.
-                      type: array
-                      items:
-                        allOf:
-                          - $ref: '#/components/schemas/RngRequest'
-                  required:
-                    - drawRequests
-            examples: {}
-      parameters: []
-      tags:
-        - RNG
-    parameters: []
-  /rng/regular-draws:
-    post:
-      summary: Regular Draw
-      operationId: post-rng-regular-draws
-      description: Conduct draws for regular draw products.
+      summary: Draw Random Numbers
+      operationId: post-rng-draws
+      description: Generate random numbers for draw products.
       responses:
         '200':
           description: OK
@@ -705,7 +659,7 @@ paths:
     parameters: []
   /rng/verification:
     get:
-      summary: Verify an RNG record
+      summary: Verify an RNG draw record
       tags:
         - RNG
       responses:
@@ -752,7 +706,7 @@ paths:
         '404':
           description: Not Found
       operationId: get-rng-verification
-      description: Retrieves and verifies a previously generated RNG record.
+      description: Retrieves and verifies a previously generated RNG draw record.
       parameters:
         - schema:
             type: string
