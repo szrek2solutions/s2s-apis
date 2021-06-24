@@ -7,8 +7,10 @@ info:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - url: 'http://localhost:55002/api/draw/v1'
-    description: Local API Server
+  - url: 'https://test.trusteddraw.com/api/v1/rng'
+    description: Test Server
+  - description: Local Server
+    url: 'http://localhost:55002/api/v1/rng'
 components:
   schemas:
     DrawUser:
@@ -446,7 +448,7 @@ components:
                     path: 'drawRequests[1].productId'
   securitySchemes: {}
 paths:
-  /draw/draws:
+  /draws:
     post:
       summary: Draw Random Numbers
       operationId: post-draw-draws
@@ -548,7 +550,7 @@ paths:
       tags:
         - RNG
     parameters: []
-  /draw/status:
+  /status:
     get:
       summary: RNG Status
       responses:
@@ -683,7 +685,7 @@ paths:
       tags:
         - Status
     parameters: []
-  /draw/verifications:
+  /verifications:
     parameters: []
     post:
       summary: Verify an RNG draw record
