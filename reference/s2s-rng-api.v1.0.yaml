@@ -7,8 +7,6 @@ info:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - url: 'https://test.trusteddraw.com/api/v1/rng'
-    description: Test Server
   - description: Local Server
     url: 'http://localhost:55002/api/v1/rng'
 components:
