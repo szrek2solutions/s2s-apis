@@ -7,7 +7,7 @@ info:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - url: 'http://localhost:55002/api/rng/v1'
+  - url: 'http://localhost:55002/api/draw/v1'
     description: Local API Server
 components:
   schemas:
@@ -29,8 +29,8 @@ components:
           examples:
             - '2020-03-15T15:47:44Z'
           example: '2021-06-22T18:44:34-04:00'
-    RngMatrix:
-      title: RngMatrix
+    DrawMatrix:
+      title: DrawMatrix
       type: object
       description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
       properties:
@@ -81,9 +81,8 @@ components:
           maxItems: 65535
           items:
             type: integer
-            examples:
-              - 0
-            example: '10,12,15'
+          example:
+            - 10
         distribution:
           $ref: '#/components/schemas/Distribution'
       required:
@@ -100,7 +99,7 @@ components:
           maxItems: 64
           items:
             type: integer
-            example: '8,8,8,8,8'
+            example: 8
         depletionType:
           type: string
           enum:
@@ -171,7 +170,7 @@ components:
             - code: INVALID_VALUE
               message: Product not found
               fieldName: productId
-              path: 'rngRequests[1].productId'
+              path: 'draw[1].productId'
     SecurityRequest:
       title: SecurityRequest
       type: object
@@ -279,8 +278,8 @@ components:
           properties:
             clientTransactionId:
               $ref: '#/components/schemas/ClientTransactionId'
-    RngRequest:
-      title: RngRequest
+    DrawRequest:
+      title: DrawRequest
       type: object
       properties:
         clientRecordId:
@@ -292,7 +291,7 @@ components:
           type: integer
           description: 'Identifier of the product to be generated. The product defines all RNG parameters, and MAY allow them to be overridden in the RNG matrix structure.'
         drawMatrix:
-          $ref: '#/components/schemas/RngMatrix'
+          $ref: '#/components/schemas/DrawMatrix'
         clientData:
           $ref: '#/components/schemas/ClientData'
       required:
@@ -310,11 +309,11 @@ components:
           required:
             - transactionStatus
         - $ref: '#/components/schemas/TransactionTime'
-    RngResult:
-      title: RngResult
+    DrawResult:
+      title: DrawResult
       type: object
       properties:
-        rngStatus:
+        drawStatus:
           $ref: '#/components/schemas/Status'
         clientRecordId:
           type: string
@@ -344,32 +343,17 @@ components:
             items:
               type: integer
       required:
-        - rngStatus
+        - drawStatus
     TestMode:
       type: boolean
-      description: Marks the draw as "test mode" and not valid for use.
+      description: Indicates that the draw is a test only and not valid for use.
       x-userDataIndex: 1
     DrawUsers:
       description: 'Draw participants to be included in the draw reports. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
       type: array
       items:
         $ref: '#/components/schemas/DrawUser'
-    FileDrawUserData:
-      title: FileDrawUserData
-      type: object
-      properties:
-        fileName:
-          type: string
-          description: Name of the file used for the draw.
-          examples:
-            - PROMO-1.csv
-        fileHash:
-          type: string
-          description: SHA-1 hash of the file used for the draw.
-          format: binary
-          examples:
-            - A54D88E06612D820BC3BE72877C74F257B561B19
-    RegularDrawUserData:
+    DrawData:
       title: RegularDrawUserData
       type: object
       properties:
@@ -442,10 +426,6 @@ components:
         required:
           - name
           - value
-    DrawData:
-      oneOf:
-        - $ref: '#/components/schemas/RegularDrawUserData'
-        - $ref: '#/components/schemas/FileDrawUserData'
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -463,13 +443,13 @@ components:
                   - code: INVALID_VALUE
                     message: Product not found
                     fieldName: productId
-                    path: 'rngRequests[1].productId'
+                    path: 'drawRequests[1].productId'
   securitySchemes: {}
 paths:
-  /rng/draws:
+  /draw/draws:
     post:
       summary: Draw Random Numbers
-      operationId: post-rng-draws
+      operationId: post-draw-draws
       description: Generate random numbers for draw products.
       responses:
         '200':
@@ -488,13 +468,13 @@ paths:
                         description: 'Array of results records, corresponding to the array of requests.'
                         items:
                           allOf:
-                            - $ref: '#/components/schemas/RngResult'
+                            - $ref: '#/components/schemas/DrawResult'
                             - type: object
                               properties:
                                 drawNumber:
                                   type: integer
                                 drawMatrix:
-                                  $ref: '#/components/schemas/RngMatrix'
+                                  $ref: '#/components/schemas/DrawMatrix'
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
               examples:
@@ -510,7 +490,7 @@ paths:
                     businessDay: 200930
                     testMode: true
                     results:
-                      - rngStatus:
+                      - drawStatus:
                           code: 0
                           description: Success
                         clientRecordId: RQID-31234545-32
@@ -529,10 +509,8 @@ paths:
                           withReplacement: true
                           sortOrder: UNSORTED
                           exclusions:
-                            - '10,12,15'
+                            - 10
                           distribution:
-                            values:
-                              - '8,8,8,8,8'
                             depletionType: NO_DEPLETION
                         securityBlocks:
                           - blockType: S2S
@@ -558,8 +536,8 @@ paths:
                       type: array
                       items:
                         allOf:
-                          - $ref: '#/components/schemas/RngRequest'
-                          - $ref: '#/components/schemas/RegularDrawUserData'
+                          - $ref: '#/components/schemas/DrawRequest'
+                          - $ref: '#/components/schemas/DrawData'
                     securityRequests:
                       $ref: '#/components/schemas/SecurityRequests'
                   required:
@@ -570,7 +548,7 @@ paths:
       tags:
         - RNG
     parameters: []
-  /rng/status:
+  /draw/status:
     get:
       summary: RNG Status
       responses:
@@ -638,24 +616,20 @@ paths:
                             - name
                             - type
                             - requestCount
-                      hsms:
+                      securityModules:
                         type: array
-                        description: Status of the configured hardware security modules.
+                        description: Status of the configured hardware security modules (HSMs).
                         items:
                           allOf:
                             - type: object
                               properties:
-                                slot:
-                                  type: integer
-                                  description: Slot number of the HSM.
                                 active:
                                   type: boolean
-                                  description: Indicates the currently active HSM.
+                                  description: Indicates if this is the currently active HSM or not.
                                 status:
                                   type: string
                                   description: Current status description for this HSM.
                               required:
-                                - slot
                                 - active
                                 - status
                             - $ref: '#/components/schemas/SecurityModule'
@@ -709,11 +683,11 @@ paths:
       tags:
         - Status
     parameters: []
-  /rng/verifications:
+  /draw/verifications:
     parameters: []
     post:
       summary: Verify an RNG draw record
-      operationId: post-rng-verifications
+      operationId: post-draw-verifications
       tags:
         - RNG
       responses:
@@ -728,7 +702,7 @@ paths:
                     properties:
                       verificationStatus:
                         $ref: '#/components/schemas/Status'
-                      rngRequest:
+                      drawRequest:
                         allOf:
                           - $ref: '#/components/schemas/BatchRequest'
                           - type: object
@@ -737,19 +711,18 @@ paths:
                                 $ref: '#/components/schemas/TestMode'
                               drawUsers:
                                 $ref: '#/components/schemas/DrawUsers'
-                          - $ref: '#/components/schemas/RngRequest'
-                          - $ref: '#/components/schemas/RegularDrawUserData'
-                          - $ref: '#/components/schemas/FileDrawUserData'
+                          - $ref: '#/components/schemas/DrawRequest'
+                          - $ref: '#/components/schemas/DrawData'
                         description: The original RNG request.
-                      rngResult:
+                      drawResult:
                         allOf:
                           - type: object
                           - $ref: '#/components/schemas/TransactionTime'
-                          - $ref: '#/components/schemas/RngResult'
+                          - $ref: '#/components/schemas/DrawResult'
                           - type: object
                             properties:
-                              rngMatrix:
-                                $ref: '#/components/schemas/RngMatrix'
+                              drawMatrix:
+                                $ref: '#/components/schemas/DrawMatrix'
                         description: The regenerated RNG results.
                       hsm:
                         $ref: '#/components/schemas/SecurityModule'
