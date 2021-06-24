@@ -7,8 +7,6 @@ info:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - url: 'https://test.trusteddraw.com/api/v1/rng'
-    description: Test Server
   - description: Local Server
     url: 'http://localhost:55002/api/v1/rng'
 components:
@@ -550,6 +548,65 @@ paths:
       tags:
         - RNG
     parameters: []
+  /products:
+    get:
+      summary: List Available Draw Products
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: array
+                    description: Configured products and status.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          description: Product identifier.
+                        name:
+                          type: string
+                          description: Product name.
+                        type:
+                          type: string
+                          enum:
+                            - INTEGER
+                            - TABLE
+                            - LOTTO
+                          examples:
+                            - INTEGER
+                          description: The configured RNG algorithm type for the product.
+                        requestCount:
+                          type: integer
+                          description: Current total number of RNG requests for this product.
+                        lastRequestTime:
+                          type: string
+                          description: The time of the last RNG request for this product.
+                          format: date-time
+                        distribution:
+                          type: array
+                          description: Current distribution values. Applies to TABLE type products only
+                          items:
+                            type: integer
+                            maximum: 64
+                        distributionOverride:
+                          type: array
+                          items:
+                            type: integer
+                            maximum: 64
+                      required:
+                        - id
+                        - name
+                        - type
+                        - requestCount
+      operationId: get-products
+      description: List all configured products.
+      tags:
+        - Products
+    parameters: []
   /status:
     get:
       summary: RNG Status
@@ -574,50 +631,7 @@ paths:
                         description: Current business day for this RNG server. Format is YYMMDD.
                         examples:
                           - 200930
-                      products:
-                        type: array
-                        description: Configured products and status.
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                              description: Product identifier.
-                            name:
-                              type: string
-                              description: Product name.
-                            type:
-                              type: string
-                              enum:
-                                - INTEGER
-                                - TABLE
-                                - LOTTO
-                              examples:
-                                - INTEGER
-                              description: The configured RNG algorithm type for the product.
-                            requestCount:
-                              type: integer
-                              description: Current total number of RNG requests for this product.
-                            lastRequestTime:
-                              type: string
-                              description: The time of the last RNG request for this product.
-                              format: date-time
-                            distribution:
-                              type: array
-                              description: Current distribution values. Applies to TABLE type products only
-                              items:
-                                type: integer
-                                maximum: 64
-                            distributionOverride:
-                              type: array
-                              items:
-                                type: integer
-                                maximum: 64
-                          required:
-                            - id
-                            - name
-                            - type
-                            - requestCount
+                      products: null
                       securityModules:
                         type: array
                         description: Status of the configured hardware security modules (HSMs).
