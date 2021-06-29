@@ -182,6 +182,14 @@ components:
       required:
         - code
       readOnly: true
+    TransactionStatus:
+      $ref: '#/components/schemas/Status'
+      description: Overall status of the batch request.
+    DrawStatus:
+      $ref: '#/components/schemas/Status'
+    VerificationStatus:
+      type: object
+      description: Status of the verification request.
     DrawRecord:
       title: Draw
       description: A single draw generation from an RNG product.
@@ -389,8 +397,8 @@ paths:
                   - type: object
                     behavior: Read Only
                     properties:
-                      transactionStatus:
-                        $ref: '#/components/schemas/Status'
+                      status:
+                        $ref: '#/components/schemas/TransactionStatus'
                       businessDay:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
@@ -406,7 +414,7 @@ paths:
                         items:
                           allOf:
                             - type: object
-                              description: asdfasadfdf
+                              description: ''
                               properties:
                                 status:
                                   $ref: '#/components/schemas/Status'
