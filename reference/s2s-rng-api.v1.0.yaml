@@ -278,22 +278,42 @@ components:
           properties:
             clientTransactionId:
               $ref: '#/components/schemas/ClientTransactionId'
+        - $ref: '#/components/schemas/ServerInfo'
+        - type: object
+          behavior: Read Only
+          properties:
+            transactionStatus:
+              $ref: '#/components/schemas/Status'
+            businessDay:
+              type: integer
+              description: Business day under which the transaction was recorded. Format is YYMMDD.
+              examples:
+                - 200930
     DrawRequest:
       title: DrawRequest
-      type: object
-      properties:
-        clientRecordId:
-          type: string
-          description: Client's unique identifier for this RNG request.
-          examples:
-            - RQID-31234545-32
-        productId:
-          type: integer
-          description: 'Identifier of the product to be generated. The product defines all RNG parameters, and MAY allow them to be overridden in the RNG matrix structure.'
-        drawMatrix:
-          $ref: '#/components/schemas/DrawMatrix'
-        clientData:
-          $ref: '#/components/schemas/ClientData'
+      allOf:
+        - type: object
+          properties:
+            clientRecordId:
+              type: string
+              description: Client's unique identifier for this RNG request.
+              examples:
+                - RQID-31234545-32
+            productId:
+              type: integer
+              description: 'Identifier of the product to be generated. The product defines all RNG parameters, and MAY allow them to be overridden in the RNG matrix structure.'
+            drawMatrix:
+              $ref: '#/components/schemas/DrawMatrix'
+            clientData:
+              $ref: '#/components/schemas/ClientData'
+        - type: object
+          properties:
+            timestamp:
+              type: string
+              format: date-time
+              description: Date and time the request was processed.
+              examples:
+                - '2020-09-30T18:30:23Z'
       required:
         - productId
     BatchResponse:
@@ -301,6 +321,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/ServerInfo'
         - type: object
+          behavior: Read Only
           properties:
             transactionStatus:
               $ref: '#/components/schemas/Status'
@@ -372,8 +393,8 @@ components:
           examples:
             - PROMO-1
     ServerInfo:
-      title: ServerInfo
       type: object
+      title: ServerInfo
       properties:
         serverId:
           type: string
@@ -388,6 +409,7 @@ components:
       required:
         - serverId
         - serverVersion
+      readOnly: true
     ClientTransactionId:
       title: ClientTransactionId
       type: integer
