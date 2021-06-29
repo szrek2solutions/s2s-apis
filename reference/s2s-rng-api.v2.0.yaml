@@ -406,10 +406,10 @@ paths:
                         items:
                           allOf:
                             - type: object
+                              description: asdfasadfdf
                               properties:
                                 status:
                                   $ref: '#/components/schemas/Status'
-                                  description: arasdra
                                 clientRecordId:
                                   type: string
                                   description: Client's unique identifier for this draw.
