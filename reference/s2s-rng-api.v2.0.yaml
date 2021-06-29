@@ -165,8 +165,8 @@ components:
         type: string
         example: some data field some other data
     Status:
-      type: object
       title: Status
+      type: object
       x-internal: true
       properties:
         code:
@@ -182,7 +182,7 @@ components:
       required:
         - code
       readOnly: true
-    Draw:
+    DrawRecord:
       title: Draw
       description: A single draw generation from an RNG product.
       type: object
@@ -220,9 +220,6 @@ components:
           $ref: '#/components/schemas/ClientData'
         userData:
           $ref: '#/components/schemas/UserData'
-        status:
-          $ref: '#/components/schemas/Status'
-          readOnly: true
         timestamp:
           type: string
           format: date-time
@@ -410,11 +407,14 @@ paths:
                           allOf:
                             - type: object
                               properties:
+                                status:
+                                  $ref: '#/components/schemas/Status'
+                                  description: arasdra
                                 clientRecordId:
                                   type: string
                                   description: Client's unique identifier for this draw.
                                   example: RQID-31234545-32
-                            - $ref: '#/components/schemas/Draw'
+                            - $ref: '#/components/schemas/DrawRecord'
                             - type: object
                               properties:
                                 securityBlocks:
@@ -484,7 +484,7 @@ paths:
                                 type: string
                                 description: Client's unique identifier for this draw.
                                 example: RQID-31234545-32
-                          - $ref: '#/components/schemas/Draw'
+                          - $ref: '#/components/schemas/DrawRecord'
                           - type: object
                             properties:
                               securityBlocks:
@@ -658,7 +658,7 @@ paths:
                                 $ref: '#/components/schemas/TestMode'
                               drawUsers:
                                 $ref: '#/components/schemas/DrawUsers'
-                          - $ref: '#/components/schemas/Draw'
+                          - $ref: '#/components/schemas/DrawRecord'
                         description: The original RNG request.
                       drawResult:
                         allOf:
