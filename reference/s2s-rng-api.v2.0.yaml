@@ -244,6 +244,8 @@ components:
             - PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
+        userData:
+          $ref: '#/components/schemas/UserData'
         timestamp:
           type: string
           format: date-time
