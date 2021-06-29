@@ -27,17 +27,12 @@ components:
           description: The time that the user logged into the draw GUI
           examples:
             - '2020-03-15T15:47:44Z'
+      x-internal: true
     DrawMatrix:
       title: DrawMatrix
       type: object
       description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
       properties:
-        numberOfSets:
-          type: integer
-          description: How many sets of numbers to generate.
-          minimum: 1
-          examples:
-            - 1
         setSize:
           type: integer
           description: How many numbers in each set.
@@ -83,6 +78,7 @@ components:
           $ref: '#/components/schemas/Distribution'
       required:
         - numberOfSets
+      x-internal: true
     Distribution:
       title: Distribution
       type: object
@@ -108,6 +104,7 @@ components:
             - NO_DEPLETION
           example: NO_DEPLETION
           readOnly: true
+      x-internal: true
     ClientData:
       title: ClientData
       type: array
@@ -115,6 +112,7 @@ components:
       items:
         type: string
         example: some data field some other data
+      x-internal: true
     Status:
       title: Status
       type: object
@@ -149,6 +147,7 @@ components:
         path:
           type: string
           description: 'Path to the field that caused the error, if applicable.'
+      x-internal: false
     ErrorResponse:
       description: Describes the error and any specific problems with fields in the request.
       allOf:
@@ -185,6 +184,7 @@ components:
             - '1.0'
       required:
         - blockType
+      x-internal: true
     SecurityModule:
       title: SecurityModule
       type: object
@@ -210,6 +210,7 @@ components:
           description: Identifier of the RSA key pair on the HSM.
           examples:
             - 308C-1328-3940-DC32
+      x-internal: true
     SecurityBlock:
       allOf:
         - $ref: '#/components/schemas/SecurityRequest'
@@ -238,15 +239,18 @@ components:
                 - VGhpcyBpcyBhbiBleGFtcGxl
           required:
             - blockType
+      x-internal: true
     SecurityRequests:
       type: array
       description: Requested transaction security blocks.
       items:
         $ref: '#/components/schemas/SecurityRequest'
+      x-internal: true
     SecurityBlocks:
       type: array
       items:
         $ref: '#/components/schemas/SecurityBlock'
+      x-internal: true
     ClientInfo:
       title: ClientInfo
       type: object
@@ -273,34 +277,59 @@ components:
           description: Client's current business day. Format is YYMMDD.
           examples:
             - 200930
+      x-internal: true
     BatchRequest:
       title: BatchRequest
       allOf:
         - $ref: '#/components/schemas/ClientInfo'
+      x-internal: true
     Draw:
       title: Draw
       description: A single draw generation from an RNG product.
       allOf:
         - properties:
-            productId:
-              type: integer
-              description: Identifier of the product definition used for the draw generation.
-            productChecksum:
-              type: number
-              description: CRC32 checksum of the product definition used for the draw generation.
-              readOnly: true
             clientRecordId:
               type: string
               description: Client's unique identifier for this draw.
               examples:
                 - RQID-31234545-32
+            productId:
+              type: integer
+              description: Identifier of the product definition used for the draw generation.
+              examples:
+                - 1
+            numberOfSets:
+              type: integer
+              description: How many sets of numbers to generate.
+              minimum: 1
+              examples:
+                - 1
             drawMatrix:
               $ref: '#/components/schemas/DrawMatrix'
+            drawNumber:
+              type: integer
+              examples:
+                - 1
+              description: Draw number for this draw.
+              minimum: 1
+            drawHash:
+              type: string
+              description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
+              format: binary
+              examples:
+                - B63C77E06612D820BC3BE72877C74F257B562A20
+            drawFile:
+              type: string
+              description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
+            drawText:
+              type: string
+              description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
+              examples:
+                - PROMO-1
             clientData:
               $ref: '#/components/schemas/ClientData'
             drawStatus:
               $ref: '#/components/schemas/Status'
-              readOnly: true
             timestamp:
               type: string
               format: date-time
@@ -319,6 +348,10 @@ components:
               description: A look-up handle that can optionally be used for faster verification processing.
               format: int64
               readOnly: true
+            productChecksum:
+              type: number
+              description: CRC32 checksum of the product definition used for the draw generation.
+              readOnly: true
             sets:
               type: array
               description: Numbers generated
@@ -329,6 +362,7 @@ components:
               readOnly: true
           required:
             - productId
+            - numberOfSets
       x-internal: true
       type: object
     BatchResponse:
@@ -343,10 +377,7 @@ components:
           required:
             - transactionStatus
         - $ref: '#/components/schemas/TransactionTime'
-    DrawResult:
-      title: DrawResult
-      type: object
-      properties: null
+      x-internal: true
     TestMode:
       type: boolean
       description: Indicates that the draw is a test only and not valid for use.
@@ -356,24 +387,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/DrawUser'
-    DrawData:
-      title: DrawUserData
-      type: object
-      properties:
-        drawHash:
-          type: string
-          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
-          format: binary
-          examples:
-            - B63C77E06612D820BC3BE72877C74F257B562A20
-        drawFile:
-          type: string
-          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
-        drawText:
-          type: string
-          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
-          examples:
-            - PROMO-1
     ServerInfo:
       type: object
       title: ServerInfo
@@ -470,16 +483,14 @@ paths:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
-                      results:
+                      draws:
                         type: array
-                        description: 'Array of results records, corresponding to the array of requests.'
+                        description: Array of draw records.
                         items:
                           allOf:
-                            - $ref: '#/components/schemas/DrawResult'
+                            - $ref: '#/components/schemas/Draw'
                             - type: object
                               properties:
-                                drawNumber:
-                                  type: integer
                                 drawMatrix:
                                   $ref: '#/components/schemas/DrawMatrix'
                                 securityBlocks:
@@ -538,17 +549,15 @@ paths:
                       $ref: '#/components/schemas/TestMode'
                     drawUsers:
                       $ref: '#/components/schemas/DrawUsers'
-                    drawRequests:
-                      description: One or more RNG requests to be processed.
+                    draws:
+                      description: One or more RNG draw requests to be processed.
                       type: array
                       items:
-                        allOf:
-                          - $ref: '#/components/schemas/Draw'
-                          - $ref: '#/components/schemas/DrawData'
+                        - $ref: '#/components/schemas/Draw'
                     securityRequests:
                       $ref: '#/components/schemas/SecurityRequests'
                   required:
-                    - drawRequests
+                    - draws
             examples: {}
         description: ''
       parameters: []
@@ -718,13 +727,11 @@ paths:
                                 $ref: '#/components/schemas/TestMode'
                               drawUsers:
                                 $ref: '#/components/schemas/DrawUsers'
-                          - $ref: '#/components/schemas/DrawData'
                         description: The original RNG request.
                       drawResult:
                         allOf:
                           - type: object
                           - $ref: '#/components/schemas/TransactionTime'
-                          - $ref: '#/components/schemas/DrawResult'
                           - type: object
                             properties:
                               drawMatrix:
