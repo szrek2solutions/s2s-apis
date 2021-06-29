@@ -305,8 +305,6 @@ components:
             - PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
-        drawStatus:
-          $ref: '#/components/schemas/Status'
         timestamp:
           type: string
           format: date-time
@@ -449,6 +447,10 @@ paths:
                               properties:
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
+                            - type: object
+                              properties:
+                                status:
+                                  $ref: '#/components/schemas/Status'
               examples:
                 example-1:
                   value:
@@ -510,6 +512,7 @@ paths:
                         allOf:
                           - $ref: '#/components/schemas/Draw'
                           - type: object
+                            description: Status of the draw request.
                             properties:
                               securityBlocks:
                                 $ref: '#/components/schemas/SecurityBlocks'
