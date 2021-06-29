@@ -158,7 +158,7 @@ components:
     UserData:
       type: array
       title: UserData
-      description: Optional text fields that are signed and logged. This is an old and deprecated field. If used it will replace many of the other Draw fields.
+      description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values.
       x-internal: true
       deprecated: true
       items:
@@ -220,6 +220,8 @@ components:
           $ref: '#/components/schemas/ClientData'
         userData:
           $ref: '#/components/schemas/UserData'
+        status:
+          $ref: '#/components/schemas/Status'
         timestamp:
           type: string
           format: date-time
@@ -235,10 +237,6 @@ components:
           type: integer
           description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
-          readOnly: true
-        productChecksum:
-          type: number
-          description: CRC32 checksum of the product definition used for the draw generation.
           readOnly: true
         sets:
           type: array
@@ -409,11 +407,6 @@ paths:
                         description: Array of draw records.
                         items:
                           allOf:
-                            - type: object
-                              behavior: Read Only
-                              properties:
-                                status:
-                                  $ref: '#/components/schemas/Status'
                             - type: object
                               properties:
                                 clientRecordId:
