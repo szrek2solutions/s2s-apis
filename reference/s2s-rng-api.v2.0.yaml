@@ -114,22 +114,25 @@ components:
         example: some data field some other data
       x-internal: true
     Status:
-      title: Status
       type: object
+      title: Status
+      x-internal: true
       properties:
         code:
           type: integer
           description: Numeric error or status code.
           examples:
             - 0
+          readOnly: true
         description:
           type: string
           description: Short description of the error or status code.
           examples:
             - Success
+          readOnly: true
       required:
         - code
-      x-internal: true
+      readOnly: true
     FieldError:
       title: FieldError
       type: object
@@ -167,24 +170,6 @@ components:
               message: Product not found
               fieldName: productId
               path: 'draw[1].productId'
-    SecurityRequest:
-      title: SecurityRequest
-      type: object
-      description: Optional requests for security blocks to be included in the response.
-      properties:
-        blockType:
-          type: string
-          description: Security block type identifier.
-          examples:
-            - S2S
-        version:
-          type: string
-          description: Format version of the security block.
-          examples:
-            - '1.0'
-      required:
-        - blockType
-      x-internal: true
     SecurityModule:
       title: SecurityModule
       type: object
@@ -212,39 +197,31 @@ components:
             - 308C-1328-3940-DC32
       x-internal: true
     SecurityBlock:
-      allOf:
-        - $ref: '#/components/schemas/SecurityRequest'
-        - type: object
-          description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
-          properties:
-            blockType:
-              type: string
-              description: Security block type identifier.
-              examples:
-                - S2S
-            version:
-              type: string
-              description: Format version of the security block.
-              examples:
-                - '1.0'
-            keyId:
-              type: string
-              description: 'Identifier of the public key needed to verify the security block, if applicable.'
-              examples:
-                - 308C-1328-3940-DC32
-            data:
-              type: string
-              description: Base 64 encoded content of the security block.
-              examples:
-                - VGhpcyBpcyBhbiBleGFtcGxl
-          required:
-            - blockType
-      x-internal: true
-    SecurityRequests:
-      type: array
-      description: Requested transaction security blocks.
-      items:
-        $ref: '#/components/schemas/SecurityRequest'
+      type: object
+      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+      properties:
+        blockType:
+          type: string
+          description: Security block type identifier.
+          examples:
+            - S2S
+        version:
+          type: string
+          description: Format version of the security block.
+          examples:
+            - '1.0'
+        keyId:
+          type: string
+          description: 'Identifier of the public key needed to verify the security block, if applicable.'
+          examples:
+            - 308C-1328-3940-DC32
+        data:
+          type: string
+          description: Base 64 encoded content of the security block.
+          examples:
+            - VGhpcyBpcyBhbiBleGFtcGxl
+      required:
+        - blockType
       x-internal: true
     SecurityBlocks:
       type: array
@@ -376,7 +353,6 @@ components:
               $ref: '#/components/schemas/Status'
           required:
             - transactionStatus
-        - $ref: '#/components/schemas/TransactionTime'
       x-internal: true
     TestMode:
       type: boolean
@@ -405,21 +381,6 @@ components:
         - serverId
         - serverVersion
       readOnly: true
-    TransactionTime:
-      title: TransactionTime
-      type: object
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          description: Date and time the request was processed.
-          examples:
-            - '2020-09-30T18:30:23Z'
-        businessDay:
-          type: integer
-          description: Business day under which the transaction was recorded. Format is YYMMDD.
-          examples:
-            - 200930
     ExtractFields:
       type: array
       description: Name/value pairs as would be generated in a CSV extract file.
@@ -547,15 +508,15 @@ paths:
                   properties:
                     testMode:
                       $ref: '#/components/schemas/TestMode'
-                    drawUsers:
+                    users:
                       $ref: '#/components/schemas/DrawUsers'
                     draws:
                       description: One or more RNG draw requests to be processed.
                       type: array
                       items:
                         - $ref: '#/components/schemas/Draw'
-                    securityRequests:
-                      $ref: '#/components/schemas/SecurityRequests'
+                    securityBlocks:
+                      $ref: '#/components/schemas/SecurityBlocks'
                   required:
                     - draws
             examples: {}
@@ -730,8 +691,6 @@ paths:
                         description: The original RNG request.
                       drawResult:
                         allOf:
-                          - type: object
-                          - $ref: '#/components/schemas/TransactionTime'
                           - type: object
                             properties:
                               drawMatrix:
