@@ -14,21 +14,19 @@ components:
     DrawUser:
       title: DrawUser
       type: object
-      description: 'Draw participant''s name and login time, to be included in the draw reports.'
+      description: Draw participant's name and login time as used in the draw reports.
       properties:
         name:
           type: string
           description: Full name of the user as it should appear in the draw reports.
           examples:
             - John Smith
-          example: Joe Smith
         loginTime:
           type: string
           format: date-time
-          description: 'If included, the login time for the user will appear in the draw reports.'
+          description: The time that the user logged into the draw GUI
           examples:
             - '2020-03-15T15:47:44Z'
-          example: '2021-06-22T18:44:34-04:00'
     DrawMatrix:
       title: DrawMatrix
       type: object
@@ -38,28 +36,26 @@ components:
           type: integer
           description: How many sets of numbers to generate.
           minimum: 1
-          example: 1
+          examples:
+            - 1
         setSize:
           type: integer
           description: How many numbers in each set.
           examples:
             - 6
           minimum: 1
-          example: 6
         minValue:
           type: integer
           description: Lowest number that can be generated.
           examples:
             - 1
           minimum: 0
-          example: 1
         maxValue:
           type: integer
           description: Highest number that can be generated.
           examples:
             - 49
           minimum: 0
-          example: 49
         withReplacement:
           type: boolean
           description: True if generated numbers can be repeated within a set.
@@ -81,7 +77,7 @@ components:
           maxItems: 65535
           items:
             type: integer
-          example:
+          examples:
             - 10
         distribution:
           $ref: '#/components/schemas/Distribution'
@@ -99,7 +95,8 @@ components:
           maxItems: 64
           items:
             type: integer
-            example: 8
+            examples:
+              - 8
         depletionType:
           type: string
           enum:
@@ -121,7 +118,6 @@ components:
     Status:
       title: Status
       type: object
-      description: Status code and description
       properties:
         code:
           type: integer
@@ -135,6 +131,7 @@ components:
             - Success
       required:
         - code
+      x-internal: true
     FieldError:
       title: FieldError
       type: object
@@ -285,15 +282,13 @@ components:
       description: A single draw generation from an RNG product.
       allOf:
         - properties:
-            drawStatus:
-              description: Status result code from draw server after processing the draw.
-              $ref: '#/components/schemas/Status'
             productId:
               type: integer
               description: Identifier of the product definition used for the draw generation.
             productChecksum:
               type: number
               description: CRC32 checksum of the product definition used for the draw generation.
+              readOnly: true
             clientRecordId:
               type: string
               description: Client's unique identifier for this draw.
@@ -303,6 +298,9 @@ components:
               $ref: '#/components/schemas/DrawMatrix'
             clientData:
               $ref: '#/components/schemas/ClientData'
+            drawStatus:
+              $ref: '#/components/schemas/Status'
+              readOnly: true
             timestamp:
               type: string
               format: date-time
@@ -315,10 +313,23 @@ components:
               description: Unique record identifier (URI) of the draw.
               examples:
                 - EX191109870000000125
+              readOnly: true
             recordHandle:
               type: integer
               description: A look-up handle that can optionally be used for faster verification processing.
               format: int64
+              readOnly: true
+            sets:
+              type: array
+              description: Numbers generated
+              items:
+                type: array
+                items:
+                  type: integer
+              readOnly: true
+          required:
+            - productId
+      x-internal: true
       type: object
     BatchResponse:
       title: BatchResponse
@@ -335,29 +346,13 @@ components:
     DrawResult:
       title: DrawResult
       type: object
-      properties:
-        drawStatus:
-          $ref: '#/components/schemas/Status'
-        clientRecordId:
-          type: string
-          description: Client's unique identifier for this RNG request.
-          examples:
-            - RQID-31234545-32
-        sets:
-          type: array
-          description: Numbers generated
-          items:
-            type: array
-            items:
-              type: integer
-      required:
-        - drawStatus
+      properties: null
     TestMode:
       type: boolean
       description: Indicates that the draw is a test only and not valid for use.
       x-userDataIndex: 1
     DrawUsers:
-      description: 'Draw participants to be included in the draw reports. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
+      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
       type: array
       items:
         $ref: '#/components/schemas/DrawUser'
