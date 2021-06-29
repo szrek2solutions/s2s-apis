@@ -341,7 +341,6 @@ components:
             - productId
             - numberOfSets
       x-internal: true
-      type: object
     BatchResponse:
       title: BatchResponse
       allOf:
