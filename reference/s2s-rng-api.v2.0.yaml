@@ -388,8 +388,8 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/ClientInfo'
                   - $ref: '#/components/schemas/ServerInfo'
+                  - $ref: '#/components/schemas/ClientInfo'
                   - type: object
                     properties:
                       transactionStatus:
@@ -407,15 +407,23 @@ paths:
                         description: Array of draw records.
                         items:
                           allOf:
+                            - type: object
+                              properties:
+                                status:
+                                  description: Result status code after processing the draw request.
+                                  $ref: '#/components/schemas/Status'
+                            - type: object
+                              properties:
+                                clientRecordId:
+                                  type: string
+                                  description: Client's unique identifier for this draw.
+                                  example: RQID-31234545-32
                             - $ref: '#/components/schemas/Draw'
                             - type: object
                               properties:
                                 securityBlocks:
+                                  description: Array of requested security blocks.
                                   $ref: '#/components/schemas/SecurityBlocks'
-                            - type: object
-                              properties:
-                                status:
-                                  $ref: '#/components/schemas/Status'
               examples:
                 example-1:
                   value:
