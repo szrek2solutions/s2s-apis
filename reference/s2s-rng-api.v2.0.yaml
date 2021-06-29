@@ -447,8 +447,6 @@ paths:
                             - $ref: '#/components/schemas/Draw'
                             - type: object
                               properties:
-                                drawMatrix:
-                                  $ref: '#/components/schemas/DrawMatrix'
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
               examples:
