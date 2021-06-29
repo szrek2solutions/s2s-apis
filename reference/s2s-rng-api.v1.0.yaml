@@ -292,8 +292,7 @@ components:
     DrawRequest:
       title: DrawRequest
       allOf:
-        - type: object
-          properties:
+        - properties:
             clientRecordId:
               type: string
               description: Client's unique identifier for this RNG request.
@@ -306,16 +305,15 @@ components:
               $ref: '#/components/schemas/DrawMatrix'
             clientData:
               $ref: '#/components/schemas/ClientData'
-        - type: object
-          properties:
+        - properties:
             timestamp:
               type: string
               format: date-time
               description: Date and time the request was processed.
               examples:
                 - '2020-09-30T18:30:23Z'
-      required:
-        - productId
+              readOnly: true
+      type: object
     BatchResponse:
       title: BatchResponse
       allOf:
