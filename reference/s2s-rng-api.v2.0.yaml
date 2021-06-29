@@ -18,25 +18,21 @@ components:
         clientId:
           type: string
           description: Name or identifier of the client system.
-          examples:
-            - GAMESERVER-1
+          example: GAMESERVER-1
         clientTransactionId:
           type: integer
           description: Client's unique identifier for this transaction.
           format: int64
-          examples:
-            - 102030450
+          example: 102030450
         clientTime:
           type: string
           format: date-time
           description: Time on the client system.
-          examples:
-            - '2020-09-30T18:30:23Z'
+          example: '2020-09-30T18:30:23Z'
         clientBusinessDay:
           type: integer
           description: Client's current business day. Format is YYMMDD.
-          examples:
-            - 200930
+          example: 200930
       x-internal: true
     ServerInfo:
       type: object
@@ -44,13 +40,11 @@ components:
       properties:
         serverId:
           type: string
-          examples:
-            - RNG-TEST-87
+          example: RNG-TEST-87
           description: Transaction server identifier.
         serverVersion:
           type: string
-          examples:
-            - '9.3'
+          example: '9.3'
           description: Transaction server version number.
       required:
         - serverId
@@ -70,14 +64,12 @@ components:
         name:
           type: string
           description: Full name of the user as it should appear in the draw reports.
-          examples:
-            - John Smith
+          example: John Smith
         loginTime:
           type: string
           format: date-time
           description: The time that the user logged into the draw GUI
-          examples:
-            - '2020-03-15T15:47:44Z'
+          example: '2020-03-15T15:47:44Z'
       x-internal: true
     DrawUsers:
       description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
@@ -97,8 +89,7 @@ components:
           maxItems: 64
           items:
             type: integer
-            examples:
-              - 8
+            example: 8
         depletionType:
           type: string
           enum:
@@ -106,8 +97,6 @@ components:
             - DECREASE_ENTRY
             - REMOVE_ENTRY
           description: Specifies method of depletion for the distribution values.
-          examples:
-            - NO_DEPLETION
           example: NO_DEPLETION
           readOnly: true
       x-internal: true
@@ -119,20 +108,17 @@ components:
         setSize:
           type: integer
           description: How many numbers in each set.
-          examples:
-            - 6
+          example: 6
           minimum: 1
         minValue:
           type: integer
           description: Lowest number that can be generated.
-          examples:
-            - 1
+          example: 1
           minimum: 0
         maxValue:
           type: integer
           description: Highest number that can be generated.
-          examples:
-            - 49
+          example: 49
           minimum: 0
         withReplacement:
           type: boolean
@@ -146,7 +132,6 @@ components:
             - ASCENDING
           examples:
             - UNSORTED
-          example: UNSORTED
           readOnly: true
         exclusions:
           type: array
@@ -155,7 +140,7 @@ components:
           maxItems: 65535
           items:
             type: integer
-          examples:
+          example:
             - 10
         distribution:
           $ref: '#/components/schemas/Distribution'
@@ -187,14 +172,12 @@ components:
         code:
           type: integer
           description: Numeric error or status code.
-          examples:
-            - 0
+          example: 0
           readOnly: true
         description:
           type: string
           description: Short description of the error or status code.
-          examples:
-            - Success
+          example: Success
           readOnly: true
       required:
         - code
@@ -207,41 +190,35 @@ components:
         clientRecordId:
           type: string
           description: Client's unique identifier for this draw.
-          examples:
-            - RQID-31234545-32
+          example: RQID-31234545-32
         productId:
           type: integer
           description: Identifier of the product definition used for the draw generation.
-          examples:
-            - 1
+          example: 1
         numberOfSets:
           type: integer
           description: How many sets of numbers to generate.
           minimum: 1
-          examples:
-            - 1
+          example: 1
         drawMatrix:
           $ref: '#/components/schemas/DrawMatrix'
         drawNumber:
           type: integer
-          examples:
-            - 1
+          example: 1
           description: Draw number for this draw.
           minimum: 1
         drawHash:
           type: string
           description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
           format: binary
-          examples:
-            - B63C77E06612D820BC3BE72877C74F257B562A20
+          example: B63C77E06612D820BC3BE72877C74F257B562A20
         drawFile:
           type: string
           description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
         drawText:
           type: string
           description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
-          examples:
-            - PROMO-1
+          example: PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
         userData:
@@ -250,14 +227,12 @@ components:
           type: string
           format: date-time
           description: Date and time the draw results were generated.
-          examples:
-            - '2020-09-30T18:30:23Z'
+          example: '2020-09-30T18:30:23Z'
           readOnly: true
         recordId:
           type: string
           description: Unique record identifier (URI) of the draw.
-          examples:
-            - EX191109870000000125
+          example: EX191109870000000125
           readOnly: true
         recordHandle:
           type: integer
@@ -285,23 +260,19 @@ components:
         blockType:
           type: string
           description: Security block type identifier.
-          examples:
-            - S2S
+          example: S2S
         version:
           type: string
           description: Format version of the security block.
-          examples:
-            - '1.0'
+          example: '1.0'
         keyId:
           type: string
           description: 'Identifier of the public key needed to verify the security block, if applicable.'
-          examples:
-            - 308C-1328-3940-DC32
+          example: 308C-1328-3940-DC32
         data:
           type: string
           description: Base 64 encoded content of the security block.
-          examples:
-            - VGhpcyBpcyBhbiBleGFtcGxl
+          example: VGhpcyBpcyBhbiBleGFtcGxl
       required:
         - blockType
       x-internal: true
@@ -318,23 +289,19 @@ components:
         serial:
           type: string
           description: Serial number of the HSM.
-          examples:
-            - 01000000F00019C8
+          example: 01000000F00019C8
         sequencer:
           type: integer
           description: Sequence number on the HSM.
-          examples:
-            - 734595
+          example: 734595
         time:
           type: string
           description: Real-time clock value on the HSM.
-          examples:
-            - '2020-09-30T18:30:23Z'
+          example: '2020-09-30T18:30:23Z'
         keyId:
           type: string
           description: Identifier of the RSA key pair on the HSM.
-          examples:
-            - 308C-1328-3940-DC32
+          example: 308C-1328-3940-DC32
       x-internal: true
     ExtractFields:
       type: array
@@ -431,8 +398,7 @@ paths:
                       businessDay:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
-                        examples:
-                          - 200930
+                        example: 200930
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
@@ -540,14 +506,12 @@ paths:
                       serverTime:
                         type: string
                         format: date-time
-                        examples:
-                          - '2020-09-30T18:30:23Z'
+                        example: '2020-09-30T18:30:23Z'
                         description: Current system time of the RNG server.
                       businessDay:
                         type: integer
                         description: Current business day for this RNG server. Format is YYMMDD.
-                        examples:
-                          - 200930
+                        example: 200930
                       products:
                         type: array
                         description: Configured products and status.
