@@ -337,10 +337,6 @@ components:
             items:
               type: integer
           readOnly: true
-        required:
-          - productId
-          - numberOfSets
-      x-internal: true
     BatchResponse:
       title: BatchResponse
       allOf:
