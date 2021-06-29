@@ -504,12 +504,15 @@ paths:
                     users:
                       $ref: '#/components/schemas/DrawUsers'
                     draws:
-                      description: One or more RNG draw requests to be processed.
                       type: array
+                      description: Array of draw records.
                       items:
-                        - $ref: '#/components/schemas/Draw'
-                    securityBlocks:
-                      $ref: '#/components/schemas/SecurityBlocks'
+                        allOf:
+                          - $ref: '#/components/schemas/Draw'
+                          - type: object
+                            properties:
+                              securityBlocks:
+                                $ref: '#/components/schemas/SecurityBlocks'
                   required:
                     - draws
             examples: {}
