@@ -186,11 +186,8 @@ components:
       title: Draw
       description: A single draw generation from an RNG product.
       type: object
+      x-internal: true
       properties:
-        clientRecordId:
-          type: string
-          description: Client's unique identifier for this draw.
-          example: RQID-31234545-32
         productId:
           type: integer
           description: Identifier of the product definition used for the draw generation.
@@ -252,7 +249,9 @@ components:
               type: integer
             readOnly: true
           readOnly: true
-      x-internal: true
+      required:
+        - productId
+        - numberOfSets
     SecurityBlock:
       type: object
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
@@ -476,11 +475,17 @@ paths:
                       description: Array of draw records.
                       items:
                         allOf:
+                          - type: object
+                            properties:
+                              clientRecordId:
+                                type: string
+                                description: Client's unique identifier for this draw.
+                                example: RQID-31234545-32
                           - $ref: '#/components/schemas/Draw'
                           - type: object
-                            description: Status of the draw request.
                             properties:
                               securityBlocks:
+                                description: Array of security block requests.
                                 $ref: '#/components/schemas/SecurityBlocks'
                   required:
                     - draws
