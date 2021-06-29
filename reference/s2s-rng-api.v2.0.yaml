@@ -170,6 +170,15 @@ components:
         type: string
         example: some data field some other data
       x-internal: true
+    UserData:
+      type: array
+      title: UserData
+      description: Optional text fields that are signed and logged. This is an old and deprecated field. If used it will replace many of the other Draw fields.
+      x-internal: true
+      deprecated: true
+      items:
+        type: string
+        example: some data field some other data
     Status:
       type: object
       title: Status
@@ -669,13 +678,13 @@ paths:
                         $ref: '#/components/schemas/Status'
                       drawRequest:
                         allOf:
-                          - $ref: '#/components/schemas/BatchRequest'
                           - type: object
                             properties:
                               testMode:
                                 $ref: '#/components/schemas/TestMode'
                               drawUsers:
                                 $ref: '#/components/schemas/DrawUsers'
+                          - $ref: '#/components/schemas/Draw'
                         description: The original RNG request.
                       drawResult:
                         allOf:
