@@ -305,7 +305,8 @@ components:
               $ref: '#/components/schemas/DrawMatrix'
             clientData:
               $ref: '#/components/schemas/ClientData'
-        - properties:
+        - behavior: Read Only
+          properties:
             timestamp:
               type: string
               format: date-time
