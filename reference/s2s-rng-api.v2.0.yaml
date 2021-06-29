@@ -259,6 +259,12 @@ components:
           description: Name or identifier of the client system.
           examples:
             - GAMESERVER-1
+        clientTransactionId:
+          type: integer
+          description: Client's unique identifier for this transaction.
+          format: int64
+          examples:
+            - 102030450
         clientTime:
           type: string
           format: date-time
@@ -274,46 +280,45 @@ components:
       title: BatchRequest
       allOf:
         - $ref: '#/components/schemas/ClientInfo'
-        - type: object
-          properties:
-            clientTransactionId:
-              $ref: '#/components/schemas/ClientTransactionId'
-        - $ref: '#/components/schemas/ServerInfo'
-        - type: object
-          behavior: Read Only
-          properties:
-            transactionStatus:
-              $ref: '#/components/schemas/Status'
-            businessDay:
-              type: integer
-              description: Business day under which the transaction was recorded. Format is YYMMDD.
-              examples:
-                - 200930
-    DrawRequest:
-      title: DrawRequest
+    Draw:
+      title: Draw
+      description: A single draw generation from an RNG product.
       allOf:
         - properties:
-            clientRecordId:
-              type: string
-              description: Client's unique identifier for this RNG request.
-              examples:
-                - RQID-31234545-32
+            drawStatus:
+              description: Status result code from draw server after processing the draw.
+              $ref: '#/components/schemas/Status'
             productId:
               type: integer
-              description: 'Identifier of the product to be generated. The product defines all RNG parameters, and MAY allow them to be overridden in the RNG matrix structure.'
+              description: Identifier of the product definition used for the draw generation.
+            productChecksum:
+              type: number
+              description: CRC32 checksum of the product definition used for the draw generation.
+            clientRecordId:
+              type: string
+              description: Client's unique identifier for this draw.
+              examples:
+                - RQID-31234545-32
             drawMatrix:
               $ref: '#/components/schemas/DrawMatrix'
             clientData:
               $ref: '#/components/schemas/ClientData'
-        - behavior: Read Only
-          properties:
             timestamp:
               type: string
               format: date-time
-              description: Date and time the request was processed.
+              description: Date and time the draw results were generated.
               examples:
                 - '2020-09-30T18:30:23Z'
               readOnly: true
+            recordId:
+              type: string
+              description: Unique record identifier (URI) of the draw.
+              examples:
+                - EX191109870000000125
+            recordHandle:
+              type: integer
+              description: A look-up handle that can optionally be used for faster verification processing.
+              format: int64
       type: object
     BatchResponse:
       title: BatchResponse
@@ -324,8 +329,6 @@ components:
           properties:
             transactionStatus:
               $ref: '#/components/schemas/Status'
-            clientTransactionId:
-              $ref: '#/components/schemas/ClientTransactionId'
           required:
             - transactionStatus
         - $ref: '#/components/schemas/TransactionTime'
@@ -340,21 +343,6 @@ components:
           description: Client's unique identifier for this RNG request.
           examples:
             - RQID-31234545-32
-        recordId:
-          type: string
-          description: Unique record identifier (URI).
-          examples:
-            - EX191109870000000125
-        recordHandle:
-          type: integer
-          description: A look-up handle that can optionally be used for faster verification processing.
-          format: int64
-        productId:
-          type: integer
-          description: Identifier of the product definition used for the random generation.
-        productChecksum:
-          type: number
-          description: CRC32 checksum of the product definition used for the random generation.
         sets:
           type: array
           description: Numbers generated
@@ -374,7 +362,7 @@ components:
       items:
         $ref: '#/components/schemas/DrawUser'
     DrawData:
-      title: RegularDrawUserData
+      title: DrawUserData
       type: object
       properties:
         drawHash:
@@ -409,13 +397,6 @@ components:
         - serverId
         - serverVersion
       readOnly: true
-    ClientTransactionId:
-      title: ClientTransactionId
-      type: integer
-      description: Client's unique identifier for this transaction.
-      format: int64
-      examples:
-        - 102030450
     TransactionTime:
       title: TransactionTime
       type: object
@@ -479,11 +460,21 @@ paths:
             application/json:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/BatchResponse'
+                  - $ref: '#/components/schemas/ClientInfo'
+                  - $ref: '#/components/schemas/ServerInfo'
                   - type: object
                     properties:
+                      transactionStatus:
+                        $ref: '#/components/schemas/Status'
+                      businessDay:
+                        type: integer
+                        description: Business day under which the transaction was recorded. Format is YYMMDD.
+                        examples:
+                          - 200930
                       testMode:
                         $ref: '#/components/schemas/TestMode'
+                      drawUsers:
+                        $ref: '#/components/schemas/DrawUsers'
                       results:
                         type: array
                         description: 'Array of results records, corresponding to the array of requests.'
@@ -545,7 +536,7 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/BatchRequest'
+                - $ref: '#/components/schemas/ClientInfo'
                 - type: object
                   properties:
                     testMode:
@@ -557,7 +548,7 @@ paths:
                       type: array
                       items:
                         allOf:
-                          - $ref: '#/components/schemas/DrawRequest'
+                          - $ref: '#/components/schemas/Draw'
                           - $ref: '#/components/schemas/DrawData'
                     securityRequests:
                       $ref: '#/components/schemas/SecurityRequests'
@@ -732,7 +723,6 @@ paths:
                                 $ref: '#/components/schemas/TestMode'
                               drawUsers:
                                 $ref: '#/components/schemas/DrawUsers'
-                          - $ref: '#/components/schemas/DrawRequest'
                           - $ref: '#/components/schemas/DrawData'
                         description: The original RNG request.
                       drawResult:
