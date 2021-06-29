@@ -391,6 +391,7 @@ paths:
                   - $ref: '#/components/schemas/ServerInfo'
                   - $ref: '#/components/schemas/ClientInfo'
                   - type: object
+                    behavior: Read Only
                     properties:
                       transactionStatus:
                         $ref: '#/components/schemas/Status'
@@ -398,6 +399,7 @@ paths:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
                         example: 200930
+                        readOnly: true
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
@@ -408,9 +410,9 @@ paths:
                         items:
                           allOf:
                             - type: object
+                              behavior: Read Only
                               properties:
                                 status:
-                                  description: Result status code after processing the draw request.
                                   $ref: '#/components/schemas/Status'
                             - type: object
                               properties:
@@ -422,7 +424,6 @@ paths:
                             - type: object
                               properties:
                                 securityBlocks:
-                                  description: Array of requested security blocks.
                                   $ref: '#/components/schemas/SecurityBlocks'
               examples:
                 example-1:
