@@ -11,6 +11,57 @@ servers:
     url: 'http://localhost:55002/api/v1/rng'
 components:
   schemas:
+    ClientInfo:
+      title: ClientInfo
+      type: object
+      properties:
+        clientId:
+          type: string
+          description: Name or identifier of the client system.
+          examples:
+            - GAMESERVER-1
+        clientTransactionId:
+          type: integer
+          description: Client's unique identifier for this transaction.
+          format: int64
+          examples:
+            - 102030450
+        clientTime:
+          type: string
+          format: date-time
+          description: Time on the client system.
+          examples:
+            - '2020-09-30T18:30:23Z'
+        clientBusinessDay:
+          type: integer
+          description: Client's current business day. Format is YYMMDD.
+          examples:
+            - 200930
+      x-internal: true
+    ServerInfo:
+      type: object
+      title: ServerInfo
+      properties:
+        serverId:
+          type: string
+          examples:
+            - RNG-TEST-87
+          description: Transaction server identifier.
+        serverVersion:
+          type: string
+          examples:
+            - '9.3'
+          description: Transaction server version number.
+      required:
+        - serverId
+        - serverVersion
+      readOnly: true
+      x-internal: true
+    TestMode:
+      type: boolean
+      description: Indicates that the draw is a test only and not valid for use.
+      x-userDataIndex: 1
+      x-internal: true
     DrawUser:
       title: DrawUser
       type: object
@@ -27,6 +78,38 @@ components:
           description: The time that the user logged into the draw GUI
           examples:
             - '2020-03-15T15:47:44Z'
+      x-internal: true
+    DrawUsers:
+      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
+      type: array
+      items:
+        $ref: '#/components/schemas/DrawUser'
+      x-internal: true
+    Distribution:
+      title: Distribution
+      type: object
+      description: Initial distribution values and depletion type. Used for TABLE products only.
+      x-examples: {}
+      properties:
+        values:
+          type: array
+          description: Initial distribution values.
+          maxItems: 64
+          items:
+            type: integer
+            examples:
+              - 8
+        depletionType:
+          type: string
+          enum:
+            - NO_DEPLETION
+            - DECREASE_ENTRY
+            - REMOVE_ENTRY
+          description: Specifies method of depletion for the distribution values.
+          examples:
+            - NO_DEPLETION
+          example: NO_DEPLETION
+          readOnly: true
       x-internal: true
     DrawMatrix:
       title: DrawMatrix
@@ -79,32 +162,6 @@ components:
       required:
         - numberOfSets
       x-internal: true
-    Distribution:
-      title: Distribution
-      type: object
-      description: Initial distribution values and depletion type. Used for TABLE products only.
-      x-examples: {}
-      properties:
-        values:
-          type: array
-          description: Initial distribution values.
-          maxItems: 64
-          items:
-            type: integer
-            examples:
-              - 8
-        depletionType:
-          type: string
-          enum:
-            - NO_DEPLETION
-            - DECREASE_ENTRY
-            - REMOVE_ENTRY
-          description: Specifies method of depletion for the distribution values.
-          examples:
-            - NO_DEPLETION
-          example: NO_DEPLETION
-          readOnly: true
-      x-internal: true
     ClientData:
       title: ClientData
       type: array
@@ -133,133 +190,6 @@ components:
       required:
         - code
       readOnly: true
-    FieldError:
-      title: FieldError
-      type: object
-      description: Details about a specific field error.
-      properties:
-        code:
-          type: string
-          description: Error code name.
-        message:
-          type: string
-          description: Additional detail about the error code.
-        fieldName:
-          type: string
-          description: 'Name of the field that caused the error, if applicable.'
-        path:
-          type: string
-          description: 'Path to the field that caused the error, if applicable.'
-      x-internal: false
-    ErrorResponse:
-      description: Describes the error and any specific problems with fields in the request.
-      allOf:
-        - $ref: '#/components/schemas/Status'
-        - type: object
-          properties:
-            fieldErrors:
-              type: array
-              items:
-                $ref: '#/components/schemas/FieldError'
-      x-examples:
-        example-1:
-          code: 999
-          description: Input validation failed.
-          fieldErrors:
-            - code: INVALID_VALUE
-              message: Product not found
-              fieldName: productId
-              path: 'draw[1].productId'
-    SecurityModule:
-      title: SecurityModule
-      type: object
-      description: Details about the cryptographic Hardware Security Module (HSM).
-      properties:
-        serial:
-          type: string
-          description: Serial number of the HSM.
-          examples:
-            - 01000000F00019C8
-        sequencer:
-          type: integer
-          description: Sequence number on the HSM.
-          examples:
-            - 734595
-        time:
-          type: string
-          description: Real-time clock value on the HSM.
-          examples:
-            - '2020-09-30T18:30:23Z'
-        keyId:
-          type: string
-          description: Identifier of the RSA key pair on the HSM.
-          examples:
-            - 308C-1328-3940-DC32
-      x-internal: true
-    SecurityBlock:
-      type: object
-      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
-      properties:
-        blockType:
-          type: string
-          description: Security block type identifier.
-          examples:
-            - S2S
-        version:
-          type: string
-          description: Format version of the security block.
-          examples:
-            - '1.0'
-        keyId:
-          type: string
-          description: 'Identifier of the public key needed to verify the security block, if applicable.'
-          examples:
-            - 308C-1328-3940-DC32
-        data:
-          type: string
-          description: Base 64 encoded content of the security block.
-          examples:
-            - VGhpcyBpcyBhbiBleGFtcGxl
-      required:
-        - blockType
-      x-internal: true
-    SecurityBlocks:
-      type: array
-      items:
-        $ref: '#/components/schemas/SecurityBlock'
-      x-internal: true
-    ClientInfo:
-      title: ClientInfo
-      type: object
-      properties:
-        clientId:
-          type: string
-          description: Name or identifier of the client system.
-          examples:
-            - GAMESERVER-1
-        clientTransactionId:
-          type: integer
-          description: Client's unique identifier for this transaction.
-          format: int64
-          examples:
-            - 102030450
-        clientTime:
-          type: string
-          format: date-time
-          description: Time on the client system.
-          examples:
-            - '2020-09-30T18:30:23Z'
-        clientBusinessDay:
-          type: integer
-          description: Client's current business day. Format is YYMMDD.
-          examples:
-            - 200930
-      x-internal: true
-    BatchRequest:
-      title: BatchRequest
-      allOf:
-        - $ref: '#/components/schemas/ClientInfo'
-      x-internal: true
     Draw:
       title: Draw
       description: A single draw generation from an RNG product.
@@ -334,46 +264,67 @@ components:
             type: array
             items:
               type: integer
+            readOnly: true
           readOnly: true
-    BatchResponse:
-      title: BatchResponse
-      allOf:
-        - $ref: '#/components/schemas/ServerInfo'
-        - type: object
-          behavior: Read Only
-          properties:
-            transactionStatus:
-              $ref: '#/components/schemas/Status'
-          required:
-            - transactionStatus
       x-internal: true
-    TestMode:
-      type: boolean
-      description: Indicates that the draw is a test only and not valid for use.
-      x-userDataIndex: 1
-    DrawUsers:
-      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
+    SecurityBlock:
+      type: object
+      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+      properties:
+        blockType:
+          type: string
+          description: Security block type identifier.
+          examples:
+            - S2S
+        version:
+          type: string
+          description: Format version of the security block.
+          examples:
+            - '1.0'
+        keyId:
+          type: string
+          description: 'Identifier of the public key needed to verify the security block, if applicable.'
+          examples:
+            - 308C-1328-3940-DC32
+        data:
+          type: string
+          description: Base 64 encoded content of the security block.
+          examples:
+            - VGhpcyBpcyBhbiBleGFtcGxl
+      required:
+        - blockType
+      x-internal: true
+    SecurityBlocks:
       type: array
       items:
-        $ref: '#/components/schemas/DrawUser'
-    ServerInfo:
+        $ref: '#/components/schemas/SecurityBlock'
+      x-internal: true
+    SecurityModule:
+      title: SecurityModule
       type: object
-      title: ServerInfo
+      description: Details about the cryptographic Hardware Security Module (HSM).
       properties:
-        serverId:
+        serial:
           type: string
+          description: Serial number of the HSM.
           examples:
-            - RNG-TEST-87
-          description: Transaction server identifier.
-        serverVersion:
+            - 01000000F00019C8
+        sequencer:
+          type: integer
+          description: Sequence number on the HSM.
+          examples:
+            - 734595
+        time:
           type: string
+          description: Real-time clock value on the HSM.
           examples:
-            - '9.3'
-          description: Transaction server version number.
-      required:
-        - serverId
-        - serverVersion
-      readOnly: true
+            - '2020-09-30T18:30:23Z'
+        keyId:
+          type: string
+          description: Identifier of the RSA key pair on the HSM.
+          examples:
+            - 308C-1328-3940-DC32
+      x-internal: true
     ExtractFields:
       type: array
       description: Name/value pairs as would be generated in a CSV extract file.
@@ -390,6 +341,44 @@ components:
         required:
           - name
           - value
+      x-internal: true
+    FieldError:
+      title: FieldError
+      type: object
+      description: Details about a specific field error.
+      properties:
+        code:
+          type: string
+          description: Error code name.
+        message:
+          type: string
+          description: Additional detail about the error code.
+        fieldName:
+          type: string
+          description: 'Name of the field that caused the error, if applicable.'
+        path:
+          type: string
+          description: 'Path to the field that caused the error, if applicable.'
+      x-internal: false
+    ErrorResponse:
+      description: Describes the error and any specific problems with fields in the request.
+      allOf:
+        - $ref: '#/components/schemas/Status'
+        - type: object
+          properties:
+            fieldErrors:
+              type: array
+              items:
+                $ref: '#/components/schemas/FieldError'
+      x-examples:
+        example-1:
+          code: 999
+          description: Input validation failed.
+          fieldErrors:
+            - code: INVALID_VALUE
+              message: Product not found
+              fieldName: productId
+              path: 'draw[1].productId'
   responses:
     BadRequestResponse:
       description: Bad Request
