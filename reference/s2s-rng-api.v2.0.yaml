@@ -222,6 +222,7 @@ components:
           $ref: '#/components/schemas/UserData'
         status:
           $ref: '#/components/schemas/Status'
+          readOnly: true
         timestamp:
           type: string
           format: date-time
