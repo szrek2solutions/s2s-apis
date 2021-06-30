@@ -262,11 +262,7 @@ components:
           format: int64
           readOnly: true
         numberSets:
-          type: array
-          description: Numbers generated
-          items:
-            $ref: '#/components/schemas/NumberSet'
-          readOnly: true
+          $ref: '#/components/schemas/NumberSets'
       required:
         - productId
         - numberOfSets
@@ -379,6 +375,12 @@ components:
       items:
         type: integer
         readOnly: true
+    NumberSets:
+      type: array
+      description: Numbers generated.
+      items:
+        $ref: '#/components/schemas/NumberSet'
+      readOnly: true
   responses:
     BadRequestResponse:
       description: Bad Request
