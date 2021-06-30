@@ -515,9 +515,9 @@ paths:
             examples: {}
       parameters: []
       tags:
-        - Draw
+        - Draws
     parameters: []
-  /status:
+  /server/status:
     get:
       summary: Get Draw Server Status
       description: Get current status of the RNG server and the configured products.
@@ -673,10 +673,12 @@ paths:
                 - recordId
         description: ''
       tags:
-        - Verify
+        - Verifications
 security: []
 tags:
-  - name: Draw
-    description: Operations related to generating draw
-  - name: Verify
+  - name: Draws
+    description: Operations related to draw records.
+  - name: Verifications
+    description: Oper
   - name: Status
+    description: OO
