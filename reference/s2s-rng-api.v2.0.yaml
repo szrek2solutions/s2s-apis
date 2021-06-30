@@ -168,10 +168,12 @@ components:
       type: integer
       description: Numeric error or status code.
       example: 0
+      x-internal: true
     StatusDescription:
       type: string
       description: Short description of the error or status code.
       example: Success
+      x-internal: true
     Status:
       type: object
       x-internal: true
@@ -448,46 +450,7 @@ paths:
                               properties:
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
-              examples:
-                example-1:
-                  value:
-                    serverId: RNG-TEST-87
-                    serverVersion: '9.3'
-                    transactionStatus:
-                      code: 0
-                      description: Success
-                    clientTransactionId: 102030450
-                    timestamp: '2020-09-30T18:30:23Z'
-                    businessDay: 200930
-                    testMode: true
-                    results:
-                      - drawStatus:
-                          code: 0
-                          description: Success
-                        clientRecordId: RQID-31234545-32
-                        recordId: EX191109870000000125
-                        recordHandle: 0
-                        productId: 0
-                        productChecksum: 0
-                        sets:
-                          - - 0
-                        drawNumber: 0
-                        drawMatrix:
-                          numberOfSets: 1
-                          setSize: 6
-                          minValue: 1
-                          maxValue: 49
-                          withReplacement: true
-                          sortOrder: UNSORTED
-                          exclusions:
-                            - 10
-                          distribution:
-                            depletionType: NO_DEPLETION
-                        securityBlocks:
-                          - blockType: S2S
-                            version: '1.0'
-                            keyId: 308C-1328-3940-DC32
-                            data: VGhpcyBpcyBhbiBleGFtcGxl
+              examples: {}
         '400':
           $ref: '#/components/responses/BadRequestResponse'
       requestBody:
