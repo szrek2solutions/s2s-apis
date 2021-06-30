@@ -248,12 +248,6 @@ components:
       x-internal: true
       type: object
       properties:
-        timestamp:
-          type: string
-          format: date-time
-          description: Date and time the draw results were generated.
-          example: '2020-09-30T18:30:23Z'
-          readOnly: true
         recordId:
           type: string
           description: Unique record identifier (URI) of the draw.
@@ -263,6 +257,12 @@ components:
           type: integer
           description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
+          readOnly: true
+        timestamp:
+          type: string
+          format: date-time
+          description: Date and time the draw results were generated.
+          example: '2020-09-30T18:30:23Z'
           readOnly: true
         sets:
           $ref: '#/components/schemas/NumberSets'
