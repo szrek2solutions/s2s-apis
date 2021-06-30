@@ -615,7 +615,7 @@ paths:
                                   example: '2020-09-30T18:30:23Z'
               examples: {}
       tags:
-        - Status
+        - Server
     parameters: []
   /verifications:
     parameters: []
@@ -669,12 +669,10 @@ paths:
                 - recordId
         description: ''
       tags:
-        - Verifications
+        - Draws
 security: []
 tags:
   - name: Draws
     description: Operations related to draw records.
-  - name: Verifications
-    description: Operations related to verifying draw records.
-  - name: Status
-    description: Operations related to querying the draw server configuration and status.
+  - name: Server
+    description: Operations related to draw server configuration and status.
