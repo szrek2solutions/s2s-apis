@@ -457,7 +457,7 @@ paths:
                       $ref: '#/components/schemas/DrawUsers'
                     drawRequests:
                       type: array
-                      description: Array of draw requests.
+                      description: Array of draw request records.
                       items:
                         allOf:
                           - type: object
