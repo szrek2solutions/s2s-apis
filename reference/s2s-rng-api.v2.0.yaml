@@ -579,11 +579,6 @@ paths:
                               items:
                                 type: integer
                                 maximum: 64
-                          required:
-                            - id
-                            - name
-                            - type
-                            - requestCount
                       securityModules:
                         type: array
                         description: Status of the configured hardware security modules (HSMs).
@@ -598,9 +593,6 @@ paths:
                                 status:
                                   type: string
                                   description: Current status description for this HSM.
-                              required:
-                                - active
-                                - status
                             - $ref: '#/components/schemas/SecurityModule'
                             - type: object
                               properties:
@@ -613,9 +605,6 @@ paths:
                                   description: 'The time of the last error code, if any.'
                                   format: date-time
                                   example: '2020-09-30T18:30:23Z'
-                    required:
-                      - serverTime
-                      - businessDay
               examples: {}
       tags:
         - Status
