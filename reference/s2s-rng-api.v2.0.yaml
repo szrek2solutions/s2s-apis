@@ -35,6 +35,7 @@ components:
       x-internal: true
     ServerInfo:
       type: object
+      x-internal: true
       properties:
         serverId:
           type: string
@@ -44,11 +45,7 @@ components:
           type: string
           example: '9.3'
           description: Transaction server version number.
-      required:
-        - serverId
-        - serverVersion
       readOnly: true
-      x-internal: true
     TestMode:
       type: boolean
       description: Indicates that the draw is a test only and not valid for use.
@@ -185,8 +182,6 @@ components:
           description: Short description of the error or status code.
           example: Success
           readOnly: true
-      required:
-        - code
       readOnly: true
     TransactionStatus:
       type: object
@@ -344,6 +339,7 @@ components:
     ExtractFields:
       type: array
       description: Name/value pairs as would be generated in a CSV extract file.
+      x-internal: true
       items:
         type: object
         description: ''
@@ -354,10 +350,6 @@ components:
           value:
             type: string
             description: 'Value of the extract field, formatted for CSV.'
-        required:
-          - name
-          - value
-      x-internal: true
     FieldError:
       type: object
       description: Details about a specific field error.
@@ -385,15 +377,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/FieldError'
-      x-examples:
-        example-1:
-          code: 999
-          description: Input validation failed.
-          fieldErrors:
-            - code: INVALID_VALUE
-              message: Product not found
-              fieldName: productId
-              path: 'draw[1].productId'
     NumberSet:
       type: array
       items:
@@ -421,7 +404,7 @@ components:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
           examples:
-            Example:
+            Input Validation Failed:
               value:
                 code: 999
                 description: Input validation failed.
@@ -480,7 +463,21 @@ paths:
                                   $ref: '#/components/schemas/SecurityBlocks'
               examples: {}
         '400':
-          $ref: '#/components/responses/BadRequestResponse'
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                Input Validation Failed:
+                  value:
+                    code: 999
+                    description: Input validation failed.
+                    fieldErrors:
+                      - code: INVALID_VALUE
+                        message: Product not found
+                        fieldName: productId
+                        path: 'draw[1].productId'
       requestBody:
         content:
           application/json:
