@@ -274,6 +274,7 @@ components:
             type: array
             items:
               type: integer
+              readOnly: true
             readOnly: true
           readOnly: true
       required:
