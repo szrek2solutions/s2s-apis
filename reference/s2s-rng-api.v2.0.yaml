@@ -417,9 +417,9 @@ components:
 paths:
   /draws:
     post:
-      summary: Generate Draw Record
+      summary: Generate Draw Records
       operationId: post-draws
-      description: Generate random numbers from draw products.
+      description: Draw random numbers for one or more draw products.
       responses:
         '200':
           description: OK
@@ -493,6 +493,8 @@ paths:
                     drawRecords:
                       type: array
                       description: Array of draw request records.
+                      minItems: 1
+                      maxItems: 25
                       items:
                         allOf:
                           - type: object
