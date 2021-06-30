@@ -216,7 +216,6 @@ components:
           $ref: '#/components/schemas/StatusDescription'
       x-internal: true
     DrawRecord:
-      title: Draw
       description: A single draw generation from an RNG product.
       type: object
       x-internal: true
