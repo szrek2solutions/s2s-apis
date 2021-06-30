@@ -271,7 +271,7 @@ components:
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
       x-internal: true
       properties:
-        blockType:
+        id:
           type: string
           description: Security block type identifier.
           example: S2S
@@ -280,7 +280,7 @@ components:
           description: Format version of the security block.
           example: '1.0'
       required:
-        - blockType
+        - id
     SecurityRequests:
       type: array
       items:
