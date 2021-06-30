@@ -634,7 +634,9 @@ paths:
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
                       drawRecord:
-                        $ref: '#/components/schemas/DrawOutput'
+                        allOf:
+                          - $ref: '#/components/schemas/DrawInput'
+                          - $ref: '#/components/schemas/DrawOutput'
                       hsm:
                         $ref: '#/components/schemas/SecurityModule'
                       extractFields:
