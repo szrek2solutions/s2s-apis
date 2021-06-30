@@ -401,7 +401,6 @@ paths:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
                         example: 200930
-                        readOnly: true
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
@@ -412,6 +411,7 @@ paths:
                         items:
                           allOf:
                             - type: object
+                              description: Some description
                               properties:
                                 status:
                                   $ref: '#/components/schemas/DrawStatus'
