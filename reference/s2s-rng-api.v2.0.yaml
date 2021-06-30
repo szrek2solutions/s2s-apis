@@ -516,7 +516,7 @@ paths:
   /server/status:
     get:
       summary: Get Draw Server Status
-      description: Get current status of the draw server, draw products, and security modules (HSMs).
+      description: 'Get current status of the draw server, draw products, and security modules (HSMs).'
       operationId: get-status
       responses:
         '200':
@@ -537,7 +537,7 @@ paths:
                         type: integer
                         description: Current business day for this RNG server. Format is YYMMDD.
                         example: 200930
-                      products:
+                      activeProducts:
                         type: array
                         description: Configured products and status.
                         items:
@@ -570,23 +570,6 @@ paths:
                               description: The time of the last RNG request for this product.
                               format: date-time
                               example: '2020-09-30T18:30:23Z'
-                            distribution:
-                              type: array
-                              description: Current distribution values. Applies to TABLE type products only
-                              items:
-                                type: integer
-                                maximum: 64
-                              example:
-                                - 8
-                                - 8
-                                - 8
-                                - 8
-                                - 8
-                            distributionOverride:
-                              type: array
-                              items:
-                                type: integer
-                                maximum: 64
                       securityModules:
                         type: array
                         description: Status of the configured hardware security modules (HSMs).
@@ -598,21 +581,7 @@ paths:
                                   type: boolean
                                   description: Indicates if this is the currently active HSM or not.
                                   example: true
-                                status:
-                                  type: string
-                                  description: Current status description for this HSM.
                             - $ref: '#/components/schemas/SecurityModule'
-                            - type: object
-                              properties:
-                                lastErrorCode:
-                                  type: integer
-                                  description: 'The error code of the most recent HSM error, if any.'
-                                  example: 0
-                                lastErrorTime:
-                                  type: string
-                                  description: 'The time of the last error code, if any.'
-                                  format: date-time
-                                  example: '2020-09-30T18:30:23Z'
               examples: {}
       tags:
         - Server
