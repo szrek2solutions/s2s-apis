@@ -393,7 +393,6 @@ paths:
                   - $ref: '#/components/schemas/ServerInfo'
                   - $ref: '#/components/schemas/ClientInfo'
                   - type: object
-                    behavior: Read Only
                     properties:
                       status:
                         $ref: '#/components/schemas/TransactionStatus'
