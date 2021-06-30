@@ -582,7 +582,6 @@ paths:
       summary: Verify Draw Record
       description: |-
         Verifies a previously generated draw record using the following steps:
-
          - Looks up the original draw record using the provided URI.
          - Verifies that the draw record is valid and unmodified.
          - Verifies the draw signature is valid.
