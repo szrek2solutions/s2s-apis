@@ -568,7 +568,7 @@ paths:
                               items:
                                 type: integer
                                 maximum: 64
-                                example: 
+                                example:
                                   - 8
                                   - 8
                                   - 8
@@ -594,6 +594,7 @@ paths:
                                 active:
                                   type: boolean
                                   description: Indicates if this is the currently active HSM or not.
+                                  example: true
                                 status:
                                   type: string
                                   description: Current status description for this HSM.
@@ -606,7 +607,7 @@ paths:
                                 lastErrorCode:
                                   type: integer
                                   description: 'The error code of the most recent HSM error, if any.'
-                                  example: 231
+                                  example: 0
                                 lastErrorTime:
                                   type: string
                                   description: 'The time of the last error code, if any.'
