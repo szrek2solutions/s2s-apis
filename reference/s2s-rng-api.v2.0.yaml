@@ -208,66 +208,62 @@ components:
         text:
           $ref: '#/components/schemas/StatusDescription'
       x-internal: true
-    DrawRecord:
-      description: A single draw generation from an RNG product.
+    DrawInput:
       x-internal: true
-      allOf:
-        - properties:
-            productId:
-              type: integer
-              description: Identifier of the product definition used for the draw generation.
-              example: 1
-            numberOfSets:
-              type: integer
-              description: How many sets of numbers to generate.
-              minimum: 1
-              example: 1
-            drawMatrix:
-              $ref: '#/components/schemas/DrawMatrix'
-            drawNumber:
-              type: integer
-              example: 1
-              description: Draw number for this draw.
-              minimum: 1
-            drawHash:
-              type: string
-              description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
-              format: binary
-              example: B63C77E06612D820BC3BE72877C74F257B562A20
-            drawFile:
-              type: string
-              description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
-            drawText:
-              type: string
-              description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
-              example: PROMO-1
-            clientData:
-              $ref: '#/components/schemas/ClientData'
-            userData:
-              $ref: '#/components/schemas/UserData'
-            timestamp:
-              type: string
-              format: date-time
-              description: Date and time the draw results were generated.
-              example: '2020-09-30T18:30:23Z'
-              readOnly: true
-            recordId:
-              type: string
-              description: Unique record identifier (URI) of the draw.
-              example: EX191109870000000125
-              readOnly: true
-            recordHandle:
-              type: integer
-              description: A look-up handle that can optionally be used for faster verification processing.
-              format: int64
-              readOnly: true
-        - behavior: Read Only
-          additionalProperties: false
-          properties:
-            numberSets:
-              $ref: '#/components/schemas/NumberSets'
       type: object
-    SecurityBlock:
+      properties:
+        productId:
+          type: integer
+          description: Identifier of the product definition used for the draw generation.
+          example: 1
+        numberOfSets:
+          type: integer
+          description: How many sets of numbers to generate.
+          minimum: 1
+          example: 1
+        drawMatrix:
+          $ref: '#/components/schemas/DrawMatrix'
+        drawNumber:
+          type: integer
+          example: 1
+          description: Draw number for this draw.
+          minimum: 1
+        drawHash:
+          type: string
+          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
+          format: binary
+          example: B63C77E06612D820BC3BE72877C74F257B562A20
+        drawFile:
+          type: string
+          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
+        drawText:
+          type: string
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
+          example: PROMO-1
+        clientData:
+          $ref: '#/components/schemas/ClientData'
+        userData:
+          $ref: '#/components/schemas/UserData'
+    DrawOutput:
+      x-internal: true
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: Date and time the draw results were generated.
+          example: '2020-09-30T18:30:23Z'
+        recordId:
+          type: string
+          description: Unique record identifier (URI) of the draw.
+          example: EX191109870000000125
+        recordHandle:
+          type: integer
+          description: A look-up handle that can optionally be used for faster verification processing.
+          format: int64
+        numberSets:
+          $ref: '#/components/schemas/NumberSets'
+    SecurityRequest:
       type: object
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
       x-internal: true
@@ -280,18 +276,31 @@ components:
           type: string
           description: Format version of the security block.
           example: '1.0'
-        keyId:
-          type: string
-          description: 'Identifier of the public key needed to verify the security block, if applicable.'
-          example: 308C-1328-3940-DC32
-          readOnly: true
-        data:
-          type: string
-          description: Base 64 encoded content of the security block.
-          example: VGhpcyBpcyBhbiBleGFtcGxl
-          readOnly: true
       required:
         - blockType
+    SecurityRequests:
+      type: array
+      items:
+        $ref: '#/components/schemas/SecurityRequest'
+      x-internal: true
+    SecurityBlock:
+      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+      x-internal: true
+      title: ''
+      allOf:
+        - $ref: '#/components/schemas/SecurityRequest'
+        - type: object
+          properties:
+            keyId:
+              type: string
+              description: 'Identifier of the public key needed to verify the security block, if applicable.'
+              example: 308C-1328-3940-DC32
+              readOnly: true
+            data:
+              type: string
+              description: Base 64 encoded content of the security block.
+              example: VGhpcyBpcyBhbiBleGFtcGxl
+              readOnly: true
     SecurityBlocks:
       type: array
       items:
@@ -380,7 +389,6 @@ components:
       description: Numbers generated.
       items:
         $ref: '#/components/schemas/NumberSet'
-      readOnly: true
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -427,7 +435,7 @@ paths:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
-                      draws:
+                      drawRecords:
                         type: array
                         description: Array of draw records.
                         items:
@@ -440,7 +448,8 @@ paths:
                                   type: string
                                   description: Client's unique identifier for this draw.
                                   example: RQID-31234545-32
-                            - $ref: '#/components/schemas/DrawRecord'
+                            - $ref: '#/components/schemas/DrawInput'
+                            - $ref: '#/components/schemas/DrawOutput'
                             - type: object
                               properties:
                                 securityBlocks:
@@ -460,7 +469,7 @@ paths:
                       $ref: '#/components/schemas/TestMode'
                     users:
                       $ref: '#/components/schemas/DrawUsers'
-                    drawRequests:
+                    drawRecords:
                       type: array
                       description: Array of draw request records.
                       items:
@@ -471,13 +480,11 @@ paths:
                                 type: string
                                 description: Client's unique identifier for this draw.
                                 example: RQID-31234545-32
-                          - $ref: '#/components/schemas/DrawRecord'
+                          - $ref: '#/components/schemas/DrawInput'
                           - type: object
                             properties:
                               securityBlocks:
                                 $ref: '#/components/schemas/SecurityBlocks'
-                  required:
-                    - draws
             examples: {}
       parameters: []
       tags:
@@ -641,7 +648,7 @@ paths:
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
                       drawRecord:
-                        $ref: '#/components/schemas/DrawRecord'
+                        $ref: '#/components/schemas/DrawOutput'
                       hsm:
                         $ref: '#/components/schemas/SecurityModule'
                       extractFields:
