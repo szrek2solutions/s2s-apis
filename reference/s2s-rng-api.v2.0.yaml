@@ -166,14 +166,13 @@ components:
         example: some data field some other data
     Status:
       type: object
-      title: Status
       x-internal: true
       properties:
         code:
           type: integer
           description: Numeric error or status code.
           example: 0
-        description:
+        text:
           type: string
           description: Short description of the error or status code.
           example: Success
