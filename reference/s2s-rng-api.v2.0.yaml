@@ -580,7 +580,15 @@ paths:
     parameters: []
     post:
       summary: Verify Draw Record
-      description: Verifies a previously generated draw record and returns the record detail.
+      description: |-
+        Verifies a previously generated draw record using the following steps:
+
+         - Look up the original draw record using the provided URI.
+         - Verify the draw record is valid.
+         - Verify the draw signature is valid.
+         - Generate the draw again and return the results.
+         
+        The API user can then independently verify that the regenerated draw results match the original draw results.
       operationId: post-verifications
       responses:
         '200':
