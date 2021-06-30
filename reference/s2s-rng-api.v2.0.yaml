@@ -417,9 +417,9 @@ components:
 paths:
   /draws:
     post:
-      summary: Draw Random Numbers
+      summary: Generate Draw Record
       operationId: post-draws
-      description: Generate random numbers for draw products.
+      description: Generate random numbers from draw products.
       responses:
         '200':
           description: OK
