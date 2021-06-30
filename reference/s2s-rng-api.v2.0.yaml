@@ -165,26 +165,24 @@ components:
         type: string
         example: some data field some other data
     Status:
-      title: Status
       type: object
+      title: Status
       x-internal: true
       properties:
         code:
           type: integer
           description: Numeric error or status code.
           example: 0
-          readOnly: true
         description:
           type: string
           description: Short description of the error or status code.
           example: Success
-          readOnly: true
       required:
         - code
-      readOnly: true
     TransactionStatus:
       $ref: '#/components/schemas/Status'
       description: Overall status of the batch request.
+      x-internal: true
     DrawStatus:
       $ref: '#/components/schemas/Status'
     VerificationStatus:
@@ -414,10 +412,9 @@ paths:
                         items:
                           allOf:
                             - type: object
-                              description: ''
                               properties:
                                 status:
-                                  $ref: '#/components/schemas/Status'
+                                  $ref: '#/components/schemas/DrawStatus'
                                 clientRecordId:
                                   type: string
                                   description: Client's unique identifier for this draw.
