@@ -509,7 +509,7 @@ paths:
             examples: {}
       parameters: []
       tags:
-        - RNG
+        - Draw
     parameters: []
   /status:
     get:
@@ -621,8 +621,6 @@ paths:
       summary: Verify Draw Record
       description: Verifies a previously generated RNG draw record and returns the draw detail.
       operationId: post-verifications
-      tags:
-        - RNG
       responses:
         '200':
           description: OK
@@ -668,7 +666,10 @@ paths:
               required:
                 - recordId
         description: ''
+      tags:
+        - Verify
 security: []
 tags:
-  - name: RNG
+  - name: Draw
+  - name: Verify
   - name: Status
