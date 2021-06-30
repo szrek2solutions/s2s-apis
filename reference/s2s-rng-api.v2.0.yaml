@@ -476,7 +476,6 @@ paths:
                   required:
                     - draws
             examples: {}
-        description: Some description for the draw request
       parameters: []
       tags:
         - RNG
