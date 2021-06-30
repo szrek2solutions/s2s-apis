@@ -380,6 +380,7 @@ components:
       description: Numbers generated.
       items:
         $ref: '#/components/schemas/NumberSet'
+      readOnly: true
   responses:
     BadRequestResponse:
       description: Bad Request
