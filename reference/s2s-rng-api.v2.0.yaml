@@ -261,7 +261,7 @@ components:
           description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
           readOnly: true
-        sets:
+        numberSets:
           type: array
           description: Numbers generated
           items:
