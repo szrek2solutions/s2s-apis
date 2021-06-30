@@ -273,11 +273,7 @@ components:
           type: array
           description: Numbers generated
           items:
-            type: array
-            items:
-              type: integer
-              readOnly: true
-            readOnly: true
+            $ref: '#/components/schemas/NumberSet'
           readOnly: true
       required:
         - productId
@@ -386,6 +382,11 @@ components:
               message: Product not found
               fieldName: productId
               path: 'draw[1].productId'
+    NumberSet:
+      title: NumberSet
+      type: array
+      items:
+        type: integer
   responses:
     BadRequestResponse:
       description: Bad Request
