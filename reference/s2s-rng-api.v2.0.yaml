@@ -376,10 +376,15 @@ components:
         type: integer
         readOnly: true
     NumberSets:
-      type: array
+      type: object
       description: Numbers generated.
-      items:
-        $ref: '#/components/schemas/NumberSet'
+      x-internal: true
+      properties:
+        numberSets:
+          type: array
+          items:
+            $ref: '#/components/schemas/NumberSet'
+          readOnly: true
       readOnly: true
   responses:
     BadRequestResponse:
