@@ -109,12 +109,10 @@ components:
           type: integer
           description: Lowest number that can be generated.
           example: 1
-          minimum: 0
         maxValue:
           type: integer
           description: Highest number that can be generated.
           example: 49
-          minimum: 0
         withReplacement:
           type: boolean
           description: True if generated numbers can be repeated within a set.
@@ -137,6 +135,8 @@ components:
             type: integer
           example:
             - 10
+            - 30
+            - 53
         distribution:
           $ref: '#/components/schemas/Distribution'
       required:
@@ -570,12 +570,12 @@ paths:
                               items:
                                 type: integer
                                 maximum: 64
-                                example:
-                                  - 8
-                                  - 8
-                                  - 8
-                                  - 8
-                                  - 8
+                              example:
+                                - 8
+                                - 8
+                                - 8
+                                - 8
+                                - 8
                             distributionOverride:
                               type: array
                               items:
