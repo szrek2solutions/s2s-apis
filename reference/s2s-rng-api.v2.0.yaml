@@ -9,7 +9,7 @@ info:
   contact:
     url: 'http://www.szrek.com'
     email: info@szrek.com
-  summary: Szrek2Solutions Random Number Generator API
+  summary: Szrek2Solutions Random Number Generator API (modified)
 servers:
   - description: Local Server
     url: 'http://localhost:55002/api/v2/rng'
@@ -677,5 +677,6 @@ paths:
 security: []
 tags:
   - name: Draw
+    description: Operations related to generating draw
   - name: Verify
   - name: Status
