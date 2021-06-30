@@ -553,11 +553,11 @@ paths:
                               example: Pick3
                             requestCount:
                               type: integer
-                              description: Current total number of RNG requests for this product.
+                              description: Current total number of draw requests for this product.
                               example: 324
                             lastRequestTime:
                               type: string
-                              description: The time of the last RNG request for this product.
+                              description: The time of the last draw request for this product.
                               format: date-time
                               example: '2020-09-30T18:30:23Z'
                       securityModules:
