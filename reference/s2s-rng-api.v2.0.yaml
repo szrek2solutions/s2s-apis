@@ -2,14 +2,10 @@ openapi: 3.1.0
 info:
   title: S2S RNG API (Draft)
   version: 2.0.0
-  description: |-
-    This is the full description of the Szrek2Solutions Random Number Generator API.
-
-    It has multiple lines.
+  description: Szrek2Solutions Random Number Generator API.
   contact:
     url: 'http://www.szrek.com'
     email: info@szrek.com
-  summary: Szrek2Solutions Random Number Generator API (modified)
 servers:
   - description: Local Server
     url: 'http://localhost:55002/api/v2/rng'
@@ -679,6 +675,6 @@ tags:
   - name: Draws
     description: Operations related to draw records.
   - name: Verifications
-    description: Oper
+    description: Operations related to verifying draw records.
   - name: Status
-    description: OO
+    description: Operations related to querying the draw server configuration and status.
