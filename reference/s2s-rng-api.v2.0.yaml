@@ -273,6 +273,7 @@ components:
     SecurityBlock:
       type: object
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+      x-internal: true
       properties:
         blockType:
           type: string
@@ -286,13 +287,14 @@ components:
           type: string
           description: 'Identifier of the public key needed to verify the security block, if applicable.'
           example: 308C-1328-3940-DC32
+          readOnly: true
         data:
           type: string
           description: Base 64 encoded content of the security block.
           example: VGhpcyBpcyBhbiBleGFtcGxl
+          readOnly: true
       required:
         - blockType
-      x-internal: true
     SecurityBlocks:
       type: array
       items:
