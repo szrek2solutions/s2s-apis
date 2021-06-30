@@ -275,6 +275,7 @@ components:
           example: '2020-09-30T18:30:23Z'
           readOnly: true
         sets:
+          description: Numbers generated.
           type: array
           items:
             type: array
