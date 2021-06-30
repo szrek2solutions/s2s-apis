@@ -406,7 +406,7 @@ paths:
   /draws:
     post:
       summary: Draw Random Numbers
-      operationId: post-draw-draws
+      operationId: post-draws
       description: Generate random numbers for draw products.
       responses:
         '200':
@@ -528,7 +528,9 @@ paths:
     parameters: []
   /status:
     get:
-      summary: RNG Status
+      summary: Get Draw Server Status
+      description: Get current status of the RNG server and the configured products.
+      operationId: get-status
       responses:
         '200':
           description: OK
@@ -542,8 +544,8 @@ paths:
                       serverTime:
                         type: string
                         format: date-time
-                        example: '2020-09-30T18:30:23Z'
                         description: Current system time of the RNG server.
+                        example: '2020-09-30T18:30:23Z'
                       businessDay:
                         type: integer
                         description: Current business day for this RNG server. Format is YYMMDD.
@@ -654,16 +656,15 @@ paths:
                         serial: 01000000F00019C5
                         sequencer: 39459
                         keyId: 308C-1328-3940-DC32
-      operationId: get-server-status
-      description: Get current status of the RNG server and the configured products.
       tags:
         - Status
     parameters: []
   /verifications:
     parameters: []
     post:
-      summary: Verify an RNG draw record
-      operationId: post-draw-verifications
+      summary: Verify Draw Record
+      description: Verifies a previously generated RNG draw record and returns the draw detail.
+      operationId: post-verifications
       tags:
         - RNG
       responses:
@@ -692,7 +693,6 @@ paths:
           description: Bad Request
         '404':
           description: Not Found
-      description: Verifies a previously generated RNG draw record and returns the draw detail.
       requestBody:
         content:
           application/json:
