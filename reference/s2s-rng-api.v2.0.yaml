@@ -310,27 +310,6 @@ components:
       items:
         $ref: '#/components/schemas/SecurityBlock'
       x-internal: true
-    SecurityModule:
-      type: object
-      description: Details about the cryptographic Hardware Security Module (HSM).
-      properties:
-        serial:
-          type: string
-          description: Serial number of the HSM.
-          example: 01000000F00019C8
-        sequencer:
-          type: integer
-          description: Sequence number on the HSM.
-          example: 734595
-        time:
-          type: string
-          description: Real-time clock value on the HSM.
-          example: '2020-09-30T18:30:23Z'
-        keyId:
-          type: string
-          description: Identifier of the RSA key pair on the HSM.
-          example: 308C-1328-3940-DC32
-      x-internal: true
     ExtractFields:
       type: array
       description: Name/value pairs as would be generated in a CSV extract file.
@@ -406,6 +385,27 @@ components:
           description: Hash of the product definition record.
           format: binary
           example: 12D820BC3BE7B63C77E06627B562A20877C74F25
+    SecurityModule:
+      type: object
+      description: Details about the cryptographic Hardware Security Module (HSM).
+      properties:
+        serial:
+          type: string
+          description: Serial number of the HSM.
+          example: 01000000F00019C8
+        sequencer:
+          type: integer
+          description: Sequence number on the HSM.
+          example: 734595
+        time:
+          type: string
+          description: Real-time clock value on the HSM.
+          example: '2020-09-30T18:30:23Z'
+        keyId:
+          type: string
+          description: Identifier of the RSA key pair on the HSM.
+          example: 308C-1328-3940-DC32
+      x-internal: true
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -548,22 +548,10 @@ paths:
                         type: integer
                         description: Current business day for this RNG server. Format is YYMMDD.
                         example: 200930
-                      activeProducts:
-                        type: array
-                        description: Configured products and status.
-                        items: null
-                      securityModules:
-                        type: array
-                        description: Status of the configured hardware security modules (HSMs).
-                        items:
-                          allOf:
-                            - type: object
-                              properties:
-                                active:
-                                  type: boolean
-                                  description: Indicates if this is the currently active HSM or not.
-                                  example: true
-                            - $ref: '#/components/schemas/SecurityModule'
+                      activeHsm:
+                        description: Details of the currently active HSM.
+                        allOf:
+                          - $ref: '#/components/schemas/SecurityModule'
               examples: {}
       tags:
         - Server
