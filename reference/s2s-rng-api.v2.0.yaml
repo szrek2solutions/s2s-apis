@@ -468,7 +468,6 @@ paths:
                                 example: RQID-31234545-32
                           - $ref: '#/components/schemas/DrawRecord'
                           - type: object
-                            additionalProperties: false
                             properties:
                               securityBlocks:
                                 $ref: '#/components/schemas/SecurityBlocks'
