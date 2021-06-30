@@ -246,6 +246,7 @@ components:
         drawFile:
           type: string
           description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
+          example: BETS_20210312_123_LOTTO6.dat
         drawText:
           type: string
           description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
