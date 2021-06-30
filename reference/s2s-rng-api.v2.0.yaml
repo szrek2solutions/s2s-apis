@@ -253,15 +253,18 @@ components:
           format: date-time
           description: Date and time the draw results were generated.
           example: '2020-09-30T18:30:23Z'
+          readOnly: true
         recordId:
           type: string
           description: Unique record identifier (URI) of the draw.
           example: EX191109870000000125
+          readOnly: true
         recordHandle:
           type: integer
           description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
-        numberSets:
+          readOnly: true
+        sets:
           $ref: '#/components/schemas/NumberSets'
     SecurityRequest:
       type: object
@@ -484,7 +487,7 @@ paths:
                           - type: object
                             properties:
                               securityBlocks:
-                                $ref: '#/components/schemas/SecurityBlocks'
+                                $ref: '#/components/schemas/SecurityRequests'
             examples: {}
       parameters: []
       tags:
