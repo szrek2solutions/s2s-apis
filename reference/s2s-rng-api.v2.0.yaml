@@ -378,6 +378,7 @@ components:
       type: array
       items:
         type: integer
+        readOnly: true
   responses:
     BadRequestResponse:
       description: Bad Request
