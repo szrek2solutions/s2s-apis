@@ -168,21 +168,6 @@ components:
       example: Success
       x-internal: true
       readOnly: true
-    Status:
-      type: object
-      x-internal: true
-      properties:
-        code:
-          type: integer
-          description: Numeric error or status code.
-          example: 0
-          readOnly: true
-        text:
-          type: string
-          description: Short description of the error or status code.
-          example: Success
-          readOnly: true
-      readOnly: true
     TransactionStatus:
       type: object
       description: Overall status of the batch request.
@@ -206,6 +191,16 @@ components:
     VerificationStatus:
       type: object
       description: Status of the verification request.
+      x-internal: true
+      properties:
+        code:
+          $ref: '#/components/schemas/StatusCode'
+        text:
+          $ref: '#/components/schemas/StatusDescription'
+      readOnly: true
+    ErrorStatus:
+      type: object
+      description: Error code and description.
       x-internal: true
       properties:
         code:
@@ -370,7 +365,7 @@ components:
     ErrorResponse:
       description: Describes the error and any specific problems with fields in the request.
       allOf:
-        - $ref: '#/components/schemas/Status'
+        - $ref: '#/components/schemas/ErrorStatus'
         - type: object
           properties:
             fieldErrors:
@@ -395,6 +390,22 @@ components:
         $ref: '#/components/schemas/NumberSet'
       readOnly: true
       x-internal: true
+    DrawProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Product identifier.
+          example: 1001
+        name:
+          type: string
+          description: Product name.
+          example: Pick3
+        hash:
+          type: string
+          description: Hash of the product definition record.
+          format: binary
+          example: 12D820BC3BE7B63C77E06627B562A20877C74F25
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -513,10 +524,10 @@ paths:
       tags:
         - Draws
     parameters: []
-  /server/status:
+  /status:
     get:
       summary: Get Draw Server Status
-      description: 'Get current status of the draw server, draw products, and security modules (HSMs).'
+      description: 'Get current status of the server. Returns the HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. The typical cause of 503 response is that the HSM is disconnected.'
       operationId: get-status
       responses:
         '200':
@@ -540,26 +551,7 @@ paths:
                       activeProducts:
                         type: array
                         description: Configured products and status.
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                              description: Product identifier.
-                              example: 1001
-                            name:
-                              type: string
-                              description: Product name.
-                              example: Pick3
-                            requestCount:
-                              type: integer
-                              description: Current total number of draw requests for this product.
-                              example: 324
-                            lastRequestTime:
-                              type: string
-                              description: The time of the last draw request for this product.
-                              format: date-time
-                              example: '2020-09-30T18:30:23Z'
+                        items: null
                       securityModules:
                         type: array
                         description: Status of the configured hardware security modules (HSMs).
