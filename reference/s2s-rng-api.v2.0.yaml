@@ -145,10 +145,12 @@ components:
     ClientData:
       type: array
       description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
+      x-internal: true
+      example:
+        - A data field
+        - Another data field
       items:
         type: string
-        example: some data field some other data
-      x-internal: true
     UserData:
       type: array
       description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values.
@@ -223,7 +225,7 @@ components:
         productId:
           type: integer
           description: Identifier of the product definition used for the draw generation.
-          example: 1
+          example: 1002
         numberOfSets:
           type: integer
           description: How many sets of numbers to generate.
