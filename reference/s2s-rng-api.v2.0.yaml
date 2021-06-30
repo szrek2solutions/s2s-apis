@@ -8,7 +8,7 @@ info:
     email: info@szrek.com
 servers:
   - description: Local Server
-    url: 'http://localhost:55002/api/v1/rng'
+    url: 'http://localhost:55002/api/v2/rng'
 components:
   schemas:
     ClientInfo:
@@ -538,6 +538,7 @@ paths:
                             id:
                               type: integer
                               description: Product identifier.
+                              example: 1001
                             name:
                               type: string
                               description: Product name.
@@ -550,19 +551,23 @@ paths:
                               examples:
                                 - INTEGER
                               description: The configured RNG algorithm type for the product.
+                              example: INTEGER
                             requestCount:
                               type: integer
                               description: Current total number of RNG requests for this product.
+                              example: 324
                             lastRequestTime:
                               type: string
                               description: The time of the last RNG request for this product.
                               format: date-time
+                              example: '2020-09-30T18:30:23Z'
                             distribution:
                               type: array
                               description: Current distribution values. Applies to TABLE type products only
                               items:
                                 type: integer
                                 maximum: 64
+                                example: '[8,8,8,8,8]'
                             distributionOverride:
                               type: array
                               items:
@@ -593,48 +598,18 @@ paths:
                             - type: object
                               properties:
                                 lastErrorCode:
-                                  description: 'The error code of the most recent HSM error, if any.'
                                   type: integer
+                                  description: 'The error code of the most recent HSM error, if any.'
+                                  example: 231
                                 lastErrorTime:
                                   type: string
                                   description: 'The time of the last error code, if any.'
                                   format: date-time
+                                  example: '2020-09-30T18:30:23Z'
                     required:
                       - serverTime
                       - businessDay
-              examples:
-                Example 1:
-                  value:
-                    serverId: RNG-TEST-87
-                    serverVersion: '9.3'
-                    serverTime: '2020-09-30T18:30:23Z'
-                    businessDay: 200930
-                    products:
-                      - id: 1001
-                        name: Cool3
-                        type: INTEGER
-                        requestCount: 1
-                        lastRequestTime: '2019-08-24T14:15:22Z'
-                      - id: 1002
-                        name: Lotto6
-                        type: INTEGER
-                        requestCount: 1
-                        lastRequestTime: '2019-08-24T14:15:22Z'
-                    hsms:
-                      - slot: 0
-                        active: true
-                        status: OK
-                        serial: 01000000F00019C8
-                        sequencer: 18394549
-                        lastError: 5
-                        lastErrorTime: '2019-08-24T14:15:22Z'
-                        keyId: 308C-1328-3940-DC32
-                      - slot: 1
-                        active: false
-                        status: OK
-                        serial: 01000000F00019C5
-                        sequencer: 39459
-                        keyId: 308C-1328-3940-DC32
+              examples: {}
       tags:
         - Status
     parameters: []
