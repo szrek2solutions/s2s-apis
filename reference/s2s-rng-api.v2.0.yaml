@@ -162,11 +162,13 @@ components:
       description: Numeric error or status code.
       example: 0
       x-internal: true
+      readOnly: true
     StatusDescription:
       type: string
       description: Short description of the error or status code.
       example: Success
       x-internal: true
+      readOnly: true
     Status:
       type: object
       x-internal: true
@@ -175,12 +177,15 @@ components:
           type: integer
           description: Numeric error or status code.
           example: 0
+          readOnly: true
         text:
           type: string
           description: Short description of the error or status code.
           example: Success
+          readOnly: true
       required:
         - code
+      readOnly: true
     TransactionStatus:
       type: object
       description: Overall status of the batch request.
