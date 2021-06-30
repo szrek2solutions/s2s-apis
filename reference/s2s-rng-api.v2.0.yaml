@@ -184,30 +184,33 @@ components:
     TransactionStatus:
       type: object
       description: Overall status of the batch request.
+      x-internal: true
       properties:
         code:
           $ref: '#/components/schemas/StatusCode'
         text:
           $ref: '#/components/schemas/StatusDescription'
-      x-internal: true
+      readOnly: true
     DrawStatus:
       type: object
       description: Status of the draw request.
+      x-internal: true
       properties:
         code:
           $ref: '#/components/schemas/StatusCode'
         text:
           $ref: '#/components/schemas/StatusDescription'
-      x-internal: true
+      readOnly: true
     VerificationStatus:
       type: object
       description: Status of the verification request.
+      x-internal: true
       properties:
         code:
           $ref: '#/components/schemas/StatusCode'
         text:
           $ref: '#/components/schemas/StatusDescription'
-      x-internal: true
+      readOnly: true
     DrawInput:
       x-internal: true
       type: object
