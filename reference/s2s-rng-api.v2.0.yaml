@@ -455,9 +455,9 @@ paths:
                       $ref: '#/components/schemas/TestMode'
                     users:
                       $ref: '#/components/schemas/DrawUsers'
-                    draws:
+                    drawRequests:
                       type: array
-                      description: Array of draw records.
+                      description: Array of draw requests.
                       items:
                         allOf:
                           - type: object
