@@ -196,12 +196,22 @@ components:
           $ref: '#/components/schemas/StatusDescription'
       x-internal: true
     DrawStatus:
-      $ref: '#/components/schemas/Status'
+      type: object
       description: Status of the draw request.
+      properties:
+        code:
+          $ref: '#/components/schemas/StatusCode'
+        text:
+          $ref: '#/components/schemas/StatusDescription'
       x-internal: true
     VerificationStatus:
-      $ref: '#/components/schemas/Status'
+      type: object
       description: Status of the verification request.
+      properties:
+        code:
+          $ref: '#/components/schemas/StatusCode'
+        text:
+          $ref: '#/components/schemas/StatusDescription'
       x-internal: true
     DrawRecord:
       title: Draw
@@ -409,7 +419,7 @@ paths:
                   - $ref: '#/components/schemas/ClientInfo'
                   - type: object
                     properties:
-                      status:
+                      transactionStatus:
                         $ref: '#/components/schemas/TransactionStatus'
                       businessDay:
                         type: integer
@@ -426,7 +436,7 @@ paths:
                           allOf:
                             - type: object
                               properties:
-                                status:
+                                drawStatus:
                                   $ref: '#/components/schemas/DrawStatus'
                                 clientRecordId:
                                   type: string
@@ -667,24 +677,13 @@ paths:
                   - type: object
                     properties:
                       verificationStatus:
-                        $ref: '#/components/schemas/Status'
-                      drawRequest:
-                        allOf:
-                          - type: object
-                            properties:
-                              testMode:
-                                $ref: '#/components/schemas/TestMode'
-                              drawUsers:
-                                $ref: '#/components/schemas/DrawUsers'
-                          - $ref: '#/components/schemas/DrawRecord'
-                        description: The original RNG request.
-                      drawResult:
-                        allOf:
-                          - type: object
-                            properties:
-                              drawMatrix:
-                                $ref: '#/components/schemas/DrawMatrix'
-                        description: The regenerated RNG results.
+                        $ref: '#/components/schemas/VerificationStatus'
+                      testMode:
+                        $ref: '#/components/schemas/TestMode'
+                      drawUsers:
+                        $ref: '#/components/schemas/DrawUsers'
+                      drawRecord:
+                        $ref: '#/components/schemas/DrawRecord'
                       hsm:
                         $ref: '#/components/schemas/SecurityModule'
                       extractFields:
