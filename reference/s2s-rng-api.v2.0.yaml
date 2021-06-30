@@ -551,16 +551,6 @@ paths:
                               type: string
                               description: Product name.
                               example: Pick3
-                            type:
-                              type: string
-                              enum:
-                                - INTEGER
-                                - TABLE
-                                - LOTTO
-                              examples:
-                                - INTEGER
-                              description: The configured RNG algorithm type for the product.
-                              example: INTEGER
                             requestCount:
                               type: integer
                               description: Current total number of RNG requests for this product.
