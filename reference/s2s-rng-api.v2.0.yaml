@@ -387,11 +387,14 @@ components:
       type: array
       items:
         type: integer
+      x-internal: true
     NumberSets:
       type: array
       description: Numbers generated.
       items:
         $ref: '#/components/schemas/NumberSet'
+      readOnly: true
+      x-internal: true
   responses:
     BadRequestResponse:
       description: Bad Request
