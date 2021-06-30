@@ -164,6 +164,14 @@ components:
       items:
         type: string
         example: some data field some other data
+    StatusCode:
+      type: integer
+      description: Numeric error or status code.
+      example: 0
+    StatusDescription:
+      type: string
+      description: Short description of the error or status code.
+      example: Success
     Status:
       type: object
       x-internal: true
@@ -179,14 +187,22 @@ components:
       required:
         - code
     TransactionStatus:
-      $ref: '#/components/schemas/Status'
+      type: object
       description: Overall status of the batch request.
+      properties:
+        code:
+          $ref: '#/components/schemas/StatusCode'
+        text:
+          $ref: '#/components/schemas/StatusDescription'
       x-internal: true
     DrawStatus:
       $ref: '#/components/schemas/Status'
+      description: Status of the draw request.
+      x-internal: true
     VerificationStatus:
-      type: object
+      $ref: '#/components/schemas/Status'
       description: Status of the verification request.
+      x-internal: true
     DrawRecord:
       title: Draw
       description: A single draw generation from an RNG product.
@@ -409,7 +425,6 @@ paths:
                         items:
                           allOf:
                             - type: object
-                              description: Some description
                               properties:
                                 status:
                                   $ref: '#/components/schemas/DrawStatus'
