@@ -12,7 +12,6 @@ servers:
 components:
   schemas:
     ClientInfo:
-      title: ClientInfo
       type: object
       properties:
         clientId:
@@ -36,7 +35,6 @@ components:
       x-internal: true
     ServerInfo:
       type: object
-      title: ServerInfo
       properties:
         serverId:
           type: string
@@ -57,7 +55,6 @@ components:
       x-userDataIndex: 1
       x-internal: true
     DrawUser:
-      title: DrawUser
       type: object
       description: Draw participant's name and login time as used in the draw reports.
       properties:
@@ -78,7 +75,6 @@ components:
         $ref: '#/components/schemas/DrawUser'
       x-internal: true
     Distribution:
-      title: Distribution
       type: object
       description: Initial distribution values and depletion type. Used for TABLE products only.
       x-examples: {}
@@ -101,7 +97,6 @@ components:
           readOnly: true
       x-internal: true
     DrawMatrix:
-      title: DrawMatrix
       type: object
       description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
       properties:
@@ -148,7 +143,6 @@ components:
         - numberOfSets
       x-internal: true
     ClientData:
-      title: ClientData
       type: array
       description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
       items:
@@ -157,7 +151,6 @@ components:
       x-internal: true
     UserData:
       type: array
-      title: UserData
       description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values.
       x-internal: true
       deprecated: true
@@ -306,7 +299,6 @@ components:
         $ref: '#/components/schemas/SecurityBlock'
       x-internal: true
     SecurityModule:
-      title: SecurityModule
       type: object
       description: Details about the cryptographic Hardware Security Module (HSM).
       properties:
@@ -345,7 +337,6 @@ components:
           - value
       x-internal: true
     FieldError:
-      title: FieldError
       type: object
       description: Details about a specific field error.
       properties:
@@ -382,7 +373,6 @@ components:
               fieldName: productId
               path: 'draw[1].productId'
     NumberSet:
-      title: NumberSet
       type: array
       items:
         type: integer
