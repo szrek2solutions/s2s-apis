@@ -542,6 +542,7 @@ paths:
                             name:
                               type: string
                               description: Product name.
+                              example: Pick3
                             type:
                               type: string
                               enum:
@@ -567,7 +568,12 @@ paths:
                               items:
                                 type: integer
                                 maximum: 64
-                                example: '[8,8,8,8,8]'
+                                example: 
+                                  - 8
+                                  - 8
+                                  - 8
+                                  - 8
+                                  - 8
                             distributionOverride:
                               type: array
                               items:
