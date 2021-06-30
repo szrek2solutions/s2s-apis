@@ -621,7 +621,7 @@ paths:
     parameters: []
     post:
       summary: Verify Draw Record
-      description: Verifies a previously generated RNG draw record and returns the draw detail.
+      description: Verifies a previously generated draw record and returns the record detail.
       operationId: post-verifications
       responses:
         '200':
