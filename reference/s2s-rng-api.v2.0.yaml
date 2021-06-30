@@ -275,12 +275,7 @@ components:
           example: '2020-09-30T18:30:23Z'
           readOnly: true
         sets:
-          description: Numbers generated.
-          type: array
-          items:
-            type: array
-            items:
-              type: integer
+          $ref: '#/components/schemas/NumberSets'
     SecurityRequest:
       type: object
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
@@ -402,6 +397,12 @@ components:
       type: array
       items:
         type: integer
+      example:
+        - 25
+        - 5
+        - 41
+        - 17
+        - 1
       x-internal: true
     NumberSets:
       type: array
