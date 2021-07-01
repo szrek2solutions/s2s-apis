@@ -419,7 +419,7 @@ paths:
     post:
       summary: Generate Draw Records
       operationId: post-draws
-      description: Draw random numbers for one or more draw products.
+      description: Process a batch of one or more draw requests.
       responses:
         '200':
           description: OK
@@ -444,9 +444,9 @@ paths:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
-                      drawRecords:
+                      draws:
                         type: array
-                        description: Array of draw records.
+                        description: List of draw records.
                         items:
                           allOf:
                             - type: object
@@ -500,9 +500,9 @@ paths:
                       $ref: '#/components/schemas/TestMode'
                     users:
                       $ref: '#/components/schemas/DrawUsers'
-                    drawRecords:
+                    draws:
                       type: array
-                      description: Array of draw request records.
+                      description: List of draw requests.
                       minItems: 1
                       maxItems: 25
                       items:
