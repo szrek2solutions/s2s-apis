@@ -388,6 +388,7 @@ components:
     SecurityModule:
       type: object
       description: Details about the cryptographic Hardware Security Module (HSM).
+      x-internal: true
       properties:
         serial:
           type: string
@@ -395,17 +396,16 @@ components:
           example: 01000000F00019C8
         sequencer:
           type: integer
-          description: Sequence number on the HSM.
+          description: Current sequence number on the HSM.
           example: 734595
         time:
           type: string
-          description: Real-time clock value on the HSM.
+          description: Current real-time clock value on the HSM.
           example: '2020-09-30T18:30:23Z'
         keyId:
           type: string
-          description: Identifier of the RSA key pair on the HSM.
+          description: Current identifier of the RSA key pair on the HSM.
           example: 308C-1328-3940-DC32
-      x-internal: true
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -549,7 +549,7 @@ paths:
                         description: Current business day for this RNG server. Format is YYMMDD.
                         example: 200930
                       activeHsm:
-                        description: Details of the currently active HSM.
+                        description: 'Details of the currently active HSM, if any.'
                         allOf:
                           - $ref: '#/components/schemas/SecurityModule'
               examples: {}
