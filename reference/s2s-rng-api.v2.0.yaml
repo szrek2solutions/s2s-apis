@@ -468,14 +468,13 @@ paths:
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
               examples:
-                Cash-3 Minimal:
+                Cash 3 Minimal:
                   value:
                     serverId: ASL-RNG-TEST (87)
                     serverVersion: '11.0'
-                    businessDay: '210701'
+                    businessDay: 210701
                     draws:
                       - productId: 1701
-                        numberOfSets: 1
                         drawMatrix:
                           setSize: 3
                           minValue: 0
@@ -491,10 +490,9 @@ paths:
                   value:
                     serverId: ASL-RNG-TEST (87)
                     serverVersion: '11.0'
-                    businessDay: '210701'
+                    businessDay: 210701
                     draws:
                       - productId: 1702
-                        numberOfSets: 1
                         drawMatrix:
                           setSize: 4
                           minValue: 0
@@ -511,10 +509,9 @@ paths:
                   value:
                     serverId: ASL-RNG-TEST (87)
                     serverVersion: '11.0'
-                    businessDay: '210701'
+                    businessDay: 210701
                     draws:
                       - productId: 1710
-                        numberOfSets: 1
                         drawMatrix:
                           setSize: 5
                           minValue: 1
@@ -587,17 +584,14 @@ paths:
                 value:
                   draws:
                     - productId: 1701
-                      numberOfSets: 1
               Cash 4 Minimal:
                 value:
                   draws:
                     - productId: 1702
-                      numberOfSets: 1
               Natural State Jackpot Minimal:
                 value:
                   draws:
                     - productId: 1710
-                      numberOfSets: 1
         description: ''
       parameters: []
       tags:
