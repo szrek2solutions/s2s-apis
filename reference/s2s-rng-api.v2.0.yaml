@@ -40,11 +40,11 @@ components:
         serverId:
           type: string
           example: RNG-TEST-87
-          description: Transaction server identifier.
+          description: Draw server identifier.
         serverVersion:
           type: string
           example: '9.3'
-          description: Transaction server version number.
+          description: Draw server version number.
       readOnly: true
     TestMode:
       type: boolean
