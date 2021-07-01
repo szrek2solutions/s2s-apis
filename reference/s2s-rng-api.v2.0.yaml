@@ -13,26 +13,26 @@ components:
   schemas:
     ClientInfo:
       type: object
+      x-internal: true
       properties:
         clientId:
           type: string
-          description: Name or identifier of the client system.
+          description: Name or identifier of the client system. Optional input.
           example: GAMESERVER-1
         clientTransactionId:
           type: integer
-          description: Client's unique identifier for this transaction.
+          description: Client's unique identifier for this transaction. Optional input.
           format: int64
           example: 102030450
         clientTime:
           type: string
           format: date-time
-          description: Time on the client system.
+          description: Time on the client system. Optional input.
           example: '2020-09-30T18:30:23Z'
         clientBusinessDay:
           type: integer
-          description: Client's current business day. Format is YYMMDD.
+          description: Client's current business day. Format is YYMMDD. Optional input.
           example: 200930
-      x-internal: true
     ServerInfo:
       type: object
       x-internal: true
@@ -48,12 +48,13 @@ components:
       readOnly: true
     TestMode:
       type: boolean
-      description: Indicates that the draw is a test only and not valid for use.
+      description: Indicates that the draw is a test only and not valid for use. Optional input.
       x-userDataIndex: 1
       x-internal: true
     DrawUser:
       type: object
-      description: Draw participant's name and login time as used in the draw reports.
+      description: Draw participant's name and login time as used in the draw reports. Optional input.
+      x-internal: true
       properties:
         name:
           type: string
@@ -62,18 +63,17 @@ components:
         loginTime:
           type: string
           format: date-time
-          description: The time that the user logged into the draw GUI
+          description: The time that the user logged into the draw GUI. Optional input.
           example: '2020-03-15T15:47:44Z'
-      x-internal: true
     DrawUsers:
-      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer.'
+      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer. Optional input.'
       type: array
       items:
         $ref: '#/components/schemas/DrawUser'
       x-internal: true
     Distribution:
       type: object
-      description: Initial distribution values and depletion type. Used for TABLE products only.
+      description: 'Initial distribution values and depletion type. Used for TABLE products only. '
       x-examples: {}
       properties:
         values:
@@ -95,7 +95,7 @@ components:
       x-internal: true
     Exclusions:
       type: array
-      description: Values to be excluded from the generation.
+      description: Values to be excluded from the generation. For non-TABLE products only. Optional input.
       uniqueItems: true
       maxItems: 65535
       example:
@@ -111,16 +111,16 @@ components:
       properties:
         setSize:
           type: integer
-          description: How many numbers in each set.
+          description: How many numbers in each set. Optional input.
           example: 6
           minimum: 1
         minValue:
           type: integer
-          description: Lowest number that can be generated.
+          description: Lowest number that can be generated. Optional input.
           example: 1
         maxValue:
           type: integer
-          description: Highest number that can be generated.
+          description: Highest number that can be generated. Optional input.
           example: 49
         withReplacement:
           type: boolean
@@ -139,7 +139,7 @@ components:
           $ref: '#/components/schemas/Distribution'
     ClientData:
       type: array
-      description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
+      description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports. Optional input.
       x-internal: true
       example:
         - A data field
@@ -148,7 +148,7 @@ components:
         type: string
     UserData:
       type: array
-      description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values.
+      description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values. Optional input.
       x-internal: true
       deprecated: true
       items:
@@ -176,11 +176,11 @@ components:
       properties:
         productId:
           type: integer
-          description: Identifier of the product definition used for the draw generation.
+          description: Identifier of the product definition used for the draw generation. Required input.
           example: 1002
         numberOfSets:
           type: integer
-          description: How many sets of numbers to generate.
+          description: How many sets of numbers to generate. Optional input.
           minimum: 1
           example: 1
         drawMatrix:
@@ -193,20 +193,20 @@ components:
         drawNumber:
           type: integer
           example: 1
-          description: Draw number for this draw.
+          description: Draw number for this draw. Optional input.
           minimum: 1
         drawHash:
           type: string
-          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format.'
+          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format. Optional input.'
           format: binary
           example: B63C77E06612D820BC3BE72877C74F257B562A20
         drawFile:
           type: string
-          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText.'
+          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText. Optional input.'
           example: BETS_20210312_123_LOTTO6.dat
         drawText:
           type: string
-          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile.
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input.
           example: PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
@@ -214,7 +214,6 @@ components:
           $ref: '#/components/schemas/UserData'
       required:
         - productId
-        - numberOfSets
     DrawOutput:
       x-internal: true
       type: object
@@ -422,7 +421,7 @@ paths:
     post:
       summary: Generate Draw Records
       operationId: post-draws
-      description: Process a batch of one or more draw requests.
+      description: 'Process a batch of one or more draw requests. Most of the defined input fields are optional, but when used they provide additional verification and security features.'
       responses:
         '200':
           description: OK
@@ -565,7 +564,7 @@ paths:
                       $ref: '#/components/schemas/DrawUsers'
                     draws:
                       type: array
-                      description: List of draw requests.
+                      description: List of draw requests. Required input/output.
                       minItems: 1
                       maxItems: 25
                       items:
@@ -574,7 +573,7 @@ paths:
                             properties:
                               clientRecordId:
                                 type: string
-                                description: Client's unique identifier for this draw.
+                                description: Client's unique identifier for this draw. Optional input.
                                 example: RQID-31234545-32
                           - $ref: '#/components/schemas/DrawInput'
                           - type: object
