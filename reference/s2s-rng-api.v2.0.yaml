@@ -93,6 +93,17 @@ components:
           example: NO_DEPLETION
           readOnly: true
       x-internal: true
+    Exclusions:
+      type: array
+      description: Values to be excluded from the generation.
+      uniqueItems: true
+      maxItems: 65535
+      example:
+        - 10
+        - 30
+        - 53
+      items:
+        type: integer
     DrawMatrix:
       type: object
       description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
@@ -124,17 +135,6 @@ components:
           examples:
             - UNSORTED
           readOnly: true
-        exclusions:
-          type: array
-          description: Values to be excluded from the generation.
-          uniqueItems: true
-          maxItems: 65535
-          example:
-            - 10
-            - 30
-            - 53
-          items:
-            type: integer
         distribution:
           $ref: '#/components/schemas/Distribution'
     ClientData:
@@ -184,7 +184,12 @@ components:
           minimum: 1
           example: 1
         drawMatrix:
-          $ref: '#/components/schemas/DrawMatrix'
+          allOf:
+            - $ref: '#/components/schemas/DrawMatrix'
+            - properties:
+                exclusions:
+                  $ref: '#/components/schemas/Exclusions'
+              type: object
         drawNumber:
           type: integer
           example: 1
@@ -477,6 +482,12 @@ paths:
                         message: Product not found
                         fieldName: productId
                         path: 'draw[1].productId'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       requestBody:
         content:
           application/json:
@@ -553,8 +564,23 @@ paths:
                         $ref: '#/components/schemas/ExtractFields'
         '400':
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
           description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples: {}
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
       requestBody:
         content:
           application/json:
@@ -579,7 +605,7 @@ paths:
     get:
       summary: Get Server Status
       description: |-
-        Get current status of the server. Returns HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. The typical cause of 503 response is that the HSM is disconnected.
+        Get current status of the server. Returns HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. A typical cause of an 503 response is that are no HSMs connected to the draw server.
 
         This operation can be used by network monitoring systems to report exceptions and automatically manage load balancing.
       operationId: get-status
