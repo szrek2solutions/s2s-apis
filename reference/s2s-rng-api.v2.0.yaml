@@ -95,7 +95,8 @@ components:
       x-internal: true
     DrawMatrix:
       type: object
-      description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
+      description: ''
+      x-internal: true
       properties:
         setSize:
           type: integer
@@ -128,17 +129,14 @@ components:
           description: Values to be excluded from the generation.
           uniqueItems: true
           maxItems: 65535
-          items:
-            type: integer
           example:
             - 10
             - 30
             - 53
+          items:
+            type: integer
         distribution:
           $ref: '#/components/schemas/Distribution'
-      required:
-        - numberOfSets
-      x-internal: true
     ClientData:
       type: array
       description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports.
