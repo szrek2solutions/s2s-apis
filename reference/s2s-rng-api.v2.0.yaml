@@ -339,22 +339,32 @@ components:
       readOnly: true
       x-internal: true
     DrawProduct:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Product identifier.
-          example: 1001
-        name:
-          type: string
-          description: Product name.
-          example: Pick3
-        hash:
-          type: string
-          description: Hash of the product definition record.
-          format: binary
-          example: 12D820BC3BE7B63C77E06627B562A20877C74F25
       x-internal: true
+      allOf:
+        - type: object
+          properties:
+            id:
+              type: integer
+              description: Product identifier.
+              example: 1002
+            name:
+              type: string
+              description: Product name.
+              example: Lotto6
+            type:
+              type: string
+              enum:
+                - INTEGER
+                - TABLE
+                - LOTTO
+              example: INTEGER
+              description: The configured RNG algorithm type for the product.
+            hash:
+              type: string
+              description: Hash of the product definition record.
+              format: binary
+              example: 12D820BC3BE7B63C77E06627B562A20877C74F25
+        - $ref: '#/components/schemas/DrawMatrix'
     SecurityModule:
       type: object
       description: Details about the cryptographic Hardware Security Module (HSM).
@@ -654,16 +664,16 @@ paths:
                   - type: object
                     properties:
                       hsms:
-                        allOf:
-                          - type: object
-                            properties:
-                              active:
-                                type: boolean
-                                description: True if this is the currently active HSM.
-                          - type: array
-                            items:
-                              $ref: '#/components/schemas/SecurityModule'
                         description: HSMs currently connected to the server.
+                        type: array
+                        items:
+                          allOf:
+                            - type: object
+                              properties:
+                                active:
+                                  type: boolean
+                                  description: True if this is the currently active HSM.
+                            - $ref: '#/components/schemas/SecurityModule'
               examples: {}
       operationId: get-hsms
       description: Get list of all current hardware security modules (HSMs) found on the draw server.
