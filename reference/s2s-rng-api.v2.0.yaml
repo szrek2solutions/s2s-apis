@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: S2S RNG API (Draft)
-  version: 2.0.0
+  version: 2.0.1
   description: Szrek2Solutions Random Number Generator API.
   contact:
     url: 'http://www.szrek.com'
