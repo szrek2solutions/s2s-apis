@@ -654,9 +654,16 @@ paths:
                   - type: object
                     properties:
                       hsms:
-                        type: array
-                        items:
-                          $ref: '#/components/schemas/SecurityModule'
+                        allOf:
+                          - type: array
+                            items:
+                              $ref: '#/components/schemas/SecurityModule'
+                          - type: object
+                            properties:
+                              active:
+                                type: boolean
+                                description: True if this is the currently active HSM.
+                        description: HSMs currently connected to the server.
               examples: {}
       operationId: get-hsms
       description: Get list of all current hardware security modules (HSMs) found on the draw server.
