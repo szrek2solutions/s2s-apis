@@ -564,7 +564,7 @@ paths:
   /server/status:
     parameters: []
     get:
-      summary: Get Draw Server Status
+      summary: Get Server Status
       description: |-
         Get current status of the server. Returns HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. The typical cause of 503 response is that the HSM is disconnected.
 
