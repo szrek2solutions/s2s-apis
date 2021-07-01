@@ -160,20 +160,18 @@ components:
       type: object
       description: Status code and description.
       x-internal: true
+      readOnly: true
       properties:
         code:
           type: integer
           description: Numeric error or status code.
           example: 0
           x-internal: true
-          readOnly: true
-        text:
+        description:
           type: string
           description: Short description of the error or status code.
           example: Success
           x-internal: true
-          readOnly: true
-      readOnly: true
     DrawInput:
       x-internal: true
       type: object
