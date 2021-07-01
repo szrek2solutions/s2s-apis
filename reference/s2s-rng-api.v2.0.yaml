@@ -95,7 +95,7 @@ components:
       x-internal: true
     DrawMatrix:
       type: object
-      description: ''
+      description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
       x-internal: true
       properties:
         setSize:
