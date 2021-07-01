@@ -617,6 +617,20 @@ paths:
         description: ''
       tags:
         - Draws
+  /products:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Server
+      responses: {}
+      operationId: get-products
+  /hsms:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - Server
+      responses: {}
+      operationId: get-hsms
 security: []
 tags:
   - name: Draws
