@@ -643,7 +643,21 @@ paths:
       summary: Get Security Modules
       tags:
         - Server
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      hsms:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/SecurityModule'
+              examples: {}
       operationId: get-hsms
       description: Get list of all current hardware security modules (HSMs) found on the draw server.
     parameters: []
