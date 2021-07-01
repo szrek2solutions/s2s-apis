@@ -8,7 +8,7 @@ info:
     email: info@szrek.com
 servers:
   - description: Local Server
-    url: 'http://localhost:55002/api/v2/rng'
+    url: 'http://asl-rng-test:55002/api/v2/rng'
 components:
   schemas:
     ClientInfo:
