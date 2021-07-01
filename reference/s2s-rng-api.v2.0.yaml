@@ -342,6 +342,7 @@ components:
       x-internal: true
       allOf:
         - type: object
+          description: Draw product details.
           properties:
             id:
               type: integer
@@ -359,12 +360,16 @@ components:
                 - LOTTO
               example: INTEGER
               description: The configured RNG algorithm type for the product.
+            active:
+              type: boolean
+              description: True if the product is currently active.
             hash:
               type: string
               description: Hash of the product definition record.
               format: binary
               example: 12D820BC3BE7B63C77E06627B562A20877C74F25
         - $ref: '#/components/schemas/DrawMatrix'
+      description: ''
     SecurityModule:
       type: object
       description: Details about the cryptographic Hardware Security Module (HSM).
@@ -641,6 +646,7 @@ paths:
                     properties:
                       products:
                         type: array
+                        description: List of configured draw products.
                         items:
                           $ref: '#/components/schemas/DrawProduct'
               examples: {}
