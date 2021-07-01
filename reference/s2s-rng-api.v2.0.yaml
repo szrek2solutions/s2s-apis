@@ -427,6 +427,7 @@ components:
   securitySchemes: {}
 paths:
   /draws:
+    parameters: []
     post:
       summary: Generate Draw Records
       operationId: post-draws
@@ -523,8 +524,8 @@ paths:
       parameters: []
       tags:
         - Draws
-    parameters: []
   /server/status:
+    parameters: []
     get:
       summary: Get Draw Server Status
       description: |-
@@ -556,9 +557,27 @@ paths:
                         allOf:
                           - $ref: '#/components/schemas/SecurityModule'
               examples: {}
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      serverTime:
+                        type: string
+                        format: date-time
+                        description: Current system time of the RNG server.
+                        example: '2020-09-30T18:30:23Z'
+                      businessDay:
+                        type: integer
+                        description: Current business day for this RNG server. Format is YYMMDD.
+                        example: 200930
+              examples: {}
       tags:
         - Server
-    parameters: []
   /verifications:
     parameters: []
     post:
@@ -621,10 +640,9 @@ paths:
       tags:
         - Draws
   /server/products:
+    parameters: []
     get:
       summary: Get Draw Products
-      tags:
-        - Server
       responses:
         '200':
           description: OK
@@ -642,7 +660,8 @@ paths:
               examples: {}
       operationId: get-products
       description: Get list of all configured draw products on the draw server.
-    parameters: []
+      tags:
+        - Server
   /server/hsms:
     get:
       summary: Get Security Modules
