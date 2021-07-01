@@ -674,6 +674,7 @@ paths:
         description: ''
       tags:
         - Draws
+      x-internal: true
   /server/status:
     parameters: []
     get:
@@ -752,6 +753,7 @@ paths:
       description: Get list of all configured draw products on the draw server.
       tags:
         - Server
+      x-internal: true
   /server/hsms:
     get:
       summary: Get Security Modules
@@ -781,6 +783,7 @@ paths:
               examples: {}
       operationId: get-hsms
       description: Get list of all current hardware security modules (HSMs) found on the draw server.
+      x-internal: true
     parameters: []
 security: []
 tags:
