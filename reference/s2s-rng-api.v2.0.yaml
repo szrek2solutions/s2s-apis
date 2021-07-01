@@ -625,7 +625,21 @@ paths:
       summary: Get Draw Products
       tags:
         - Server
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      products:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DrawProduct'
+              examples: {}
       operationId: get-products
       description: Get list of all configured draw products on the draw server.
     parameters: []
