@@ -421,7 +421,7 @@ paths:
     post:
       summary: Generate Draw Records
       operationId: post-draws
-      description: 'Process a batch of one or more draw requests. Most of the defined input fields are optional, but when used they provide additional verification and security features.'
+      description: 'Process a batch of one or more draw requests. Most of the defined input fields are optional, but when used they provide additional verification and security features. '
       responses:
         '200':
           description: OK
