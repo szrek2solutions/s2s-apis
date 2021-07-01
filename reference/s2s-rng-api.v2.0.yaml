@@ -655,14 +655,14 @@ paths:
                     properties:
                       hsms:
                         allOf:
-                          - type: array
-                            items:
-                              $ref: '#/components/schemas/SecurityModule'
                           - type: object
                             properties:
                               active:
                                 type: boolean
                                 description: True if this is the currently active HSM.
+                          - type: array
+                            items:
+                              $ref: '#/components/schemas/SecurityModule'
                         description: HSMs currently connected to the server.
               examples: {}
       operationId: get-hsms
