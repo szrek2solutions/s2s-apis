@@ -156,57 +156,23 @@ components:
       items:
         type: string
         example: some data field some other data
-    StatusCode:
-      type: integer
-      description: Numeric error or status code.
-      example: 0
-      x-internal: true
-      readOnly: true
-    StatusDescription:
-      type: string
-      description: Short description of the error or status code.
-      example: Success
-      x-internal: true
-      readOnly: true
     Status:
       type: object
       description: Status code and description.
       x-internal: true
       properties:
         code:
-          $ref: '#/components/schemas/StatusCode'
+          type: integer
+          description: Numeric error or status code.
+          example: 0
+          x-internal: true
+          readOnly: true
         text:
-          $ref: '#/components/schemas/StatusDescription'
-      readOnly: true
-    DrawStatus:
-      type: object
-      description: Status of the draw request.
-      x-internal: true
-      properties:
-        code:
-          $ref: '#/components/schemas/StatusCode'
-        text:
-          $ref: '#/components/schemas/StatusDescription'
-      readOnly: true
-    VerificationStatus:
-      type: object
-      description: Status of the verification request.
-      x-internal: true
-      properties:
-        code:
-          $ref: '#/components/schemas/StatusCode'
-        text:
-          $ref: '#/components/schemas/StatusDescription'
-      readOnly: true
-    ErrorStatus:
-      type: object
-      description: Error code and description.
-      x-internal: true
-      properties:
-        code:
-          $ref: '#/components/schemas/StatusCode'
-        text:
-          $ref: '#/components/schemas/StatusDescription'
+          type: string
+          description: Short description of the error or status code.
+          example: Success
+          x-internal: true
+          readOnly: true
       readOnly: true
     DrawInput:
       x-internal: true
@@ -344,7 +310,7 @@ components:
     ErrorResponse:
       description: Describes the error and any specific problems with fields in the request.
       allOf:
-        - $ref: '#/components/schemas/ErrorStatus'
+        - $ref: '#/components/schemas/Status'
         - type: object
           properties:
             fieldErrors:
@@ -465,7 +431,9 @@ paths:
                             - type: object
                               properties:
                                 drawStatus:
-                                  $ref: '#/components/schemas/DrawStatus'
+                                  allOf:
+                                    - $ref: '#/components/schemas/Status'
+                                  description: Status of the draw request.
                                 clientRecordId:
                                   type: string
                                   description: Client's unique identifier for this draw.
@@ -552,7 +520,9 @@ paths:
                   - type: object
                     properties:
                       verificationStatus:
-                        $ref: '#/components/schemas/VerificationStatus'
+                        allOf:
+                          - $ref: '#/components/schemas/Status'
+                        description: Status of the verification request.
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
