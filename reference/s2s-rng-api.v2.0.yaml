@@ -186,10 +186,10 @@ components:
         drawMatrix:
           allOf:
             - $ref: '#/components/schemas/DrawMatrix'
-            - properties:
+            - type: object
+              properties:
                 exclusions:
                   $ref: '#/components/schemas/Exclusions'
-              type: object
         drawNumber:
           type: integer
           example: 1
@@ -212,6 +212,9 @@ components:
           $ref: '#/components/schemas/ClientData'
         userData:
           $ref: '#/components/schemas/UserData'
+      required:
+        - productId
+        - numberOfSets
     DrawOutput:
       x-internal: true
       type: object
@@ -578,6 +581,8 @@ paths:
                             properties:
                               securityBlocks:
                                 $ref: '#/components/schemas/SecurityRequests'
+                  required:
+                    - draws
             examples:
               Cash 3 Minimal:
                 value:
