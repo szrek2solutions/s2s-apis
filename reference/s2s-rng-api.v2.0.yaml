@@ -465,7 +465,67 @@ paths:
                               properties:
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
-              examples: {}
+              examples:
+                Cash-3 Minimal:
+                  value:
+                    serverId: ASL-RNG-TEST (87)
+                    serverVersion: '11.0'
+                    businessDay: '210701'
+                    draws:
+                      - productId: 1701
+                        numberOfSets: 1
+                        drawMatrix:
+                          setSize: 3
+                          minValue: 0
+                          maxValue: 9
+                          withReplacement: true
+                        recordId: EX210701870000409847
+                        sets:
+                          - - 4
+                            - 3
+                            - 6
+                        timeStamp: '2021-07-01T16:02:32Z'
+                Cash 4 Minimal:
+                  value:
+                    serverId: ASL-RNG-TEST (87)
+                    serverVersion: '11.0'
+                    businessDay: '210701'
+                    draws:
+                      - productId: 1702
+                        numberOfSets: 1
+                        drawMatrix:
+                          setSize: 4
+                          minValue: 0
+                          maxValue: 9
+                          withReplacement: true
+                        recordId: EX210701870000409948
+                        sets:
+                          - - 4
+                            - 9
+                            - 2
+                            - 3
+                        timeStamp: '2021-07-01T16:09:02Z'
+                Natural State Jackpot Minimal:
+                  value:
+                    serverId: ASL-RNG-TEST (87)
+                    serverVersion: '11.0'
+                    businessDay: '210701'
+                    draws:
+                      - productId: 1710
+                        numberOfSets: 1
+                        drawMatrix:
+                          setSize: 5
+                          minValue: 1
+                          maxValue: 39
+                          withReplacement: false
+                        recordId: EX210701870000410049
+                        sets:
+                          - - 9
+                            - 10
+                            - 13
+                            - 17
+                            - 28
+                        timeStamp: '2021-07-01T16:13:04Z'
         '400':
           description: Bad Request
           content:
@@ -518,7 +578,23 @@ paths:
                             properties:
                               securityBlocks:
                                 $ref: '#/components/schemas/SecurityRequests'
-            examples: {}
+            examples:
+              Cash 3 Minimal:
+                value:
+                  draws:
+                    - productId: 1701
+                      numberOfSets: 1
+              Cash 4 Minimal:
+                value:
+                  draws:
+                    - productId: 1702
+                      numberOfSets: 1
+              Natural State Jackpot Minimal:
+                value:
+                  draws:
+                    - productId: 1710
+                      numberOfSets: 1
+        description: ''
       parameters: []
       tags:
         - Draws
