@@ -168,9 +168,9 @@ components:
       example: Success
       x-internal: true
       readOnly: true
-    TransactionStatus:
+    Status:
       type: object
-      description: Overall status of the batch request.
+      description: Status code and description.
       x-internal: true
       properties:
         code:
@@ -385,6 +385,7 @@ components:
           description: Hash of the product definition record.
           format: binary
           example: 12D820BC3BE7B63C77E06627B562A20877C74F25
+      x-internal: true
     SecurityModule:
       type: object
       description: Details about the cryptographic Hardware Security Module (HSM).
@@ -444,7 +445,9 @@ paths:
                   - type: object
                     properties:
                       transactionStatus:
-                        $ref: '#/components/schemas/TransactionStatus'
+                        allOf:
+                          - $ref: '#/components/schemas/Status'
+                        description: Overall status of the batch request.
                       businessDay:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
@@ -524,61 +527,7 @@ paths:
       parameters: []
       tags:
         - Draws
-  /server/status:
-    parameters: []
-    get:
-      summary: Get Draw Server Status
-      description: |-
-        Get current status of the server. Returns the HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. The typical cause of 503 response is that the HSM is disconnected.
-
-        This operation can be used by network monitoring systems to report exceptions and automatically manage load balancing.
-      operationId: get-status
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ServerInfo'
-                  - type: object
-                    properties:
-                      serverTime:
-                        type: string
-                        format: date-time
-                        description: Current system time of the RNG server.
-                        example: '2020-09-30T18:30:23Z'
-                      businessDay:
-                        type: integer
-                        description: Current business day for this RNG server. Format is YYMMDD.
-                        example: 200930
-                      activeHsm:
-                        description: 'Details of the currently active HSM, if any.'
-                        allOf:
-                          - $ref: '#/components/schemas/SecurityModule'
-              examples: {}
-        '503':
-          description: Service Unavailable
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: '#/components/schemas/ServerInfo'
-                  - type: object
-                    properties:
-                      serverTime:
-                        type: string
-                        format: date-time
-                        description: Current system time of the RNG server.
-                        example: '2020-09-30T18:30:23Z'
-                      businessDay:
-                        type: integer
-                        description: Current business day for this RNG server. Format is YYMMDD.
-                        example: 200930
-              examples: {}
-      tags:
-        - Server
-  /verifications:
+  /draws/verification:
     parameters: []
     post:
       summary: Verify Draw Record
@@ -639,6 +588,60 @@ paths:
         description: ''
       tags:
         - Draws
+  /server/status:
+    parameters: []
+    get:
+      summary: Get Draw Server Status
+      description: |-
+        Get current status of the server. Returns the HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. The typical cause of 503 response is that the HSM is disconnected.
+
+        This operation can be used by network monitoring systems to report exceptions and automatically manage load balancing.
+      operationId: get-status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      serverTime:
+                        type: string
+                        format: date-time
+                        description: Current system time of the RNG server.
+                        example: '2020-09-30T18:30:23Z'
+                      businessDay:
+                        type: integer
+                        description: Current business day for this RNG server. Format is YYMMDD.
+                        example: 200930
+                      activeHsm:
+                        description: 'Details of the currently active HSM, if any.'
+                        allOf:
+                          - $ref: '#/components/schemas/SecurityModule'
+              examples: {}
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/ServerInfo'
+                  - type: object
+                    properties:
+                      serverTime:
+                        type: string
+                        format: date-time
+                        description: Current system time of the RNG server.
+                        example: '2020-09-30T18:30:23Z'
+                      businessDay:
+                        type: integer
+                        description: Current business day for this RNG server. Format is YYMMDD.
+                        example: 200930
+              examples: {}
+      tags:
+        - Server
   /server/products:
     parameters: []
     get:
