@@ -622,7 +622,7 @@ paths:
         - Draws
   /server/products:
     get:
-      summary: Get Configured Products
+      summary: Get Draw Products
       tags:
         - Server
       responses: {}
@@ -631,7 +631,7 @@ paths:
     parameters: []
   /server/hsms:
     get:
-      summary: Get Current Security Modules
+      summary: Get Security Modules
       tags:
         - Server
       responses: {}
