@@ -7,7 +7,7 @@ info:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - description: Local Server
+  - description: ASL Test Server
     url: 'http://asl-rng-test:55002/api/v2/rng'
 components:
   schemas:
