@@ -683,7 +683,7 @@ paths:
     get:
       summary: Get Server Status
       description: |-
-        Get current status of the server. Returns HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. A typical cause of an 503 response is that are no HSMs connected to the draw server.
+        Get current status of the server. Returns HTTP 200 status code if the server is ready to generate, or HTTP 503 if any problems with the RNG engine have been detected. A typical cause of a 503 response is that are no HSMs connected to the draw server.
 
         This operation can be used by network monitoring systems to report exceptions and automatically manage load balancing.
       operationId: get-status
