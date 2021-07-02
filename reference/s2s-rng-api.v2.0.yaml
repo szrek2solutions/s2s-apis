@@ -481,6 +481,7 @@ paths:
                           maxValue: 9
                           withReplacement: true
                         recordId: EX210701870000409847
+                        recordHandle: 8509
                         sets:
                           - - 4
                             - 3
@@ -499,6 +500,7 @@ paths:
                           maxValue: 9
                           withReplacement: true
                         recordId: EX210701870000409948
+                        recordHandle: 8509
                         sets:
                           - - 4
                             - 9
@@ -518,6 +520,7 @@ paths:
                           maxValue: 39
                           withReplacement: false
                         recordId: EX210701870000410049
+                        recordHandle: 8509
                         sets:
                           - - 9
                             - 10
