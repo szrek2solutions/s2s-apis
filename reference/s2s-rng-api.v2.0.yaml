@@ -153,7 +153,9 @@ components:
       deprecated: true
       items:
         type: string
-        example: some data field some other data
+      example: 
+        - some data field
+        - some other data
     Status:
       type: object
       description: Status code and description.
@@ -605,11 +607,9 @@ paths:
                         setSize: 6
                         minValue: 1
                         maxValue: 49
-                        withReplacement: true
                         distribution:
                           values:
                             - 8
-                          depletionType: NO_DEPLETION
                         exclusions:
                           - 10
                           - 30
@@ -622,7 +622,8 @@ paths:
                         - A data field
                         - Another data field
                       userData:
-                        - some data field some other data
+                        - some data field
+                        - some other data
                       securityBlocks:
                         - id: S2S
                           version: '1.0'
