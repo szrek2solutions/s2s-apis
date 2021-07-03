@@ -126,15 +126,6 @@ components:
           type: boolean
           description: True if generated numbers can be repeated within a set.
           readOnly: true
-        sortOrder:
-          type: string
-          description: Sort order for the generated numbers within a set.
-          enum:
-            - UNSORTED
-            - ASCENDING
-          examples:
-            - UNSORTED
-          readOnly: true
         distribution:
           $ref: '#/components/schemas/Distribution'
     ClientData:
