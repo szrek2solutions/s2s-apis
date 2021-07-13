@@ -511,6 +511,59 @@ paths:
                             - 17
                             - 28
                         timeStamp: '2021-07-01T16:13:04Z'
+                All Fields:
+                  value:
+                    serverId: RNG-TEST-87
+                    serverVersion: '9.3'
+                    clientId: GAMESERVER-1
+                    clientTransactionId: 102030450
+                    clientTime: '2020-09-30T18:30:23Z'
+                    clientBusinessDay: 200930
+                    transactionStatus:
+                      code: 0
+                      description: Success
+                    businessDay: 200930
+                    testMode: true
+                    drawUsers:
+                      - name: John Smith
+                        loginTime: '2020-03-15T15:47:44Z'
+                    draws:
+                      - drawStatus:
+                          code: 0
+                          description: Success
+                        clientRecordId: RQID-31234545-32
+                        productId: 1002
+                        numberOfSets: 1
+                        drawMatrix:
+                          setSize: 6
+                          minValue: 1
+                          maxValue: 49
+                          withReplacement: true
+                          distribution:
+                            values:
+                              - 8
+                            depletionType: NO_DEPLETION
+                          exclusions:
+                            - 10
+                            - 30
+                            - 53
+                        drawNumber: 1
+                        drawHash: B63C77E06612D820BC3BE72877C74F257B562A20
+                        drawFile: BETS_20210312_123_LOTTO6.dat
+                        drawText: PROMO-1
+                        clientData:
+                          - A data field
+                          - Another data field
+                        recordId: EX191109870000000125
+                        recordHandle: 0
+                        timestamp: '2020-09-30T18:30:23Z'
+                        sets:
+                          - - 0
+                        securityBlocks:
+                          - id: S2S
+                            version: '1.0'
+                            keyId: 308C-1328-3940-DC32
+                            data: VGhpcyBpcyBhbiBleGFtcGxl
         '400':
           description: Bad Request
           content:
