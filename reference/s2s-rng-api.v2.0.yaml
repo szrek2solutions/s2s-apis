@@ -419,7 +419,7 @@ paths:
                       transactionStatus:
                         allOf:
                           - $ref: '#/components/schemas/Status'
-                        description: Overall status of the batch request. Present only if non-zero status code.
+                        description: Overall status of the batch request. Present only if status code is non-zero.
                       businessDay:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
@@ -439,7 +439,7 @@ paths:
                                 drawStatus:
                                   allOf:
                                     - $ref: '#/components/schemas/Status'
-                                  description: Status of the draw request. Present only if non-zero status code.
+                                  description: Status of the draw request. Present only if status code is non-zero.
                                 clientRecordId:
                                   type: string
                                   description: Client's unique identifier for this draw.
