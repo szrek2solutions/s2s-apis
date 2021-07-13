@@ -11,7 +11,7 @@ servers:
     url: 'http://asl-rng-test:55002/api/v2/rng'
 components:
   schemas:
-    ClientInfo:
+    ClientIdentity:
       type: object
       x-internal: true
       properties:
@@ -24,6 +24,10 @@ components:
           description: Client's unique identifier for this transaction. Optional input.
           format: int64
           example: 102030450
+    ClientTime:
+      type: object
+      x-internal: true
+      properties:
         clientTime:
           type: string
           format: date-time
@@ -413,7 +417,8 @@ paths:
               schema:
                 allOf:
                   - $ref: '#/components/schemas/ServerInfo'
-                  - $ref: '#/components/schemas/ClientInfo'
+                  - $ref: '#/components/schemas/ClientIdentity'
+                  - $ref: '#/components/schemas/ClientTime'
                   - type: object
                     properties:
                       transactionStatus:
@@ -591,7 +596,8 @@ paths:
           application/json:
             schema:
               allOf:
-                - $ref: '#/components/schemas/ClientInfo'
+                - $ref: '#/components/schemas/ClientIdentity'
+                - $ref: '#/components/schemas/ClientTime'
                 - type: object
                   properties:
                     testMode:
