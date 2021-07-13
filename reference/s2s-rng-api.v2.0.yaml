@@ -144,7 +144,7 @@ components:
       deprecated: true
       items:
         type: string
-      example: 
+      example:
         - some data field
         - some other data
     Status:
@@ -203,8 +203,6 @@ components:
           example: PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
-        userData:
-          $ref: '#/components/schemas/UserData'
       required:
         - productId
     DrawOutput:
