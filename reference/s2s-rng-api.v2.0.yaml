@@ -17,11 +17,11 @@ components:
       properties:
         clientId:
           type: string
-          description: Name or identifier of the client system. Optional input/output.
+          description: Name or identifier of the client system. Optional input.
           example: GAMESERVER-1
         clientTransactionId:
           type: integer
-          description: Client's unique identifier for this transaction. Optional input/output.
+          description: Client's unique identifier for this transaction. Optional input.
           format: int64
           example: 102030450
     ClientTime:
@@ -52,7 +52,7 @@ components:
       readOnly: true
     TestMode:
       type: boolean
-      description: Indicates that the draw is a test only and not valid for use. Optional input/output. Default is false.
+      description: Indicates that the draw is a test only and not valid for use. Optional input.
       x-userDataIndex: 1
       x-internal: true
     DrawUser:
@@ -70,7 +70,7 @@ components:
           description: The time that the user logged into the draw GUI. Optional input.
           example: '2020-03-15T15:47:44Z'
     DrawUsers:
-      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer. Optional input. Default is none.'
+      description: 'Participants conducting the draw. The first user is the Draw Manager, second user is the Draw Auditor, and third is the Draw Observer. Optional input.'
       type: array
       items:
         $ref: '#/components/schemas/DrawUser'
@@ -110,21 +110,21 @@ components:
         type: integer
     DrawMatrix:
       type: object
-      description: The RNG parameter matrix. The product definition may or may not allow overriding of these values.
+      description: The complete RNG parameter matrix. The product definition may or may not allow overriding of these values.
       x-internal: true
       properties:
         setSize:
           type: integer
-          description: How many numbers in each set. Optional input/output. Default is defined by product configuration.
+          description: How many numbers in each set. Optional input.
           example: 6
           minimum: 1
         minValue:
           type: integer
-          description: Lowest number that can be generated. Optional input/output. Default is defined by product configuration.
+          description: Lowest number that can be generated. Optional input.
           example: 1
         maxValue:
           type: integer
-          description: Highest number that can be generated. Optional input/output. Default is defined by product configuration.
+          description: Highest number that can be generated. Optional input.
           example: 49
         withReplacement:
           type: boolean
@@ -134,7 +134,7 @@ components:
           $ref: '#/components/schemas/Distribution'
     ClientData:
       type: array
-      description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports. Optional input. Default is none.
+      description: Optional data fields that are signed and logged. They can also be extracted and used in post-processing and reports. Optional input.
       x-internal: true
       example:
         - A data field
@@ -173,11 +173,11 @@ components:
       properties:
         productId:
           type: integer
-          description: 'Identifier of the product definition used for the draw generation. Required input.'
+          description: Identifier of the product definition used for the draw generation. Required input.
           example: 1002
         numberOfSets:
           type: integer
-          description: 'How many sets of numbers to generate. Optional input. Default is defined by product configuration.'
+          description: How many sets of numbers to generate. Optional input.
           minimum: 1
           example: 1
         drawMatrix:
@@ -190,20 +190,20 @@ components:
         drawNumber:
           type: integer
           example: 1
-          description: 'Draw number to be shown in draw reports. Optional input. Default is 1.'
+          description: Draw number for this draw. Optional input.
           minimum: 1
         drawHash:
           type: string
-          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format. Optional input. Default is none.'
+          description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format. Optional input.'
           format: binary
           example: B63C77E06612D820BC3BE72877C74F257B562A20
         drawFile:
           type: string
-          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText. Optional input. Default is none.'
+          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText. Optional input.'
           example: BETS_20210312_123_LOTTO6.dat
         drawText:
           type: string
-          description: 'An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input. Default is none.'
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input.
           example: PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
@@ -215,23 +215,23 @@ components:
       properties:
         recordId:
           type: string
-          description: 'Unique record identifier (URI) of the draw.'
+          description: Unique record identifier (URI) of the draw.
           example: EX191109870000000125
           readOnly: true
         recordHandle:
           type: integer
-          description: 'A look-up handle that can optionally be used for faster verification processing.'
+          description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
           readOnly: true
         timestamp:
           type: string
           format: date-time
-          description: 'Date and time the draw results were generated.'
+          description: Date and time the draw results were generated.
           example: '2020-09-30T18:30:23Z'
           readOnly: true
         sets:
           type: array
-          description: 'Generated sets of numbers.'
+          description: Generated sets of numbers.
           items:
             type: array
             items:
@@ -243,11 +243,11 @@ components:
       properties:
         id:
           type: string
-          description: 'Security block type identifier.'
+          description: Security block type identifier.
           example: S2S
         version:
           type: string
-          description: 'Format version of the security block.'
+          description: Format version of the security block.
           example: '1.0'
       required:
         - id
@@ -271,7 +271,7 @@ components:
               readOnly: true
             data:
               type: string
-              description: 'Base 64 encoded content of the security block.'
+              description: Base 64 encoded content of the security block.
               example: VGhpcyBpcyBhbiBleGFtcGxl
               readOnly: true
     SecurityBlocks:
@@ -281,7 +281,7 @@ components:
       x-internal: true
     ExtractFields:
       type: array
-      description: 'Name/value pairs as would be generated in a CSV extract file.'
+      description: Name/value pairs as would be generated in a CSV extract file.
       x-internal: true
       items:
         type: object
@@ -400,7 +400,7 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/ServerInfo'
                   - $ref: '#/components/schemas/ClientIdentity'
-                  #- $ref: '#/components/schemas/ClientTime'
+                  - $ref: '#/components/schemas/ClientTime'
                   - type: object
                     properties:
                       transactionStatus:
@@ -412,10 +412,10 @@ paths:
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
                         example: 200930
                         readOnly: true
-                      #testMode:
-                      #  $ref: '#/components/schemas/TestMode'
-                      #drawUsers:
-                      #  $ref: '#/components/schemas/DrawUsers'
+                      testMode:
+                        $ref: '#/components/schemas/TestMode'
+                      drawUsers:
+                        $ref: '#/components/schemas/DrawUsers'
                       draws:
                         type: array
                         description: List of draw records.
@@ -431,7 +431,7 @@ paths:
                                   type: string
                                   description: Client's unique identifier for this draw.
                                   example: RQID-31234545-32
-                            #- $ref: '#/components/schemas/DrawInput'
+                            - $ref: '#/components/schemas/DrawInput'
                             - $ref: '#/components/schemas/DrawOutput'
                             - type: object
                               properties:
