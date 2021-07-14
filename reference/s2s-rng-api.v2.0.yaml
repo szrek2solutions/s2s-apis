@@ -320,24 +320,6 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/FieldError'
-    NumberSet:
-      type: array
-      items:
-        type: integer
-      example:
-        - 25
-        - 5
-        - 41
-        - 17
-        - 1
-      x-internal: true
-    NumberSets:
-      type: array
-      description: Numbers generated.
-      items:
-        $ref: '#/components/schemas/NumberSet'
-      readOnly: true
-      x-internal: true
     DrawProduct:
       x-internal: true
       allOf:
