@@ -173,7 +173,7 @@ components:
       properties:
         productId:
           type: integer
-          description: 'Identifier of the product definition used for the draw generation. Required input.'
+          description: 'Identifier of the product definition used for the draw generation. Required input/output.'
           example: 1002
         numberOfSets:
           type: integer
@@ -213,6 +213,17 @@ components:
       x-internal: true
       type: object
       properties:
+        productId:
+          type: integer
+          description: 'Identifier of the product definition used for the draw generation. Required input/output.'
+          example: 1002
+        drawMatrix:
+          allOf:
+            - $ref: '#/components/schemas/DrawMatrix'
+            - type: object
+              properties:
+                exclusions:
+                  $ref: '#/components/schemas/Exclusions'
         recordId:
           type: string
           description: 'Unique record identifier (URI) of the draw.'
