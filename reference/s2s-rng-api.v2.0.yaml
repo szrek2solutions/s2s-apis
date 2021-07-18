@@ -269,7 +269,7 @@ components:
       x-internal: true
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc. Optional input.'
     SecurityBlock:
-      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+      description: ''
       x-internal: true
       title: ''
       allOf:
@@ -291,6 +291,7 @@ components:
       items:
         $ref: '#/components/schemas/SecurityBlock'
       x-internal: true
+      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc. Output.'
     ExtractFields:
       type: array
       description: Name/value pairs as would be generated in a CSV extract file.
