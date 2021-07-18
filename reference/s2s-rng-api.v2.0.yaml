@@ -110,7 +110,7 @@ components:
         type: integer
     DrawMatrix:
       type: object
-      description: The RNG parameter matrix. The product definition may or may not allow overriding of these values.
+      description: The RNG parameter matrix. The product definition may or may not allow overriding of these values. Optional input/optional output.
       x-internal: true
       properties:
         setSize:
@@ -173,11 +173,11 @@ components:
       properties:
         productId:
           type: integer
-          description: 'Identifier of the product definition used for the draw generation. Required input/output.'
+          description: Identifier of the product definition used for the draw generation. Required input/output.
           example: 1002
         numberOfSets:
           type: integer
-          description: 'How many sets of numbers to generate. Optional input. Default is defined by product configuration.'
+          description: How many sets of numbers to generate. Optional input. Default is defined by product configuration.
           minimum: 1
           example: 1
         drawMatrix:
@@ -190,7 +190,7 @@ components:
         drawNumber:
           type: integer
           example: 1
-          description: 'Draw number to be shown in draw reports. Optional input. Default is 1.'
+          description: Draw number to be shown in draw reports. Optional input. Default is 1.
           minimum: 1
         drawHash:
           type: string
@@ -203,7 +203,7 @@ components:
           example: BETS_20210312_123_LOTTO6.dat
         drawText:
           type: string
-          description: 'An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input. Default is none.'
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input. Default is none.
           example: PROMO-1
         clientData:
           $ref: '#/components/schemas/ClientData'
@@ -215,7 +215,7 @@ components:
       properties:
         productId:
           type: integer
-          description: 'Identifier of the product definition used for the draw generation. Required input/output.'
+          description: Identifier of the product definition used for the draw generation. Required input/output.
           example: 1002
         drawMatrix:
           allOf:
@@ -226,39 +226,39 @@ components:
                   $ref: '#/components/schemas/Exclusions'
         recordId:
           type: string
-          description: 'Unique record identifier (URI) of the draw.'
+          description: Unique record identifier (URI) of the draw. Output.
           example: EX191109870000000125
           readOnly: true
         recordHandle:
           type: integer
-          description: 'A look-up handle that can optionally be used for faster verification processing.'
+          description: A look-up handle that can optionally be used for faster verification processing. Optional output.
           format: int64
           readOnly: true
         timestamp:
           type: string
           format: date-time
-          description: 'Date and time the draw results were generated.'
+          description: Date and time the draw results were generated. Output.
           example: '2020-09-30T18:30:23Z'
           readOnly: true
         sets:
           type: array
-          description: 'Generated sets of numbers.'
+          description: Generated sets of numbers. Output.
           items:
             type: array
             items:
               type: integer
     SecurityRequest:
       type: object
-      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
+      description: ''
       x-internal: true
       properties:
         id:
           type: string
-          description: 'Security block type identifier.'
+          description: Security block type identifier.
           example: S2S
         version:
           type: string
-          description: 'Format version of the security block.'
+          description: Format version of the security block.
           example: '1.0'
       required:
         - id
@@ -267,6 +267,7 @@ components:
       items:
         $ref: '#/components/schemas/SecurityRequest'
       x-internal: true
+      description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc. Optional input.'
     SecurityBlock:
       description: 'Security blocks are used to authenticate various elements of the transaction. It can be an encrypted ICS block, product checksums, etc.'
       x-internal: true
@@ -282,7 +283,7 @@ components:
               readOnly: true
             data:
               type: string
-              description: 'Base 64 encoded content of the security block.'
+              description: Base 64 encoded content of the security block.
               example: VGhpcyBpcyBhbiBleGFtcGxl
               readOnly: true
     SecurityBlocks:
@@ -292,7 +293,7 @@ components:
       x-internal: true
     ExtractFields:
       type: array
-      description: 'Name/value pairs as would be generated in a CSV extract file.'
+      description: Name/value pairs as would be generated in a CSV extract file.
       x-internal: true
       items:
         type: object
@@ -411,7 +412,6 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/ServerInfo'
                   - $ref: '#/components/schemas/ClientIdentity'
-                  #- $ref: '#/components/schemas/ClientTime'
                   - type: object
                     properties:
                       transactionStatus:
@@ -423,10 +423,6 @@ paths:
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
                         example: 200930
                         readOnly: true
-                      #testMode:
-                      #  $ref: '#/components/schemas/TestMode'
-                      #drawUsers:
-                      #  $ref: '#/components/schemas/DrawUsers'
                       draws:
                         type: array
                         description: List of draw records.
@@ -442,7 +438,6 @@ paths:
                                   type: string
                                   description: Client's unique identifier for this draw.
                                   example: RQID-31234545-32
-                            #- $ref: '#/components/schemas/DrawInput'
                             - $ref: '#/components/schemas/DrawOutput'
                             - type: object
                               properties:
