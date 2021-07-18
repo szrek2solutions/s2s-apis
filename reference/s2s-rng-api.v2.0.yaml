@@ -595,7 +595,7 @@ paths:
                         - FULL
                         - NORMAL
                         - MINIMAL
-                      description: 'Controls the level of detail in the response message. Use FULL for all input and output fields, NORMAL for all output fields, and MINIMAL for required output fields only.'
+                      description: 'Controls the level of detail in the response message. Use FULL for all input and output fields, NORMAL for all output fields, and MINIMAL for required output fields only. Optional input. Default is NORMAL.'
                     testMode:
                       $ref: '#/components/schemas/TestMode'
                     users:
