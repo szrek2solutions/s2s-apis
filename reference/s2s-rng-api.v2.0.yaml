@@ -369,11 +369,11 @@ components:
           minimum: 1
         minSetSize:
           type: integer
-          description: Minimum set size that can be requested.
+          description: Minimum set size that can be generated.
           example: 1
         maxSetSize:
           type: integer
-          description: Maximum set size that can be requested.
+          description: Maximum set size that can be generated.
           example: 6
         minValue:
           type: integer
