@@ -354,6 +354,14 @@ components:
             - LOTTO
           example: INTEGER
           description: The configured RNG algorithm type for the product.
+        validFrom:
+          type: string
+          description: The date when the product is first active.
+          format: date-time
+        validUntil:
+          type: string
+          description: The date when the product becomes inactive.
+          format: date-time
         active:
           type: boolean
           description: True if the product is currently active.
