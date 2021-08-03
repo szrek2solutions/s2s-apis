@@ -95,7 +95,6 @@ components:
             - DECREASE_ENTRY
             - REMOVE_ENTRY
           description: Specifies method of depletion for the distribution values.
-          example: NO_DEPLETION
           readOnly: true
     Exclusions:
       type: array
@@ -398,27 +397,40 @@ components:
           $ref: '#/components/schemas/Distribution'
     TableProduct:
       type: object
-      description: 'Distribution values and depletion type. Used for TABLE products only. '
+      description: 'Product definition for TABLE-type products. '
       x-examples: {}
       x-internal: true
+      title: ''
       properties:
-        values:
-          type: array
-          description: Array of distribution values.
-          maxItems: 64
-          items:
-            type: integer
-            example: 8
+        required:
+          type: boolean
+          description: True if table MUST be specified in the draw request.
+        overrideable:
+          type: boolean
+          description: True if table CAN be specified in the draw request.
+        minSIze:
+          type: integer
+          description: Minimum table size that can be sent in the draw request.
+        maxSIze:
+          type: integer
+          description: Maximum table size that can be sent in the draw request.
         depletionType:
           type: string
           enum:
             - NO_DEPLETION
             - DECREASE_ENTRY
             - REMOVE_ENTRY
-          description: Specifies method of depletion for the distribution values.
-          example: NO_DEPLETION
-          readOnly: true
-      title: ''
+          description: Specifies method of depletion for the distribution table.
+        renewing:
+          type: boolean
+          description: True if the table values will be renewed when depleted.
+        values:
+          type: array
+          description: Default distribution table values.
+          maxItems: 64
+          items:
+            type: integer
+            example: '8,8,8,8,8'
     SecurityModule:
       type: object
       description: ''
