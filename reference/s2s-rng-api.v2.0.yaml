@@ -141,16 +141,6 @@ components:
         - Another data field
       items:
         type: string
-    UserData:
-      type: array
-      description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values. Optional input.
-      x-internal: true
-      deprecated: true
-      items:
-        type: string
-      example:
-        - some data field
-        - some other data
     Status:
       type: object
       description: Status code and description.
@@ -167,6 +157,16 @@ components:
           description: Short description of the error or status code.
           example: Success
           x-internal: true
+    UserData:
+      type: array
+      description: DEPRECATED. Optional text fields that are signed and logged. If used it is incompatible with many of the other Draw fields and will replace their values. Optional input.
+      x-internal: true
+      deprecated: true
+      items:
+        type: string
+      example:
+        - some data field
+        - some other data
     DrawInput:
       x-internal: true
       type: object
@@ -333,7 +333,7 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/FieldError'
-    DrawProduct:
+    Product:
       x-internal: true
       type: object
       description: Draw product details.
@@ -345,7 +345,7 @@ components:
         name:
           type: string
           description: Product name.
-          example: Lotto6
+          example: Pick 3
         type:
           type: string
           enum:
@@ -372,7 +372,7 @@ components:
         setSize:
           type: integer
           description: The default size of a set of drawn numbers.
-          example: 6
+          example: 3
           minimum: 1
         minSetSize:
           type: integer
@@ -381,21 +381,44 @@ components:
         maxSetSize:
           type: integer
           description: Maximum set size that can be drawn.
-          example: 6
+          example: 3
         minValue:
           type: integer
           description: Lowest number that can be drawn.
-          example: 1
+          example: 0
         maxValue:
           type: integer
           description: Highest number that can be drawn.
-          example: 49
+          example: 9
         withReplacement:
           type: boolean
           description: True if drawn numbers can be repeated within a set.
           readOnly: true
         distribution:
           $ref: '#/components/schemas/Distribution'
+    TableProduct:
+      type: object
+      description: 'Distribution values and depletion type. Used for TABLE products only. '
+      x-examples: {}
+      x-internal: true
+      properties:
+        values:
+          type: array
+          description: Array of distribution values.
+          maxItems: 64
+          items:
+            type: integer
+            example: 8
+        depletionType:
+          type: string
+          enum:
+            - NO_DEPLETION
+            - DECREASE_ENTRY
+            - REMOVE_ENTRY
+          description: Specifies method of depletion for the distribution values.
+          example: NO_DEPLETION
+          readOnly: true
+      title: ''
     SecurityModule:
       type: object
       description: ''
@@ -866,7 +889,7 @@ paths:
                         type: array
                         description: List of configured draw products.
                         items:
-                          $ref: '#/components/schemas/DrawProduct'
+                          $ref: '#/components/schemas/Product'
               examples: {}
       operationId: get-products
       description: Get list of all configured draw products on the draw server.
