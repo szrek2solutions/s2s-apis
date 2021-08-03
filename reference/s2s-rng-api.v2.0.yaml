@@ -110,25 +110,25 @@ components:
         type: integer
     DrawMatrix:
       type: object
-      description: The RNG parameter matrix. The product definition may or may not allow overriding of these values. Optional input/optional output.
+      description: The RNG parameter matrix for a draw. The product definition may or may not allow overriding of these values. Optional input/optional output.
       x-internal: true
       properties:
         setSize:
           type: integer
-          description: How many numbers in each set. Optional input/output. Default is defined by product configuration.
-          example: 6
+          description: How many numbers in each set drawn. Optional input/output. Default is defined by product configuration.
+          example: 3
           minimum: 1
         minValue:
           type: integer
-          description: Lowest number that can be generated. Optional input/output. Default is defined by product configuration.
+          description: Lowest number that can be drawn. Optional input/output. Default is defined by product configuration.
           example: 1
         maxValue:
           type: integer
-          description: Highest number that can be generated. Optional input/output. Default is defined by product configuration.
-          example: 49
+          description: Highest number that can be drawn. Optional input/output. Default is defined by product configuration.
+          example: 9
         withReplacement:
           type: boolean
-          description: True if generated numbers can be repeated within a set.
+          description: True if drawn numbers can be repeated within a set.
           readOnly: true
         distribution:
           $ref: '#/components/schemas/Distribution'
@@ -352,7 +352,6 @@ components:
             - INTEGER
             - TABLE
             - LOTTO
-          example: INTEGER
           description: The configured RNG algorithm type for the product.
         validFrom:
           type: string
@@ -360,40 +359,40 @@ components:
           format: date-time
         validUntil:
           type: string
-          description: The date when the product becomes inactive.
+          description: The date when the product is last active.
           format: date-time
         active:
           type: boolean
           description: True if the product is currently active.
         hash:
           type: string
-          description: Hash of the product definition record.
+          description: SHA-1 Hash of the product definition record.
           format: binary
           example: 12D820BC3BE7B63C77E06627B562A20877C74F25
         setSize:
           type: integer
-          description: Default size of a set of drawn numbers.
+          description: The default size of a set of drawn numbers.
           example: 6
           minimum: 1
         minSetSize:
           type: integer
-          description: Minimum set size that can be generated.
+          description: Minimum set size that can be drawn.
           example: 1
         maxSetSize:
           type: integer
-          description: Maximum set size that can be generated.
+          description: Maximum set size that can be drawn.
           example: 6
         minValue:
           type: integer
-          description: Lowest number that can be generated.
+          description: Lowest number that can be drawn.
           example: 1
         maxValue:
           type: integer
-          description: Highest number that can be generated.
+          description: Highest number that can be drawn.
           example: 49
         withReplacement:
           type: boolean
-          description: True if generated numbers can be repeated within a set.
+          description: True if drawn numbers can be repeated within a set.
           readOnly: true
         distribution:
           $ref: '#/components/schemas/Distribution'
