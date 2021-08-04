@@ -87,7 +87,7 @@ components:
           maxItems: 64
           items:
             type: integer
-            example: 8
+          example: [8,8,8,8,8]
         depletionType:
           type: string
           enum:
@@ -430,7 +430,12 @@ components:
           maxItems: 64
           items:
             type: integer
-          example: [8,8,8,8,8]
+          example:
+            - 8
+            - 8
+            - 8
+            - 8
+            - 8
     SecurityModule:
       type: object
       description: ''
