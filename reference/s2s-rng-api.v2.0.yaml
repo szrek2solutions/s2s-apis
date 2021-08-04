@@ -430,7 +430,7 @@ components:
           maxItems: 64
           items:
             type: integer
-            example: '8,8,8,8,8'
+          example: [8,8,8,8,8]
     SecurityModule:
       type: object
       description: ''
@@ -500,7 +500,7 @@ paths:
                         readOnly: true
                       draws:
                         type: array
-                        description: List of draw records.
+                        description: Array of draw records.
                         items:
                           allOf:
                             - type: object
@@ -899,12 +899,12 @@ paths:
                     properties:
                       products:
                         type: array
-                        description: List of configured draw products.
+                        description: Array of configured draw products.
                         items:
                           $ref: '#/components/schemas/Product'
               examples: {}
       operationId: get-products
-      description: Get list of all configured draw products on the draw server.
+      description: Get all configured draw products on the draw server.
       tags:
         - Server
       x-internal: false
@@ -936,7 +936,7 @@ paths:
                             - $ref: '#/components/schemas/SecurityModule'
               examples: {}
       operationId: get-hsms
-      description: Get list of all current hardware security modules (HSMs) found on the draw server.
+      description: Get all current hardware security modules (HSMs) found on the draw server.
       x-internal: false
     parameters: []
 security: []
