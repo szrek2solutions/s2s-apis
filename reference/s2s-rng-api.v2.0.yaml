@@ -677,7 +677,7 @@ paths:
                       $ref: '#/components/schemas/DrawUsers'
                     draws:
                       type: array
-                      description: List of draw requests. Required input/output.
+                      description: Array of draw requests. Required input/output.
                       minItems: 1
                       maxItems: 25
                       items:
@@ -907,7 +907,7 @@ paths:
       description: Get list of all configured draw products on the draw server.
       tags:
         - Server
-      x-internal: true
+      x-internal: false
   /server/hsms:
     get:
       summary: Get Security Modules
@@ -937,7 +937,7 @@ paths:
               examples: {}
       operationId: get-hsms
       description: Get list of all current hardware security modules (HSMs) found on the draw server.
-      x-internal: true
+      x-internal: false
     parameters: []
 security: []
 tags:
