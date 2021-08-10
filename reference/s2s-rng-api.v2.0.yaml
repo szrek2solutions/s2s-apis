@@ -360,31 +360,6 @@ components:
             - 8
           items:
             type: integer
-        depletionType:
-          type: string
-          enum:
-            - NO_DEPLETION
-            - DECREASE_ENTRY
-            - REMOVE_ENTRY
-          description: Specifies method of depletion for the distribution table.
-        tableType:
-          type: string
-          enum:
-            - RM_TABLE_NEW
-            - RM_TABLE_RENEW
-            - RM_TABLE_EXHAUST
-            - RM_TABLE_INDEPENDENT
-            - RM_TABLE_NEW_UNIQ_OUTCOMES
-            - RM_TABLE_SESSION_EXHAUST
-            - RM_TABLE_SESSION_INDEPENDENT
-            - RM_TABLE_SESSION_NEW_UNIQ_OUTCOMES
-          description: Shows the configured liablility control type for the product.
-        renewing:
-          type: boolean
-          description: True if the table values will be automatically renewed when depleted.
-        persistent:
-          type: boolean
-          description: 'True if the table depletion is persisted between draw requests, or false if a new table is used for each draw request.'
         overrrideType:
           type: string
           description: Describes the options for overriding the table _initialValues_ in the draw request. FIXED means the request table must match the _initialValues_ exactly; FIXED_WITH_ZEROIZE means each table value must match _initialValues_ or zero; and VARIABLE means the table values are not required to match _initialValues_.
@@ -398,6 +373,31 @@ components:
         maxSize:
           type: integer
           description: Maximum table size that can be sent in the draw request.
+        depletionType:
+          type: string
+          enum:
+            - NO_DEPLETION
+            - DECREASE_ENTRY
+            - REMOVE_ENTRY
+          description: Specifies method of depletion for the distribution table.
+        renewing:
+          type: boolean
+          description: True if the table values will be automatically renewed when depleted.
+        persistent:
+          type: boolean
+          description: 'True if the table depletion is persisted between draw requests, or false if a new table is used for each draw request.'
+        tableType:
+          type: string
+          enum:
+            - RM_TABLE_NEW
+            - RM_TABLE_RENEW
+            - RM_TABLE_EXHAUST
+            - RM_TABLE_INDEPENDENT
+            - RM_TABLE_NEW_UNIQ_OUTCOMES
+            - RM_TABLE_SESSION_EXHAUST
+            - RM_TABLE_SESSION_INDEPENDENT
+            - RM_TABLE_SESSION_NEW_UNIQ_OUTCOMES
+          description: Shows the configured liablility control type for the product.
     ProductDef:
       x-internal: true
       type: object
@@ -435,6 +435,10 @@ components:
           description: SHA-1 Hash of the product definition record.
           format: binary
           example: 12D820BC3BE7B63C77E06627B562A20877C74F25
+        overrideEnabled:
+          type: boolean
+          description: 'True if _setSize_, _minValue_, or _maxValue_ can be overridden in the draw request.'
+          readOnly: true
         setSize:
           type: integer
           description: The default size of a set of drawn numbers.
