@@ -430,6 +430,9 @@ components:
             - 8
           items:
             type: integer
+        renewing:
+          type: boolean
+          description: True if the table values will be renewed when depleted.
         required:
           type: boolean
           description: True if table MUST be specified in the draw request.
@@ -442,9 +445,6 @@ components:
         maxSize:
           type: integer
           description: Maximum table size that can be sent in the draw request.
-        renewing:
-          type: boolean
-          description: True if the table values will be renewed when depleted.
     SecurityModule:
       type: object
       description: ''
