@@ -446,11 +446,11 @@ components:
           minimum: 1
         minSetSize:
           type: integer
-          description: Minimum set size that can be drawn. For non-TABLE products only.
+          description: Minimum set size that can be drawn.
           example: 1
         maxSetSize:
           type: integer
-          description: Maximum set size that can be drawn. For non-TABLE products only.
+          description: 'Maximum set size that can be drawn. Returns -1 if it is dependent on request inputs, such as table size.'
           example: 3
         minValue:
           type: integer
