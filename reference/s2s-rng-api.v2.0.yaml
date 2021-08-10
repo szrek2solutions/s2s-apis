@@ -430,23 +430,23 @@ components:
           minimum: 1
         minSetSize:
           type: integer
-          description: Minimum set size that can be drawn.
+          description: Minimum set size that can be drawn. For non-TABLE products only.
           example: 1
         maxSetSize:
           type: integer
-          description: Maximum set size that can be drawn.
+          description: Maximum set size that can be drawn. For non-TABLE products only.
           example: 3
         minValue:
           type: integer
-          description: Lowest number that can be drawn.
+          description: Lowest number that can be drawn. For non-TABLE products only.
           example: 0
         maxValue:
           type: integer
-          description: Highest number that can be drawn.
+          description: Highest number that can be drawn. For non-TABLE products only.
           example: 9
         withReplacement:
           type: boolean
-          description: True if drawn numbers can be repeated within a set.
+          description: True if drawn numbers can be repeated within a set. For non-TABLE products only.
           readOnly: true
         table:
           $ref: '#/components/schemas/TableDef'
