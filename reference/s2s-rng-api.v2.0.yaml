@@ -87,7 +87,12 @@ components:
           maxItems: 64
           items:
             type: integer
-          example: [8,8,8,8,8]
+          example:
+            - 8
+            - 8
+            - 8
+            - 8
+            - 8
         depletionType:
           type: string
           enum:
@@ -246,6 +251,10 @@ components:
             type: array
             items:
               type: integer
+          example:
+            - - 4
+              - 8
+              - 9
     SecurityRequest:
       type: object
       description: ''
@@ -402,18 +411,6 @@ components:
       x-internal: true
       title: ''
       properties:
-        required:
-          type: boolean
-          description: True if table MUST be specified in the draw request.
-        overrideable:
-          type: boolean
-          description: True if table CAN be specified in the draw request.
-        minSIze:
-          type: integer
-          description: Minimum table size that can be sent in the draw request.
-        maxSIze:
-          type: integer
-          description: Maximum table size that can be sent in the draw request.
         depletionType:
           type: string
           enum:
@@ -421,21 +418,33 @@ components:
             - DECREASE_ENTRY
             - REMOVE_ENTRY
           description: Specifies method of depletion for the distribution table.
-        renewing:
-          type: boolean
-          description: True if the table values will be renewed when depleted.
         values:
           type: array
           description: Default distribution table values.
           maxItems: 64
-          items:
-            type: integer
           example:
             - 8
             - 8
             - 8
             - 8
             - 8
+          items:
+            type: integer
+        required:
+          type: boolean
+          description: True if table MUST be specified in the draw request.
+        overrideable:
+          type: boolean
+          description: True if table CAN be specified in the draw request.
+        minSize:
+          type: integer
+          description: Minimum table size that can be sent in the draw request.
+        maxSize:
+          type: integer
+          description: Maximum table size that can be sent in the draw request.
+        renewing:
+          type: boolean
+          description: True if the table values will be renewed when depleted.
     SecurityModule:
       type: object
       description: ''
