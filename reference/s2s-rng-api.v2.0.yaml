@@ -435,10 +435,11 @@ components:
           description: SHA-1 Hash of the product definition record.
           format: binary
           example: 12D820BC3BE7B63C77E06627B562A20877C74F25
-        overrideEnabled:
-          type: boolean
-          description: 'True if _setSize_, _minValue_, or _maxValue_ can be overridden in the draw request.'
-          readOnly: true
+        maxSets:
+          type: integer
+          description: The maximum number of sets that can be requested.
+          example: 3
+          minimum: 1
         setSize:
           type: integer
           description: The default size of a set of drawn numbers.
@@ -452,6 +453,10 @@ components:
           type: integer
           description: 'Maximum set size that can be drawn. Returns -1 if it is dependent on request inputs, such as table size.'
           example: 3
+        overrideEnabled:
+          type: boolean
+          description: 'True if _minValue_, or _maxValue_ can be overridden in the draw request.'
+          readOnly: true
         minValue:
           type: integer
           description: Lowest number that can be drawn. For non-TABLE products only.
