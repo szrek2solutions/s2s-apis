@@ -456,11 +456,9 @@ components:
         overrideEnabled:
           type: boolean
           description: True if the default values of _minValue_ and _maxValue_ can be overridden in the draw request.
-          readOnly: true
         exclusionsEnabled:
           type: boolean
           description: True if the _exclusions_ field can be used in the draw request.
-          readOnly: true
         minValue:
           type: integer
           description: Lowest number that can be drawn. For non-TABLE products only.
@@ -472,7 +470,6 @@ components:
         withReplacement:
           type: boolean
           description: True if drawn numbers can be repeated within a set. For non-TABLE products only.
-          readOnly: true
         table:
           $ref: '#/components/schemas/TableDef'
     SecurityModule:
