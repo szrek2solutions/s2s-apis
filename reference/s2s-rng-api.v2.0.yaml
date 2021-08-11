@@ -437,7 +437,7 @@ components:
           example: 12D820BC3BE7B63C77E06627B562A20877C74F25
         maxSets:
           type: integer
-          description: The maximum number of sets that can be requested.
+          description: 'The maximum number of sets that can be requested, assuming _setSize_ is _minSetSize_.'
           example: 3
           minimum: 1
         setSize:
@@ -451,7 +451,7 @@ components:
           example: 1
         maxSetSize:
           type: integer
-          description: 'Maximum set size that can be drawn. Returns -1 if it is dependent on request inputs, such as table size.'
+          description: 'Maximum set size that can be drawn, assuming _numberOfSets_ is 1. Returns -1 if it is dependent on request inputs, such as table size.'
           example: 3
         overrideEnabled:
           type: boolean
