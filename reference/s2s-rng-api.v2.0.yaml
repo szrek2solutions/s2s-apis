@@ -389,14 +389,14 @@ components:
         tableType:
           type: string
           enum:
-            - RM_TABLE_NEW
-            - RM_TABLE_RENEW
-            - RM_TABLE_EXHAUST
-            - RM_TABLE_INDEPENDENT
-            - RM_TABLE_NEW_UNIQ_OUTCOMES
-            - RM_TABLE_SESSION_EXHAUST
-            - RM_TABLE_SESSION_INDEPENDENT
-            - RM_TABLE_SESSION_NEW_UNIQ_OUTCOMES
+            - NEW
+            - RENEW
+            - EXHAUST
+            - INDEPENDENT
+            - UNIQUE
+            - SESSION_EXHAUST
+            - SESSION_INDEPENDENT
+            - SESSION_UNIQUE
           description: Shows the configured liablility control type for the product.
     ProductDef:
       x-internal: true
