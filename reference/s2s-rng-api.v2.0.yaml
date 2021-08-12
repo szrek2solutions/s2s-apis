@@ -134,6 +134,8 @@ components:
           type: boolean
           description: True if drawn numbers can be repeated within a set.
           readOnly: true
+        exclusions:
+          $ref: '#/components/schemas/Exclusions'
         distribution:
           $ref: '#/components/schemas/Distribution'
     ClientData:
@@ -185,12 +187,7 @@ components:
           minimum: 1
           example: 1
         drawMatrix:
-          allOf:
-            - $ref: '#/components/schemas/DrawMatrix'
-            - type: object
-              properties:
-                exclusions:
-                  $ref: '#/components/schemas/Exclusions'
+          $ref: '#/components/schemas/DrawMatrix'
         drawNumber:
           type: integer
           example: 1
