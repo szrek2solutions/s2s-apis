@@ -8,7 +8,7 @@ info:
     email: info@szrek.com
 servers:
   - description: ASL Test Server
-    url: 'http://asl-rng-test:55002/api/v2/rng'
+    url: 'http://asl-rng-test:55502/api/v2/rng'
 components:
   schemas:
     ClientIdentity:
