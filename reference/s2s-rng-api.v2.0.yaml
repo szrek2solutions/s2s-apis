@@ -52,7 +52,7 @@ components:
       readOnly: true
     TestMode:
       type: boolean
-      description: Indicates that the draw is a test only and not valid for use. Optional input/output. Default is false.
+      description: Indicates that the draw is a test only and not valid for use. Optional input. Default is false.
       x-userDataIndex: 1
       x-internal: true
     DrawUser:
