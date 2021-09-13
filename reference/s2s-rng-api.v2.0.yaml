@@ -196,7 +196,6 @@ components:
         drawHash:
           type: string
           description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format. Optional input.'
-          format: binary
           example: B63C77E06612D820BC3BE72877C74F257B562A20
         drawFile:
           type: string
