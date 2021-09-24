@@ -819,7 +819,7 @@ paths:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
-                      drawRecord:
+                      draw:
                         allOf:
                           - $ref: '#/components/schemas/DrawInput'
                           - $ref: '#/components/schemas/DrawOutput'
