@@ -197,40 +197,24 @@ components:
     DrawInput:
       x-internal: true
       allOf:
-        type: object
-        properties:
-          productId:
-            type: integer
-            description: Identifier of the product definition used for the draw generation. Required input/output.
-            example: 1002
-          numberOfSets:
-            type: integer
-            description: How many sets of numbers to generate. Optional input. Default is defined by product configuration.
-            minimum: 1
-            example: 1
-          drawMatrix:
-            $ref: '#/components/schemas/DrawMatrix'
-          drawNumber:
-            type: integer
-            example: 1
-            description: Draw number to be shown in draw reports. Optional input. Default is 1.
-            minimum: 1
-          drawHash:
-            type: string
-            description: 'Hash of some draw data such as all bets, or a file containing draw input data. Typically SHA-1 in ASCII hex format. Optional input.'
-            example: B63C77E06612D820BC3BE72877C74F257B562A20
-          drawFile:
-            type: string
-            description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText. Optional input.'
-            example: BETS_20210312_123_LOTTO6.dat
-          drawText:
-            type: string
-            description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input.
-            example: PROMO-1
-          clientData:
-            $ref: '#/components/schemas/ClientData'
-      required:
-        - productId
+        - type: object
+          properties:
+            productId:
+              type: integer
+              description: Identifier of the product definition used for the draw generation. Required input/output.
+              example: 1002
+            numberOfSets:
+              type: integer
+              description: How many sets of numbers to generate. Optional input. Default is defined by product configuration.
+              minimum: 1
+              example: 1
+            drawMatrix:
+              $ref: '#/components/schemas/DrawMatrix'
+        - $ref: '#/components/schemas/UserDataFields'
+        - type: object
+          properties:
+            clientData:
+              $ref: '#/components/schemas/ClientData'
     DrawOutput:
       x-internal: true
       type: object
