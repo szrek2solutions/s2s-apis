@@ -188,11 +188,11 @@ components:
           example: B63C77E06612D820BC3BE72877C74F257B562A20
         drawFile:
           type: string
-          description: 'If drawHash contains a file hash, the name of the file is specified here. Mutually exclusive with drawText. Optional input.'
+          description: 'If drawHash contains a file hash, the name of the file is specified here. Optional input.'
           example: BETS_20210312_123_LOTTO6.dat
         drawText:
           type: string
-          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Mutually exclusive with drawFile. Optional input.
+          description: An extra text string that will appear in the draw reports and is also appended to the draw report file names. Optional input.
           example: PROMO-1
     DrawInput:
       x-internal: true
