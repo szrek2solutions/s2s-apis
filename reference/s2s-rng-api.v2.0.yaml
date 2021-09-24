@@ -834,38 +834,38 @@ paths:
                         type: integer
                         description: Business day under which the transaction was recorded. Format is YYMMDD.
                         example: 200930
+                      timestamp:
+                        type: string
+                        format: date-time
+                        description: Date and time the draw results were generated.
+                        example: '2020-09-30T18:30:23Z'
+                        readOnly: true
+                      productId:
+                        type: integer
+                        description: Identifier of the product definition used for the draw generation.
+                        example: 1002
+                      '':
+                        - $ref: '#/components/schemas/DrawMatrix'
+                      sets:
+                        type: array
+                        description: Generated sets of numbers.
+                        example:
+                          - - 4
+                            - 8
+                            - 9
+                        items:
+                          type: array
+                          items:
+                            type: integer
+                      hsm:
+                        $ref: '#/components/schemas/SecurityModule'
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
-                      draw:
-                        type: object
-                        properties:
-                          productId:
-                            type: integer
-                            description: Identifier of the product definition used for the draw generation.
-                            example: 1002
-                          drawMatrix:
-                            - $ref: '#/components/schemas/DrawMatrix'
-                          timestamp:
-                            type: string
-                            format: date-time
-                            description: Date and time the draw results were generated.
-                            example: '2020-09-30T18:30:23Z'
-                            readOnly: true
-                          sets:
-                            type: array
-                            description: Generated sets of numbers.
-                            items:
-                              type: array
-                              items:
-                                type: integer
-                            example:
-                              - - 4
-                                - 8
-                                - 9
-                      hsm:
-                        $ref: '#/components/schemas/SecurityModule'
+                  - $ref: '#/components/schemas/UserDataFields'
+                  - type: object
+                    properties:
                       extractFields:
                         $ref: '#/components/schemas/ExtractFields'
         '400':
