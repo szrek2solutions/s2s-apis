@@ -811,10 +811,23 @@ paths:
                   - $ref: '#/components/schemas/ServerInfo'
                   - type: object
                     properties:
+                      recordId:
+                        type: string
+                        description: The Unique Record Identifier (URI) of the record verified.
+                        example: EX210622870000000335
+                      recordHandle:
+                        type: string
+                        description: The recordHandle that was returned in RNG response.
+                        format: int64
+                        example: '184638'
                       verificationStatus:
                         allOf:
                           - $ref: '#/components/schemas/Status'
                         description: Status of the verification request.
+                      businessDay:
+                        type: integer
+                        description: Business day under which the transaction was recorded. Format is YYMMDD.
+                        example: 200930
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       drawUsers:
@@ -827,12 +840,7 @@ paths:
                             description: Identifier of the product definition used for the draw generation.
                             example: 1002
                           drawMatrix:
-                            allOf:
-                              - $ref: '#/components/schemas/DrawMatrix'
-                              - type: object
-                                properties:
-                                  exclusions:
-                                    $ref: '#/components/schemas/Exclusions'
+                            - $ref: '#/components/schemas/DrawMatrix'
                           timestamp:
                             type: string
                             format: date-time
