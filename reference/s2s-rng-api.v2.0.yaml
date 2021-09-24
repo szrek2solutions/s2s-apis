@@ -237,7 +237,7 @@ components:
           readOnly: true
         recordHandle:
           type: integer
-          description: A look-up handle that can optionally be used for faster verification processing. Optional output.
+          description: A look-up handle that can optionally be used for faster verification processing.
           format: int64
           readOnly: true
         timestamp:
@@ -844,8 +844,11 @@ paths:
                         type: integer
                         description: Identifier of the product definition used for the draw generation.
                         example: 1002
-                      '':
-                        - $ref: '#/components/schemas/DrawMatrix'
+                      productName:
+                        type: string
+                        description: Name of the product definition.
+                      drawMatrix:
+                        $ref: '#/components/schemas/DrawMatrix'
                       sets:
                         type: array
                         description: Generated sets of numbers.
@@ -861,7 +864,7 @@ paths:
                         $ref: '#/components/schemas/SecurityModule'
                       testMode:
                         $ref: '#/components/schemas/TestMode'
-                      drawUsers:
+                      users:
                         $ref: '#/components/schemas/DrawUsers'
                   - $ref: '#/components/schemas/UserDataFields'
                   - type: object
