@@ -869,6 +869,16 @@ paths:
                   - $ref: '#/components/schemas/UserDataFields'
                   - type: object
                     properties:
+                      clientData:
+                        $ref: '#/components/schemas/ClientData'
+                      userData:
+                        type: array
+                        description: All text fields that were signed and logged.
+                        items:
+                          type: string
+                        example:
+                          - some data field
+                          - some other data
                       extractFields:
                         $ref: '#/components/schemas/ExtractFields'
         '400':
