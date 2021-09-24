@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: S2S RNG API v2 (Draft)
-  version: 2.0.1
+  version: 2.0.2
   description: Szrek2Solutions Random Number Generator API.
   contact:
     url: 'http://www.szrek.com'
@@ -839,7 +839,6 @@ paths:
                         format: date-time
                         description: Date and time the draw results were generated.
                         example: '2020-09-30T18:30:23Z'
-                        readOnly: true
                       productId:
                         type: integer
                         description: Identifier of the product definition used for the draw generation.
