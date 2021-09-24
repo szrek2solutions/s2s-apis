@@ -854,11 +854,11 @@ paths:
               properties:
                 recordId:
                   type: string
-                  description: The Unique Record Identifier (URI) of the record to be verified.
+                  description: The Unique Record Identifier (URI) of the record to be verified. Required input.
                   example: EX210622870000000335
                 recordHandle:
                   type: string
-                  description: The recordHandle that was returned in RNG response. Including this parameter may improve response time.
+                  description: The recordHandle that was returned in RNG response. Including this parameter may improve response time. Optional input.
                   example: '184638'
               required:
                 - recordId
