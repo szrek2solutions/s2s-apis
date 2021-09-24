@@ -820,9 +820,36 @@ paths:
                       drawUsers:
                         $ref: '#/components/schemas/DrawUsers'
                       draw:
-                        allOf:
-                          - $ref: '#/components/schemas/DrawInput'
-                          - $ref: '#/components/schemas/DrawOutput'
+                        type: object
+                        properties:
+                          productId:
+                            type: integer
+                            description: Identifier of the product definition used for the draw generation.
+                            example: 1002
+                          drawMatrix:
+                            allOf:
+                              - $ref: '#/components/schemas/DrawMatrix'
+                              - type: object
+                                properties:
+                                  exclusions:
+                                    $ref: '#/components/schemas/Exclusions'
+                          timestamp:
+                            type: string
+                            format: date-time
+                            description: Date and time the draw results were generated.
+                            example: '2020-09-30T18:30:23Z'
+                            readOnly: true
+                          sets:
+                            type: array
+                            description: Generated sets of numbers.
+                            items:
+                              type: array
+                              items:
+                                type: integer
+                            example:
+                              - - 4
+                                - 8
+                                - 9
                       hsm:
                         $ref: '#/components/schemas/SecurityModule'
                       extractFields:
@@ -859,6 +886,7 @@ paths:
                 recordHandle:
                   type: string
                   description: The recordHandle that was returned in RNG response. Including this parameter may improve response time. Optional input.
+                  format: int64
                   example: '184638'
               required:
                 - recordId
