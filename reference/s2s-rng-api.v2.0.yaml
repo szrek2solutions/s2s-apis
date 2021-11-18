@@ -319,10 +319,11 @@ components:
     FieldError:
       type: object
       description: Details about a specific field error.
+      x-internal: false
       properties:
-        code:
+        errorType:
           type: string
-          description: Error code name.
+          description: Error type name.
         message:
           type: string
           description: Additional detail about the error code.
@@ -332,10 +333,15 @@ components:
         path:
           type: string
           description: 'Path to the field that caused the error, if applicable.'
-      x-internal: false
     ErrorResponse:
       description: Describes the error and any specific problems with fields in the request.
       allOf:
+        - type: object
+          properties:
+            errorType:
+              type: string
+              description: |
+                Error type name
         - $ref: '#/components/schemas/Status'
         - type: object
           properties:
