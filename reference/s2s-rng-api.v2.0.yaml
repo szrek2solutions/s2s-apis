@@ -501,6 +501,17 @@ components:
           type: string
           description: Identifier of the RSA key pair on the HSM.
           example: 308C-1328-3940-DC32
+    ResultsHash:
+      title: ResultsHash
+      type: object
+      description: 'A hash of all critical draw data for a specific draw, including: Product, draw number, draw time, HSM details, URI, signature, and the generated numbers.'
+      properties:
+        hash:
+          type: string
+          description: An ASCII hex string of the SHA-1 (or other) hash value.
+        version:
+          type: integer
+          description: Internal version number of the hash algorithm used.
   responses:
     BadRequestResponse:
       description: Bad Request
@@ -871,6 +882,8 @@ paths:
                         $ref: '#/components/schemas/TestMode'
                       users:
                         $ref: '#/components/schemas/DrawUsers'
+                      resultsHash:
+                        $ref: '#/components/schemas/ResultsHash'
                   - $ref: '#/components/schemas/UserDataFields'
                   - type: object
                     properties:
@@ -879,11 +892,11 @@ paths:
                       userData:
                         type: array
                         description: All text fields that were signed and logged.
-                        items:
-                          type: string
                         example:
                           - some data field
                           - some other data
+                        items:
+                          type: string
                       extractFields:
                         $ref: '#/components/schemas/ExtractFields'
         '400':
