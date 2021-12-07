@@ -249,14 +249,16 @@ components:
         sets:
           type: array
           description: Generated sets of numbers. Output.
-          items:
-            type: array
-            items:
-              type: integer
           example:
             - - 4
               - 8
               - 9
+          items:
+            type: array
+            items:
+              type: integer
+        resultsHash:
+          $ref: '#/components/schemas/ResultsHash'
     SecurityRequest:
       type: object
       description: ''
