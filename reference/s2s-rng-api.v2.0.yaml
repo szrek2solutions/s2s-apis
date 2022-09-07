@@ -24,6 +24,7 @@ components:
           description: Client's unique identifier for this transaction. Optional input.
           format: int64
           example: 102030450
+      title: ''
     ClientTime:
       type: object
       x-internal: true
