@@ -6,7 +6,7 @@ info:
   contact:
     url: 'http://www.szrek.com'
 servers:
-  - url: 'http://localhost:55002/api/transaction/v1.0'
+  - url: 'http://s2sdev.net/s2s-api/v1/transaction'
 components:
   schemas:
     ClientData:

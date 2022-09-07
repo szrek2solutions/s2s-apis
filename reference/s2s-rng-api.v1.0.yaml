@@ -7,8 +7,7 @@ info:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - url: 'http://localhost:55002/api/rng/v1'
-    description: Local API Server
+  - url: 'http://s2sdev.net/s2s-api/v1/rng'
 components:
   schemas:
     DrawUser:
