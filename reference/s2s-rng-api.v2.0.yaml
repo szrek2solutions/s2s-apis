@@ -1,14 +1,14 @@
 openapi: 3.1.0
 info:
   title: S2S RNG API v2 (Draft)
-  version: 2.0.2
+  version: 2.0.3
   description: Szrek2Solutions Random Number Generator API.
   contact:
     url: 'http://www.szrek.com'
     email: info@szrek.com
 servers:
-  - description: ASL Test Server
-    url: 'http://asl-rng-test:55502/api/v2/rng'
+  - description: Test Server
+    url: 'http://rnghost:9152/api/v2/rng'
 components:
   schemas:
     ClientIdentity:
@@ -484,25 +484,41 @@ components:
           $ref: '#/components/schemas/TableDef'
     SecurityModule:
       type: object
-      description: ''
       x-internal: true
       properties:
         serial:
           type: string
-          description: Serial number of the HSM.
+          description: Serial number of the security module.
           example: 01000000F00019C8
         sequencer:
           type: integer
-          description: Sequence number on the HSM.
+          description: 'Sequence number on the security module, if available.'
           example: 734595
         time:
           type: string
-          description: Real-time clock value on the HSM.
+          description: 'Real-time clock value on the security module, if available.'
           example: '2020-09-30T18:30:23Z'
         keyId:
           type: string
-          description: Identifier of the RSA key pair on the HSM.
+          description: Identifier of the RSA key pair on the security module.
           example: 308C-1328-3940-DC32
+    SignatureInfo:
+      type: object
+      x-stoplight:
+        id: 4rohdi7a1d96s
+      x-internal: true
+      properties:
+        systemTime:
+          type: string
+          description: System time when the signature was generated.
+          example: '2020-09-30T18:30:23Z'
+          x-stoplight:
+            id: mg1natn4zl4y7
+        securityModule:
+          $ref: '#/components/schemas/SecurityModule'
+          x-stoplight:
+            id: h63s07z3w2jcq
+          description: Security module used to generate the signature.
     ResultsHash:
       title: ResultsHash
       type: object
@@ -580,6 +596,16 @@ paths:
                               properties:
                                 securityBlocks:
                                   $ref: '#/components/schemas/SecurityBlocks'
+                      deferredSigning:
+                        type: boolean
+                        x-stoplight:
+                          id: g78981av26wh0
+                        description: True if deferred signing mode was used for this request.
+                      generationSignature:
+                        $ref: '#/components/schemas/SignatureInfo'
+                        x-stoplight:
+                          id: sdtenl8mexycc
+                        description: Information about the signature used to generate the draw results. If deferredSigning mode was used then another signature (storageSignature) will be used to sign and store the draw data.
               examples:
                 Cash 3 Minimal:
                   value:
@@ -724,6 +750,8 @@ paths:
                 - $ref: '#/components/schemas/ClientIdentity'
                 - $ref: '#/components/schemas/ClientTime'
                 - type: object
+                  required:
+                    - draws
                   properties:
                     responseDetail:
                       type: string
@@ -735,6 +763,11 @@ paths:
                       writeOnly: true
                     testMode:
                       $ref: '#/components/schemas/TestMode'
+                    deferredSigning:
+                      type: boolean
+                      x-stoplight:
+                        id: hc1tzdv7ieyhk
+                      description: 'True if deferred signing mode is requested, for the fastest response times. Used for quick-picks and other transactions where high performance is needed.'
                     users:
                       $ref: '#/components/schemas/DrawUsers'
                     draws:
@@ -755,8 +788,6 @@ paths:
                             properties:
                               securityBlocks:
                                 $ref: '#/components/schemas/SecurityRequests'
-                  required:
-                    - draws
             examples:
               Cash 3 Minimal:
                 value:
@@ -878,8 +909,16 @@ paths:
                           type: array
                           items:
                             type: integer
-                      hsm:
-                        $ref: '#/components/schemas/SecurityModule'
+                      generationSignature:
+                        $ref: '#/components/schemas/SignatureInfo'
+                        x-stoplight:
+                          id: 8m8xs0swzqpw1
+                        description: Information about the signature used to generate the draw results.
+                      storageSignature:
+                        $ref: '#/components/schemas/SignatureInfo'
+                        x-stoplight:
+                          id: a9718m5q4a2pa
+                        description: Information about the signature used to sign and store the draw request.
                       testMode:
                         $ref: '#/components/schemas/TestMode'
                       users:
