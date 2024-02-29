@@ -55,6 +55,14 @@ components:
       description: Indicates that the draw is a test only and not valid for use. Optional input. Default is false.
       x-userDataIndex: 1
       x-internal: true
+    DeferredSigning:
+      type: boolean
+      x-stoplight:
+        id: opxulwmyhdkvm
+      description: 'True if deferred signing mode is requested, for the fastest response times. Used for quick-picks and other transactions where high performance is needed. Optional input/output.'
+      x-userDataIndex: 1
+      x-internal: true
+      title: ''
     DrawUser:
       type: object
       description: Draw participant's name and login time as used in the draw reports. Optional input.
@@ -764,7 +772,7 @@ paths:
                     testMode:
                       $ref: '#/components/schemas/TestMode'
                     deferredSigning:
-                      type: boolean
+                      $ref: '#/components/schemas/DeferredSigning'
                       x-stoplight:
                         id: hc1tzdv7ieyhk
                       description: 'True if deferred signing mode is requested, for the fastest response times. Used for quick-picks and other transactions where high performance is needed.'
@@ -921,6 +929,10 @@ paths:
                         description: Information about the signature used to sign and store the draw request.
                       testMode:
                         $ref: '#/components/schemas/TestMode'
+                      deferredSigning:
+                        $ref: '#/components/schemas/DeferredSigning'
+                        x-stoplight:
+                          id: 75z3uepzalh39
                       users:
                         $ref: '#/components/schemas/DrawUsers'
                       resultsHash:
